@@ -6,348 +6,646 @@
   <title>EDF413 · Registration</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      --bg: #f7f8fc;
+      --bg-2: #eef1f9;
+      --surface: #ffffff;
+      --surface-2: #f4f6fb;
+      --surface-3: #eaedf6;
+      --border: #e4e7f0;
+      --border-light: #d8dde9;
+      --text: #1a1f36;
+      --text-dim: #5a6482;
+      --text-dimmer: #8b95ad;
+      --accent: #6366f1;
+      --accent-2: #8b5cf6;
+      --accent-soft: rgba(99, 102, 241, 0.08);
+      --accent-glow: rgba(99, 102, 241, 0.28);
+      --success: #10b981;
+      --danger: #ef4444;
+    }
+
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    html, body { height: 100%; }
+
     body {
-      background: linear-gradient(145deg, #eef2f7 0%, #f8fafc 100%);
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 2rem 1rem;
-    }
-
-    .form-card {
-      max-width: 720px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 32px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 8px 20px -8px rgba(0, 20, 40, 0.1);
-      padding: 2.5rem 2.25rem;
-      border: 1px solid rgba(255, 255, 255, 0.5);
       position: relative;
+      overflow-x: hidden;
     }
 
-    @media (max-width: 540px) {
-      .form-card { padding: 1.75rem 1.25rem; border-radius: 24px; }
+    /* Soft ambient gradients */
+    body::before {
+      content: '';
+      position: fixed;
+      top: -30%;
+      left: -15%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.10) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      bottom: -30%;
+      right: -15%;
+      width: 700px;
+      height: 700px;
+      background: radial-gradient(circle, rgba(139, 92, 246, 0.09) 0%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    /* Hidden admin link */
-    .admin-link {
+    .shell {
+      width: 100%;
+      max-width: 1100px;
+      display: grid;
+      grid-template-columns: 1fr 1.15fr;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow:
+        0 30px 60px -30px rgba(30, 40, 80, 0.15),
+        0 8px 24px -12px rgba(30, 40, 80, 0.08);
+      position: relative;
+      z-index: 1;
+      min-height: 620px;
+    }
+
+    /* ============ LEFT PANEL (Info) ============ */
+    .panel-info {
+      background: linear-gradient(155deg, #ffffff 0%, #f4f6fb 100%);
+      padding: 3rem 2.5rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border-right: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .panel-info::before {
+      content: '';
       position: absolute;
-      top: 1.5rem;
-      right: 1.75rem;
-      font-size: 0.7rem;
-      color: #b0bfcf;
-      text-decoration: none;
-      padding: 0.4rem 0.85rem;
-      border-radius: 40px;
-      transition: 0.2s ease;
-      letter-spacing: 0.04em;
-      font-weight: 500;
-      border: 1px solid transparent;
-    }
-    .admin-link:hover {
-      color: #1e4b6e;
-      background: #f1f5f9;
-      border-color: #e0e8f0;
+      top: -80px;
+      right: -80px;
+      width: 280px;
+      height: 280px;
+      background: radial-gradient(circle, rgba(99, 102, 241, 0.10), transparent 70%);
+      pointer-events: none;
     }
 
-    .header {
-      margin-bottom: 2rem;
-      text-align: center;
-    }
-
-    .course-title {
-      font-size: 1.6rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      color: #0b1c2f;
-      line-height: 1.3;
-      margin-bottom: 0.75rem;
-    }
-
-    .course-code {
-      display: inline-block;
-      font-size: 0.95rem;
-      font-weight: 600;
-      color: white;
-      padding: 0.35rem 1.2rem;
-      border-radius: 40px;
-      letter-spacing: 0.5px;
-      background: linear-gradient(135deg, #1e4b6e, #2a6b96);
-      box-shadow: 0 4px 12px rgba(30, 75, 110, 0.25);
-      margin-bottom: 0.75rem;
-    }
-
-    .header-sub {
-      color: #4b5e71;
-      font-size: 0.95rem;
-      font-weight: 400;
-      line-height: 1.5;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    .divider {
-      width: 60px;
-      height: 3px;
-      background: linear-gradient(90deg, #1e4b6e, #2a6b96);
-      border-radius: 4px;
-      margin: 1.25rem auto 0;
-    }
-
-    .registration-form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.5rem;
-      margin-top: 2rem;
-    }
-
-    .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.25rem;
-    }
-
-    .form-row > .form-group { flex: 1 1 200px; }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-    }
-
-    .form-group label {
-      font-size: 0.85rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.02em;
-      color: #1e3b4f;
+    .brand {
       display: flex;
       align-items: center;
-      gap: 0.25rem;
+      gap: 0.6rem;
+      position: relative;
+      z-index: 1;
     }
 
-    .form-group label .required {
-      color: #c2410c;
-      font-size: 1.1rem;
-      line-height: 1;
-      margin-left: 2px;
-    }
-
-    .form-group input,
-    .form-group select {
-      font-family: 'Inter', sans-serif;
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
       font-size: 0.95rem;
-      padding: 0.8rem 1rem;
-      border-radius: 16px;
-      border: 1.5px solid #dae2ed;
-      background: #ffffff;
-      transition: 0.2s ease;
-      color: #0a1e2c;
-      outline: none;
-      width: 100%;
+      color: white;
+      box-shadow: 0 8px 20px -6px var(--accent-glow);
+      letter-spacing: -0.02em;
     }
 
-    .form-group input:focus,
-    .form-group select:focus {
-      border-color: #2a6b96;
-      box-shadow: 0 0 0 4px rgba(42, 107, 150, 0.15);
+    .brand-name {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: var(--text);
     }
 
-    .form-group input::placeholder { color: #9aabb9; font-size: 0.9rem; }
-
-    .form-group select {
-      appearance: none;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b5e7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 1.2rem center;
-      background-size: 1rem;
-      cursor: pointer;
+    .brand-name small {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 500;
+      color: var(--text-dimmer);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-top: 0.1rem;
     }
 
-    .form-group input:disabled {
-      background: #f8fafc;
-      cursor: not-allowed;
-      color: #64748b;
+    .hero {
+      position: relative;
+      z-index: 1;
+      margin: 3rem 0;
     }
 
-    /* Inline field status */
-    .field-status {
-      font-size: 0.75rem;
-      margin-top: 0.15rem;
-      min-height: 1em;
+    .hero-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.68rem;
+      font-weight: 600;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-2);
+      padding: 0.35rem 0.75rem;
+      background: var(--accent-soft);
+      border: 1px solid rgba(139, 92, 246, 0.18);
+      border-radius: 40px;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-tag::before {
+      content: '';
+      width: 6px;
+      height: 6px;
+      background: var(--accent-2);
+      border-radius: 50%;
+    }
+
+    .hero h1 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, #6366f1, #a855f7);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero p {
+      color: var(--text-dim);
+      font-size: 0.9rem;
+      line-height: 1.6;
+      max-width: 340px;
+    }
+
+    .features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+      position: relative;
+      z-index: 1;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 0.82rem;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .feature-icon {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      flex-shrink: 0;
+      box-shadow: 0 2px 4px rgba(30, 40, 80, 0.04);
+    }
+
+    .panel-footer {
+      position: relative;
+      z-index: 1;
+      font-size: 0.72rem;
+      color: var(--text-dimmer);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 500;
+    }
+
+    .panel-footer a {
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 600;
+      transition: color 0.15s;
+    }
+    .panel-footer a:hover { color: var(--accent-2); }
+
+    /* ============ RIGHT PANEL (Form) ============ */
+    .panel-form {
+      padding: 3rem 2.75rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      background: var(--surface);
+    }
+
+    .form-header { margin-bottom: 2rem; }
+
+    .form-header h2 {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      margin-bottom: 0.35rem;
+    }
+
+    .form-header p {
+      font-size: 0.85rem;
+      color: var(--text-dim);
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .field label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-dim);
       display: flex;
       align-items: center;
       gap: 0.3rem;
     }
-    .field-status.checking { color: #6b7f91; }
-    .field-status.valid { color: #059669; font-weight: 500; }
-    .field-status.invalid { color: #c2410c; font-weight: 500; }
 
-    .form-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      justify-content: flex-end;
-      margin-top: 0.5rem;
-      padding-top: 1rem;
+    .field label .req { color: var(--accent-2); }
+
+    .field input,
+    .field select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      padding: 0.85rem 1.05rem;
+      background: var(--surface-2);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      color: var(--text);
+      outline: none;
+      transition: all 0.18s ease;
+      width: 100%;
+      appearance: none;
     }
 
-    .btn {
-      font-family: 'Inter', sans-serif;
-      font-weight: 600;
-      font-size: 0.95rem;
-      padding: 0.9rem 2rem;
-      border-radius: 40px;
-      border: none;
+    .field input::placeholder { color: var(--text-dimmer); }
+
+    .field input:hover,
+    .field select:hover { background: var(--surface-3); }
+
+    .field input:focus,
+    .field select:focus {
+      background: var(--surface);
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-soft);
+    }
+
+    .field input:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .field select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235a6482' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.05rem center;
+      background-size: 0.85rem;
       cursor: pointer;
-      transition: 0.2s ease;
-      display: inline-flex;
+      padding-right: 2.4rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field-status {
+      font-size: 0.72rem;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      min-height: 1em;
+      font-weight: 500;
+    }
+    .field-status.checking { color: var(--text-dimmer); }
+    .field-status.valid { color: var(--success); }
+    .field-status.invalid { color: var(--danger); }
+
+    /* Pill radios for Sex */
+    .pills {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+
+    .pill { position: relative; }
+
+    .pill input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .pill label {
+      display: flex;
       align-items: center;
       justify-content: center;
       gap: 0.5rem;
+      padding: 0.85rem 1rem;
+      background: var(--surface-2);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 500;
+      color: var(--text-dim);
+      transition: all 0.18s ease;
+      text-transform: none;
+      letter-spacing: normal;
     }
 
-    .btn-primary {
-      background: #1e4b6e;
+    .pill label:hover {
+      background: var(--surface-3);
+      color: var(--text);
+    }
+
+    .pill input:checked + label {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.10), rgba(139, 92, 246, 0.10));
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+      font-weight: 600;
+    }
+
+    .pill-icon { font-size: 0.95rem; }
+
+    .btn-submit {
+      width: 100%;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+      padding: 1rem 1.5rem;
+      margin-top: 0.75rem;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: white;
-      box-shadow: 0 8px 18px -6px rgba(30, 75, 110, 0.35);
-      flex: 1 1 auto;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.2s ease;
+      box-shadow: 0 12px 24px -8px var(--accent-glow);
     }
 
-    .btn-primary:hover:not(:disabled) {
-      background: #123a54;
+    .btn-submit:hover:not(:disabled) {
       transform: translateY(-1px);
-      box-shadow: 0 12px 22px -8px rgba(30, 75, 110, 0.45);
+      box-shadow: 0 16px 32px -8px var(--accent-glow);
     }
 
-    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-submit:active:not(:disabled) { transform: translateY(0); }
 
-    .btn-secondary {
-      background: transparent;
-      color: #1e4b6e;
-      border: 1.5px solid #cbd8e6;
+    .btn-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
     }
 
-    .btn-secondary:hover { background: #f0f6fc; border-color: #a0b8cf; }
-
-    .form-footer-note {
-      margin-top: 1.8rem;
-      font-size: 0.78rem;
-      text-align: center;
-      color: #6b7f91;
-      border-top: 1px solid #e6edf5;
-      padding-top: 1.2rem;
-    }
+    .btn-submit .arrow { transition: transform 0.2s ease; }
+    .btn-submit:hover:not(:disabled) .arrow { transform: translateX(3px); }
 
     .input-error {
-      border-color: #c2410c !important;
-      background: #fff9f5;
+      border-color: var(--danger) !important;
+      background: rgba(239, 68, 68, 0.05) !important;
     }
 
     .error-msg {
-      font-size: 0.75rem;
-      color: #c2410c;
-      margin-top: 0.15rem;
+      font-size: 0.72rem;
+      color: var(--danger);
       display: none;
+      font-weight: 500;
     }
+    .error-msg.show { display: block; }
 
-    /* Toast */
+    /* ============ TOAST ============ */
     .toast {
       position: fixed;
       bottom: 2rem;
       left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: #0b1c2f;
-      color: white;
-      padding: 0.9rem 1.8rem;
-      border-radius: 50px;
-      font-size: 0.9rem;
+      transform: translateX(-50%) translateY(150px);
+      background: white;
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 0.85rem 1.6rem;
+      border-radius: 12px;
+      font-size: 0.88rem;
       font-weight: 500;
-      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 20px 40px -10px rgba(30, 40, 80, 0.18);
       opacity: 0;
       transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
       z-index: 1000;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      max-width: 90%;
-      text-align: center;
+      gap: 0.6rem;
+      max-width: 90vw;
     }
-    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-    .toast.success { background: #0f4c2e; }
-    .toast.error { background: #7a1f1f; }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast.success { border-color: rgba(16, 185, 129, 0.3); }
+    .toast.success::before {
+      content: '✓';
+      width: 20px; height: 20px;
+      background: var(--success);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .toast.error { border-color: rgba(239, 68, 68, 0.3); }
+    .toast.error::before {
+      content: '!';
+      width: 20px; height: 20px;
+      background: var(--danger);
+      color: white;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700;
+      flex-shrink: 0;
+    }
 
     .spinner {
-      width: 18px; height: 18px;
-      border: 2.5px solid rgba(255, 255, 255, 0.3);
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.4);
       border-top-color: white;
       border-radius: 50%;
       animation: spin 0.7s linear infinite;
-      display: inline-block;
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 900px) {
+      .shell {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+      }
+      .panel-info {
+        padding: 2rem 2rem 1.75rem;
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .hero { margin: 1.75rem 0 1.5rem; }
+      .hero h1 { font-size: 1.55rem; }
+      .hero p { font-size: 0.85rem; }
+      .features { display: none; }
+      .panel-form { padding: 2rem 2rem 2.25rem; }
+    }
+
+    @media (max-width: 520px) {
+      body { padding: 1rem 0.75rem; }
+      .shell { border-radius: 20px; }
+      .panel-info { padding: 1.75rem 1.5rem 1.5rem; }
+      .panel-form { padding: 1.75rem 1.5rem 2rem; }
+      .hero h1 { font-size: 1.35rem; }
+      .grid-2 { grid-template-columns: 1fr; gap: 0.9rem; }
+      .form-header h2 { font-size: 1.2rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="form-card">
-    <a href="admin.html" class="admin-link">Admin →</a>
 
-    <div class="header">
-      <div class="course-code">EDF413</div>
-      <h1 class="course-title">Education and Development in Developing Countries</h1>
-      <p class="header-sub">Fill in your details below to register for this course.</p>
-      <div class="divider"></div>
-    </div>
+  <div class="shell">
 
-    <form class="registration-form" id="edf413Form" novalidate>
-      <div class="form-row">
-        <div class="form-group">
-          <label for="fullName">Full Name <span class="required">*</span></label>
+    <!-- LEFT: INFO PANEL -->
+    <aside class="panel-info">
+      <div>
+        <div class="brand">
+          <div class="brand-mark">E4</div>
+          <div class="brand-name">
+            EDF413
+            <small>Course Registration</small>
+          </div>
+        </div>
+
+        <div class="hero">
+          <div class="hero-tag">Spring 2025</div>
+          <h1>
+             
+              Education &amp; <em>Development</em> in Developing Countries (EDF413)
+          </h1>
+         
+        </div>
+      </div>
+
+      <div class="features">
+        <div class="feature">
+          <div class="feature-icon">📚</div>
+          <span>12-week intensive program</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🌍</div>
+          <span>Case studies from 20+ countries</span>
+        </div>
+        <div class="feature">
+          <div class="feature-icon">🎓</div>
+          <span>Recognized academic credit</span>
+        </div>
+      </div>
+
+      <div class="panel-footer">
+        <a href="admin.html">Admin portal →</a>
+      </div>
+    </aside>
+
+    <!-- RIGHT: FORM -->
+    <main class="panel-form">
+      <div class="form-header">
+        <h2>Register for this course</h2>
+        <p>All fields marked with <span style="color:#8b5cf6">*</span> are required.</p>
+      </div>
+
+      <form id="edf413Form" novalidate>
+
+        <div class="field">
+          <label for="fullName">Full Name <span class="req">*</span></label>
           <input type="text" id="fullName" name="fullName" placeholder="e.g. David Makiyi" autocomplete="name">
-          <div class="error-msg">Please enter your full name.</div>
+          <div class="error-msg" id="errFullName">Please enter your full name.</div>
         </div>
-        <div class="form-group">
-          <label for="regNumber">Reg Number <span class="required">*</span></label>
-          <input type="text" id="regNumber" name="regNumber" placeholder="e.g. 2025/EDF/413" autocomplete="off">
-          <div class="field-status" id="regStatus"></div>
-          <div class="error-msg">Registration number is required.</div>
-        </div>
-      </div>
 
-      <div class="form-row">
-        <div class="form-group">
-          <label for="subjectCombination">Subject Combination <span class="required">*</span></label>
-          <input type="text" id="subjectCombination" name="subjectCombination" placeholder="e.g. MAT/BIO">
-          <div class="error-msg">Please enter your subject combination.</div>
-        </div>
-        <div class="form-group">
-          <label for="sex">Sex <span class="required">*</span></label>
-          <select id="sex" name="sex">
-            <option value="" disabled selected>Select</option>
-            <option value="Female">Female</option>
-            <option value="Male">Male</option>
-          </select>
-          <div class="error-msg">Please select your sex.</div>
-        </div>
-      </div>
+        <div class="grid-2">
+          <div class="field">
+            <label for="regNumber">Reg Number <span class="req">*</span></label>
+            <input type="text" id="regNumber" name="regNumber" placeholder="NCE/SCI/62627/23" autocomplete="off">
+            <div class="field-status" id="regStatus"></div>
+            <div class="error-msg" id="errRegNumber">Registration number is required.</div>
+          </div>
 
-      <div class="form-actions">
-        <button type="reset" class="btn btn-secondary" id="resetBtn">Clear</button>
-        <button type="submit" class="btn btn-primary" id="submitBtn">Submit registration</button>
-      </div>
-    </form>
+          <div class="field">
+            <label for="subjectCombination">Subject Combination <span class="req">*</span></label>
+            <input type="text" id="subjectCombination" name="subjectCombination" placeholder="MAT/BIO">
+            <div class="error-msg" id="errCombination">Subject combination is required.</div>
+          </div>
+        </div>
 
-    <div class="form-footer-note">
-      ⏳ EDF413 · registration closes on March 15, 2025
-    </div>
+        <div class="field">
+          <label>Sex <span class="req">*</span></label>
+          <div class="pills">
+            <div class="pill">
+              <input type="radio" name="sex" id="sexFemale" value="Female">
+              <label for="sexFemale">
+                <span class="pill-icon">♀</span>
+                Female
+              </label>
+            </div>
+            <div class="pill">
+              <input type="radio" name="sex" id="sexMale" value="Male">
+              <label for="sexMale">
+                <span class="pill-icon">♂</span>
+                Male
+              </label>
+            </div>
+          </div>
+          <div class="error-msg" id="errSex">Please select your sex.</div>
+        </div>
+
+        <button type="submit" class="btn-submit" id="submitBtn">
+          Complete Registration
+          <span class="arrow">→</span>
+        </button>
+      </form>
+    </main>
   </div>
 
   <div class="toast" id="toast"></div>
@@ -374,26 +672,17 @@
 
     const COLLECTION = 'edf413_registrations';
 
-    // ============================================================
-    // Elements
-    // ============================================================
     const form = document.getElementById('edf413Form');
     const fullName = document.getElementById('fullName');
     const regNumber = document.getElementById('regNumber');
     const subjectCombination = document.getElementById('subjectCombination');
-    const sex = document.getElementById('sex');
     const submitBtn = document.getElementById('submitBtn');
-    const resetBtn = document.getElementById('resetBtn');
     const toast = document.getElementById('toast');
     const regStatus = document.getElementById('regStatus');
 
-    // Track reg number validity
-    let regNumberValid = false; // true = unique & valid
+    let regNumberValid = false;
     let regCheckTimeout = null;
 
-    // ============================================================
-    // Toast helper
-    // ============================================================
     let toastTimeout;
     function showToast(message, type = 'success') {
       clearTimeout(toastTimeout);
@@ -404,9 +693,6 @@
       toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
-    // ============================================================
-    // Check if reg number already exists in Firestore
-    // ============================================================
     async function checkRegNumberUnique(regNo) {
       const snapshot = await db.collection(COLLECTION)
         .where('regNumber', '==', regNo)
@@ -415,19 +701,14 @@
       return snapshot.empty;
     }
 
-    // Normalize reg number for comparison (uppercase, trim)
     function normalizeReg(reg) {
       return (reg || '').trim().toUpperCase();
     }
 
-    // ============================================================
-    // Real-time uniqueness validation (with debounce)
-    // ============================================================
     regNumber.addEventListener('input', function () {
       const value = this.value.trim();
       this.classList.remove('input-error');
-      const err = this.closest('.form-group').querySelector('.error-msg');
-      if (err) err.style.display = 'none';
+      document.getElementById('errRegNumber').classList.remove('show');
 
       clearTimeout(regCheckTimeout);
 
@@ -438,7 +719,7 @@
         return;
       }
 
-      regStatus.textContent = '⏳ Checking availability…';
+      regStatus.textContent = '⟳ Checking availability…';
       regStatus.className = 'field-status checking';
       regNumberValid = false;
 
@@ -450,13 +731,13 @@
             regStatus.className = 'field-status valid';
             regNumberValid = true;
           } else {
-            regStatus.textContent = '✗ Already registered';
+            regStatus.textContent = '✕ Already registered';
             regStatus.className = 'field-status invalid';
             this.classList.add('input-error');
             regNumberValid = false;
           }
         } catch (err) {
-          console.error('Check error:', err);
+          console.error(err);
           regStatus.textContent = '⚠ Could not verify';
           regStatus.className = 'field-status invalid';
           regNumberValid = false;
@@ -464,116 +745,98 @@
       }, 450);
     });
 
-    // ============================================================
-    // Clear errors on input
-    // ============================================================
-    [fullName, subjectCombination, sex].forEach(field => {
+    [fullName, subjectCombination].forEach(field => {
       field.addEventListener('input', function () {
         this.classList.remove('input-error');
-        const err = this.closest('.form-group').querySelector('.error-msg');
-        if (err) err.style.display = 'none';
-      });
-      field.addEventListener('change', function () {
-        this.classList.remove('input-error');
-        const err = this.closest('.form-group').querySelector('.error-msg');
-        if (err) err.style.display = 'none';
+        const errId = this.id === 'fullName' ? 'errFullName' : 'errCombination';
+        document.getElementById(errId).classList.remove('show');
       });
     });
 
-    // ============================================================
-    // Reset
-    // ============================================================
-    resetBtn.addEventListener('click', function () {
-      document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
-      document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
-      regStatus.textContent = '';
-      regStatus.className = 'field-status';
-      regNumberValid = false;
-      form.reset();
+    document.querySelectorAll('input[name="sex"]').forEach(r => {
+      r.addEventListener('change', () => {
+        document.getElementById('errSex').classList.remove('show');
+      });
     });
 
-    // ============================================================
-    // Validate field
-    // ============================================================
-    function validateField(field, condition) {
-      if (condition) {
-        field.classList.add('input-error');
-        const err = field.closest('.form-group').querySelector('.error-msg');
-        if (err) err.style.display = 'block';
-        return false;
-      }
-      field.classList.remove('input-error');
-      const err = field.closest('.form-group').querySelector('.error-msg');
-      if (err) err.style.display = 'none';
-      return true;
-    }
-
-    // ============================================================
-    // Submit
-    // ============================================================
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-
       let isValid = true;
-      isValid = validateField(fullName, !fullName.value.trim()) && isValid;
-      isValid = validateField(regNumber, !regNumber.value.trim()) && isValid;
-      isValid = validateField(subjectCombination, !subjectCombination.value.trim()) && isValid;
-      isValid = validateField(sex, !sex.value) && isValid;
+
+      if (!fullName.value.trim()) {
+        fullName.classList.add('input-error');
+        document.getElementById('errFullName').classList.add('show');
+        isValid = false;
+      }
+
+      if (!regNumber.value.trim()) {
+        regNumber.classList.add('input-error');
+        document.getElementById('errRegNumber').classList.add('show');
+        isValid = false;
+      }
+
+      if (!subjectCombination.value.trim()) {
+        subjectCombination.classList.add('input-error');
+        document.getElementById('errCombination').classList.add('show');
+        isValid = false;
+      }
+
+      const sexRadio = document.querySelector('input[name="sex"]:checked');
+      if (!sexRadio) {
+        document.getElementById('errSex').classList.add('show');
+        isValid = false;
+      }
 
       if (!isValid) {
-        const firstError = document.querySelector('.input-error');
-        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
         showToast('Please fill in all required fields.', 'error');
         return;
       }
 
-      const originalBtn = submitBtn.innerHTML;
+      const orig = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="spinner"></span> Submitting…';
 
       const normalizedReg = normalizeReg(regNumber.value);
 
       try {
-        // Double-check uniqueness right before writing (race-condition safe)
         const isUnique = await checkRegNumberUnique(normalizedReg);
 
         if (!isUnique) {
           regNumber.classList.add('input-error');
-          regStatus.textContent = '✗ Already registered';
+          regStatus.textContent = '✕ Already registered';
           regStatus.className = 'field-status invalid';
-          showToast('❌ This registration number is already registered.', 'error');
+          showToast('This registration number is already registered.', 'error');
           submitBtn.disabled = false;
-          submitBtn.innerHTML = originalBtn;
+          submitBtn.innerHTML = orig;
           return;
         }
 
-        // Save
         await db.collection(COLLECTION).add({
           fullName: fullName.value.trim(),
           regNumber: normalizedReg,
-          regNumberLower: normalizedReg.toLowerCase(), // for case-insensitive queries
+          regNumberLower: normalizedReg.toLowerCase(),
           subjectCombination: subjectCombination.value.trim().toUpperCase(),
-          sex: sex.value,
+          sex: sexRadio.value,
           courseCode: 'EDF413',
           courseTitle: 'Education and Development in Developing Countries',
           submittedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        showToast('✅ Registration submitted successfully!', 'success');
+        showToast('Registration complete! Welcome aboard.', 'success');
         form.reset();
         regStatus.textContent = '';
         regStatus.className = 'field-status';
         regNumberValid = false;
 
       } catch (error) {
-        console.error('❌ Firestore error:', error);
+        console.error('❌', error);
         let msg = 'Submission failed. Please try again.';
         if (error.code === 'permission-denied') msg = 'Permission denied. Check Firestore rules.';
         else if (error.code === 'unavailable') msg = 'Network error. Check your connection.';
-        showToast('❌ ' + msg, 'error');
+        showToast(msg, 'error');
       } finally {
         submitBtn.disabled = false;
-        submitBtn.innerHTML = originalBtn;
+        submitBtn.innerHTML = orig;
       }
     });
   </script>
