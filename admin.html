@@ -1,0 +1,1415 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDF413 · Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: #f1f5f9;
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      color: #0b1c2f;
+    }
+
+    /* ============ LOGIN ============ */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+      background: linear-gradient(145deg, #0b1c2f 0%, #123a54 100%);
+    }
+
+    .login-card {
+      background: white;
+      border-radius: 28px;
+      padding: 2.5rem 2.25rem;
+      max-width: 420px;
+      width: 100%;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.4);
+    }
+
+    .login-card .logo { text-align: center; margin-bottom: 1.75rem; }
+
+    .login-card .logo-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #1e4b6e, #2a6b96);
+      color: white;
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.4rem 1rem;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+      margin-bottom: 0.9rem;
+    }
+
+    .login-card h1 { font-size: 1.5rem; font-weight: 700; color: #0b1c2f; letter-spacing: -0.02em; }
+    .login-card p.sub { font-size: 0.85rem; color: #6b7f91; margin-top: 0.35rem; }
+
+    .login-form { margin-top: 1.75rem; display: flex; flex-direction: column; gap: 1.1rem; }
+
+    .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+
+    .form-group label {
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: #1e3b4f;
+    }
+
+    .form-group input {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.85rem 1rem;
+      border-radius: 14px;
+      border: 1.5px solid #dae2ed;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .form-group input:focus {
+      border-color: #2a6b96;
+      box-shadow: 0 0 0 4px rgba(42, 107, 150, 0.15);
+    }
+
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 0.85rem 1.5rem;
+      border-radius: 40px;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: #1e4b6e;
+      color: white;
+      box-shadow: 0 8px 18px -6px rgba(30, 75, 110, 0.4);
+      width: 100%;
+    }
+    .btn-primary:hover:not(:disabled) { background: #123a54; transform: translateY(-1px); }
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .login-error {
+      background: #fef2f2;
+      color: #b91c1c;
+      font-size: 0.82rem;
+      padding: 0.7rem 1rem;
+      border-radius: 12px;
+      border: 1px solid #fecaca;
+      display: none;
+    }
+    .login-error.show { display: block; }
+
+    .login-hint {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #94a3b8;
+      margin-top: 1.25rem;
+      line-height: 1.5;
+    }
+
+    /* ============ DASHBOARD ============ */
+    .dashboard { display: none; }
+    .dashboard.show { display: block; }
+
+    .topbar {
+      background: linear-gradient(135deg, #0b1c2f, #123a54);
+      color: white;
+      padding: 1.2rem 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 0.9rem; }
+
+    .logo-badge {
+      background: linear-gradient(135deg, #2a6b96, #3b8ab8);
+      font-size: 0.85rem;
+      font-weight: 700;
+      padding: 0.4rem 0.9rem;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+    }
+
+    .topbar h1 { font-size: 1.15rem; font-weight: 600; }
+    .topbar h1 small { display: block; font-size: 0.75rem; font-weight: 400; color: #a9c4dc; margin-top: 0.1rem; }
+
+    .topbar-right { display: flex; align-items: center; gap: 0.75rem; flex-wrap: wrap; }
+
+    .admin-info {
+      font-size: 0.78rem;
+      color: #c9dcec;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.9rem;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 40px;
+    }
+
+    .admin-info .dot {
+      width: 8px; height: 8px;
+      background: #34d399;
+      border-radius: 50%;
+      animation: pulse 1.8s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6); }
+      50% { opacity: 0.7; box-shadow: 0 0 0 6px rgba(52, 211, 153, 0); }
+    }
+
+    .btn-export { background: #10b981; color: white; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); }
+    .btn-export:hover { background: #059669; transform: translateY(-1px); }
+
+    .btn-export-csv {
+      background: #0ea5e9;
+      color: white;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+    }
+    .btn-export-csv:hover { background: #0284c7; transform: translateY(-1px); }
+
+    .btn-logout {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-logout:hover { background: rgba(239, 68, 68, 0.25); border-color: rgba(239, 68, 68, 0.5); }
+
+    .btn-refresh {
+      background: rgba(255, 255, 255, 0.12);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    .btn-refresh:hover { background: rgba(255, 255, 255, 0.22); }
+
+    .container { max-width: 1280px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1.25rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      background: white;
+      border-radius: 20px;
+      padding: 1.4rem 1.5rem;
+      box-shadow: 0 8px 20px -8px rgba(0, 20, 40, 0.1);
+      border: 1px solid #e6edf5;
+      transition: transform 0.2s ease;
+    }
+    .stat-card:hover { transform: translateY(-2px); }
+
+    .stat-label {
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b7f91;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-value { font-size: 2rem; font-weight: 700; color: #0b1c2f; letter-spacing: -0.03em; line-height: 1; }
+    .stat-value.female { color: #be185d; }
+    .stat-value.male { color: #1d4ed8; }
+    .stat-sub { font-size: 0.75rem; color: #8ca0b3; margin-top: 0.4rem; }
+
+    .toolbar {
+      background: white;
+      border-radius: 20px;
+      padding: 1.1rem 1.4rem;
+      box-shadow: 0 8px 20px -8px rgba(0, 20, 40, 0.08);
+      border: 1px solid #e6edf5;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .search-box { flex: 1 1 260px; position: relative; }
+
+    .search-box input {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.9rem;
+      padding: 0.7rem 1rem 0.7rem 2.5rem;
+      border-radius: 40px;
+      border: 1.5px solid #dae2ed;
+      outline: none;
+      transition: 0.2s ease;
+      background: #f8fafc;
+    }
+    .search-box input:focus { border-color: #2a6b96; background: white; box-shadow: 0 0 0 4px rgba(42, 107, 150, 0.12); }
+
+    .search-box::before {
+      content: '🔍';
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      opacity: 0.6;
+    }
+
+    .filter-select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.88rem;
+      padding: 0.7rem 2.2rem 0.7rem 1rem;
+      border-radius: 40px;
+      border: 1.5px solid #dae2ed;
+      background: #f8fafc url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%233b5e7a' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E") no-repeat right 1rem center;
+      background-size: 0.85rem;
+      appearance: none;
+      cursor: pointer;
+      outline: none;
+      transition: 0.2s ease;
+    }
+    .filter-select:focus { border-color: #2a6b96; background-color: white; }
+
+    .table-wrap {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 24px -10px rgba(0, 20, 40, 0.12);
+      border: 1px solid #e6edf5;
+      overflow: hidden;
+    }
+
+    .table-header-bar {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid #eef2f7;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .table-header-bar h2 { font-size: 1rem; font-weight: 600; color: #0b1c2f; }
+
+    .record-count {
+      font-size: 0.8rem;
+      color: #6b7f91;
+      background: #f1f5f9;
+      padding: 0.3rem 0.9rem;
+      border-radius: 40px;
+      font-weight: 500;
+    }
+
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    thead { background: #f8fafc; }
+
+    th {
+      text-align: left;
+      padding: 0.9rem 1.2rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: #5a7288;
+      white-space: nowrap;
+      border-bottom: 1.5px solid #e6edf5;
+    }
+
+    td {
+      padding: 0.95rem 1.2rem;
+      border-bottom: 1px solid #f0f5fa;
+      color: #1e3b4f;
+      vertical-align: middle;
+    }
+
+    tbody tr { transition: background 0.15s ease; }
+    tbody tr:hover { background: #f8fbfe; }
+    tbody tr:last-child td { border-bottom: none; }
+
+    .name-cell {
+      font-weight: 600;
+      color: #0b1c2f;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+
+    .avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 0.28rem 0.75rem;
+      border-radius: 40px;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+
+    .badge-female { background: #fce7f3; color: #9d174d; }
+    .badge-male { background: #dbeafe; color: #1e40af; }
+    .badge-combo { background: #e0f2fe; color: #075985; font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.75rem; }
+    .badge-reg { background: #f1f5f9; color: #334155; font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.75rem; }
+
+    .time-cell { font-size: 0.8rem; color: #7a8fa3; white-space: nowrap; }
+
+    .row-actions { display: flex; gap: 0.4rem; }
+
+    .icon-btn {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      transition: 0.15s ease;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .icon-btn:hover { transform: scale(1.08); }
+    .icon-btn.edit:hover { background: #dbeafe; color: #1e40af; }
+    .icon-btn.delete:hover { background: #fee2e2; color: #b91c1c; }
+
+    .state-box { text-align: center; padding: 4rem 2rem; color: #7a8fa3; }
+    .state-box .icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.6; }
+    .state-box h3 { font-size: 1rem; font-weight: 600; color: #4b5e71; margin-bottom: 0.4rem; }
+    .state-box p { font-size: 0.85rem; }
+
+    .loader {
+      width: 40px; height: 40px;
+      border: 3.5px solid #e0e8f0;
+      border-top-color: #2a6b96;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 1.2rem;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ============ MODAL ============ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 28, 47, 0.65);
+      backdrop-filter: blur(4px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
+    }
+    .modal-overlay.show { opacity: 1; pointer-events: auto; }
+
+    .modal {
+      background: white;
+      border-radius: 24px;
+      padding: 2rem;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.5);
+      transform: scale(0.92);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-overlay.show .modal { transform: scale(1); }
+
+    .modal h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #0b1c2f;
+      margin-bottom: 0.4rem;
+      letter-spacing: -0.01em;
+    }
+
+    .modal .modal-sub { font-size: 0.85rem; color: #6b7f91; margin-bottom: 1.5rem; }
+    .modal .form-group { margin-bottom: 1rem; }
+
+    .modal .form-group input,
+    .modal .form-group select {
+      width: 100%;
+      font-family: 'Inter', sans-serif;
+      font-size: 0.92rem;
+      padding: 0.75rem 1rem;
+      border-radius: 12px;
+      border: 1.5px solid #dae2ed;
+      outline: none;
+      transition: 0.2s ease;
+    }
+
+    .modal .form-group input:focus,
+    .modal .form-group select:focus {
+      border-color: #2a6b96;
+      box-shadow: 0 0 0 4px rgba(42, 107, 150, 0.12);
+    }
+
+    .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.5rem; }
+
+    .btn-cancel { background: #f1f5f9; color: #475569; }
+    .btn-cancel:hover { background: #e2e8f0; }
+
+    .btn-save { background: #1e4b6e; color: white; box-shadow: 0 8px 18px -6px rgba(30, 75, 110, 0.4); }
+    .btn-save:hover:not(:disabled) { background: #123a54; transform: translateY(-1px); }
+    .btn-save:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-danger { background: #dc2626; color: white; }
+    .btn-danger:hover { background: #b91c1c; }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0b1c2f;
+      color: white;
+      padding: 0.9rem 1.8rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast.success { background: #0f4c2e; }
+    .toast.error { background: #7a1f1f; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @media (max-width: 720px) {
+      .topbar { padding: 1rem 1.2rem; }
+      .topbar h1 { font-size: 1rem; }
+      .container { padding: 1.25rem 1rem 3rem; }
+      .stat-value { font-size: 1.6rem; }
+      table, thead, tbody, th, td, tr { display: block; }
+      thead { display: none; }
+      tbody tr { border-bottom: 1px solid #eef2f7; padding: 1rem 1.2rem; }
+      tbody tr:last-child { border-bottom: none; }
+      td { border: none; padding: 0.35rem 0; display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+      td::before {
+        content: attr(data-label);
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #8ca0b3;
+        flex-shrink: 0;
+      }
+      .name-cell { justify-content: flex-end; }
+      .name-cell::before { display: none; }
+      .row-actions { justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ================= LOGIN SCREEN ================= -->
+  <div class="login-screen" id="loginScreen">
+    <div class="login-card">
+      <div class="logo">
+        <span class="logo-badge">EDF413</span>
+        <h1>Admin Login</h1>
+        <p class="sub">Education and Development in Developing Countries</p>
+      </div>
+
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input type="email" id="email" placeholder="admin@school.edu" autocomplete="email" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required>
+        </div>
+
+        <div class="login-error" id="loginError"></div>
+
+        <button type="submit" class="btn btn-primary" id="loginBtn">Sign in</button>
+      </form>
+
+      <p class="login-hint">
+        Authorized personnel only.<br>
+        <a href="index.html" style="color:#2a6b96;text-decoration:none;font-weight:600;">← Back to registration</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- ================= DASHBOARD ================= -->
+  <div class="dashboard" id="dashboard">
+
+    <div class="topbar">
+      <div class="topbar-left">
+        <span class="logo-badge">EDF413</span>
+        <h1>
+          Admin Dashboard
+          <small>Education and Development in Developing Countries</small>
+        </h1>
+      </div>
+      <div class="topbar-right">
+        <span class="admin-info">
+          <span class="dot"></span>
+          <span id="adminEmail">—</span>
+        </span>
+        <button class="btn btn-refresh" id="refreshBtn">↻ Refresh</button>
+        <button class="btn btn-export-csv" id="exportCsvBtn">⬇ CSV</button>
+        <button class="btn btn-export" id="exportBtn">⬇ Excel</button>
+        <button class="btn btn-logout" id="logoutBtn">Sign out</button>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-label">Total Registrations</div>
+          <div class="stat-value" id="statTotal">—</div>
+          <div class="stat-sub">All submissions</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Female</div>
+          <div class="stat-value female" id="statFemale">—</div>
+          <div class="stat-sub" id="statFemalePct">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Male</div>
+          <div class="stat-value male" id="statMale">—</div>
+          <div class="stat-sub" id="statMalePct">—</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Combinations</div>
+          <div class="stat-value" id="statCombos">—</div>
+          <div class="stat-sub">Unique subject combos</div>
+        </div>
+      </div>
+
+      <div class="toolbar">
+        <div class="search-box">
+          <input type="text" id="searchInput" placeholder="Search by name, reg number, or combination…">
+        </div>
+        <select class="filter-select" id="sexFilter">
+          <option value="all">All sexes</option>
+          <option value="Female">Female</option>
+          <option value="Male">Male</option>
+        </select>
+        <select class="filter-select" id="comboFilter">
+          <option value="all">All combinations</option>
+        </select>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-header-bar">
+          <h2>Registrations</h2>
+          <span class="record-count" id="recordCount">Loading…</span>
+        </div>
+        <div id="tableContainer">
+          <div class="state-box">
+            <div class="loader"></div>
+            <h3>Loading registrations…</h3>
+            <p>Fetching from Firestore</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= EDIT MODAL ================= -->
+  <div class="modal-overlay" id="editModal">
+    <div class="modal">
+      <h2>Edit Registration</h2>
+      <p class="modal-sub">Update the details for this student.</p>
+
+      <form id="editForm">
+        <input type="hidden" id="editDocId">
+
+        <div class="form-group">
+          <label for="editFullName">Full Name</label>
+          <input type="text" id="editFullName" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editRegNumber">Reg Number</label>
+          <input type="text" id="editRegNumber" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editCombination">Subject Combination</label>
+          <input type="text" id="editCombination" required>
+        </div>
+
+        <div class="form-group">
+          <label for="editSex">Sex</label>
+          <select id="editSex" required>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn btn-cancel" id="cancelEditBtn">Cancel</button>
+          <button type="submit" class="btn btn-save" id="saveEditBtn">Save changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ================= DELETE MODAL ================= -->
+  <div class="modal-overlay" id="deleteModal">
+    <div class="modal">
+      <h2>Delete Registration?</h2>
+      <p class="modal-sub">
+        This will permanently remove <strong id="deleteName">this record</strong> from the database. This action cannot be undone.
+      </p>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-cancel" id="cancelDeleteBtn">Cancel</button>
+        <button type="button" class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- ================= EXCEL LIBRARIES ================= -->
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+
+  <!-- ================= FIREBASE ================= -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ============================================================
+    // Firebase
+    // ============================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKTBTnSHbZ-aEzIOZZ6ElWpybD93DHXVc",
+      authDomain: "school-7bfaa.firebaseapp.com",
+      projectId: "school-7bfaa",
+      storageBucket: "school-7bfaa.firebasestorage.app",
+      messagingSenderId: "91516216765",
+      appId: "1:91516216765:web:a5a3b45e823b8c8d8d1ed4"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const auth = firebase.auth();
+
+    const COLLECTION = 'edf413_registrations';
+
+    // ============================================================
+    // DOM refs
+    // ============================================================
+    const loginScreen = document.getElementById('loginScreen');
+    const dashboard = document.getElementById('dashboard');
+    const loginForm = document.getElementById('loginForm');
+    const loginBtn = document.getElementById('loginBtn');
+    const loginError = document.getElementById('loginError');
+    const emailInput = document.getElementById('email');
+    const passwordInput = document.getElementById('password');
+    const adminEmail = document.getElementById('adminEmail');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    const tableContainer = document.getElementById('tableContainer');
+    const recordCount = document.getElementById('recordCount');
+    const statTotal = document.getElementById('statTotal');
+    const statFemale = document.getElementById('statFemale');
+    const statMale = document.getElementById('statMale');
+    const statCombos = document.getElementById('statCombos');
+    const statFemalePct = document.getElementById('statFemalePct');
+    const statMalePct = document.getElementById('statMalePct');
+    const searchInput = document.getElementById('searchInput');
+    const sexFilter = document.getElementById('sexFilter');
+    const comboFilter = document.getElementById('comboFilter');
+    const refreshBtn = document.getElementById('refreshBtn');
+    const exportBtn = document.getElementById('exportBtn');
+    const exportCsvBtn = document.getElementById('exportCsvBtn');
+
+    const editModal = document.getElementById('editModal');
+    const editForm = document.getElementById('editForm');
+    const editDocId = document.getElementById('editDocId');
+    const editFullName = document.getElementById('editFullName');
+    const editRegNumber = document.getElementById('editRegNumber');
+    const editCombination = document.getElementById('editCombination');
+    const editSex = document.getElementById('editSex');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const saveEditBtn = document.getElementById('saveEditBtn');
+
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteName = document.getElementById('deleteName');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    const toast = document.getElementById('toast');
+
+    // ============================================================
+    // State
+    // ============================================================
+    let allRecords = [];
+    let unsubscribe = null;
+    let pendingDeleteId = null;
+
+    // ============================================================
+    // Toast
+    // ============================================================
+    let toastTimeout;
+    function showToast(message, type = 'success') {
+      clearTimeout(toastTimeout);
+      toast.textContent = message;
+      toast.className = 'toast ' + type;
+      void toast.offsetWidth;
+      toast.classList.add('show');
+      toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // ============================================================
+    // Helpers
+    // ============================================================
+    const AVATAR_COLORS = ['#1e4b6e', '#2a6b96', '#0f766e', '#7c3aed', '#be185d', '#b45309', '#047857', '#4338ca'];
+
+    function colorForName(name) {
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) hash = name.charCodeAt(i) + ((hash << 5) - hash);
+      return AVATAR_COLORS[Math.abs(hash) % AVATAR_COLORS.length];
+    }
+
+    function initials(name) {
+      const parts = name.trim().split(/\s+/);
+      if (parts.length === 1) return parts[0].substring(0, 2).toUpperCase();
+      return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    function escapeHtml(str) {
+      if (str == null) return '';
+      return String(str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    function formatDate(timestamp) {
+      if (!timestamp) return '—';
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      if (isNaN(date.getTime())) return '—';
+      return date.toLocaleString('en-GB', {
+        day: '2-digit', month: 'short', year: 'numeric',
+        hour: '2-digit', minute: '2-digit'
+      });
+    }
+
+    // ============================================================
+    // AUTH
+    // ============================================================
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        loginScreen.style.display = 'none';
+        dashboard.classList.add('show');
+        adminEmail.textContent = user.email;
+        startListener();
+      } else {
+        loginScreen.style.display = 'flex';
+        dashboard.classList.remove('show');
+        if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+        allRecords = [];
+      }
+    });
+
+    loginForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      loginError.classList.remove('show');
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        loginError.textContent = 'Please fill in both fields.';
+        loginError.classList.add('show');
+        return;
+      }
+
+      const orig = loginBtn.innerHTML;
+      loginBtn.disabled = true;
+      loginBtn.innerHTML = '<span class="spinner"></span> Signing in…';
+
+      try {
+        await auth.signInWithEmailAndPassword(email, password);
+        passwordInput.value = '';
+      } catch (err) {
+        console.error('Login error:', err);
+        let msg = 'Login failed.';
+        if (err.code === 'auth/wrong-password' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-credential') {
+          msg = 'Invalid email or password.';
+        } else if (err.code === 'auth/invalid-email') {
+          msg = 'Invalid email format.';
+        } else if (err.code === 'auth/too-many-requests') {
+          msg = 'Too many attempts. Try again later.';
+        }
+        loginError.textContent = msg;
+        loginError.classList.add('show');
+      } finally {
+        loginBtn.disabled = false;
+        loginBtn.innerHTML = orig;
+      }
+    });
+
+    logoutBtn.addEventListener('click', async () => {
+      if (!confirm('Sign out of the admin dashboard?')) return;
+      try {
+        await auth.signOut();
+        showToast('Signed out.', 'success');
+      } catch (err) {
+        console.error(err);
+      }
+    });
+
+    // ============================================================
+    // Firestore listener
+    // ============================================================
+    function startListener() {
+      if (unsubscribe) unsubscribe();
+
+      tableContainer.innerHTML = `
+        <div class="state-box">
+          <div class="loader"></div>
+          <h3>Loading registrations…</h3>
+          <p>Connecting to Firestore</p>
+        </div>`;
+
+      unsubscribe = db.collection(COLLECTION)
+        .orderBy('submittedAt', 'desc')
+        .onSnapshot(
+          (snapshot) => {
+            allRecords = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            console.log(`📥 ${allRecords.length} registration(s) loaded`);
+            populateComboFilter();
+            updateStats();
+            applyFilters();
+          },
+          (error) => {
+            console.error('❌ Firestore listener error:', error);
+            let msg = 'Could not load registrations.';
+            if (error.code === 'permission-denied') msg = 'Permission denied. Check your Firestore rules.';
+            else if (error.code === 'failed-precondition') msg = 'This query needs an index. Create it in Firebase console.';
+            tableContainer.innerHTML = `
+              <div class="state-box">
+                <div class="icon">⚠️</div>
+                <h3>Connection error</h3>
+                <p>${escapeHtml(msg)}</p>
+              </div>`;
+            recordCount.textContent = 'Error';
+          }
+        );
+    }
+
+    // ============================================================
+    // Table render
+    // ============================================================
+    function renderTable(records) {
+      if (!records.length) {
+        tableContainer.innerHTML = `
+          <div class="state-box">
+            <div class="icon">📭</div>
+            <h3>No registrations found</h3>
+            <p>${allRecords.length ? 'Try adjusting your search or filters.' : 'Registrations will appear here as they come in.'}</p>
+          </div>`;
+        recordCount.textContent = `0 of ${allRecords.length}`;
+        return;
+      }
+
+      const rows = records.map(r => {
+        const name = r.fullName || 'Unknown';
+        const color = colorForName(name);
+        const sexClass = r.sex === 'Female' ? 'badge-female' : 'badge-male';
+
+        return `
+          <tr>
+            <td data-label="Name">
+              <div class="name-cell">
+                <span class="avatar" style="background:${color}">${escapeHtml(initials(name))}</span>
+                <span>${escapeHtml(name)}</span>
+              </div>
+            </td>
+            <td data-label="Reg Number"><span class="badge badge-reg">${escapeHtml(r.regNumber || '—')}</span></td>
+            <td data-label="Combination"><span class="badge badge-combo">${escapeHtml(r.subjectCombination || '—')}</span></td>
+            <td data-label="Sex"><span class="badge ${sexClass}">${escapeHtml(r.sex || '—')}</span></td>
+            <td data-label="Submitted" class="time-cell">${escapeHtml(formatDate(r.submittedAt))}</td>
+            <td data-label="Actions">
+              <div class="row-actions">
+                <button class="icon-btn edit" data-action="edit" data-id="${r.id}" title="Edit">✏️</button>
+                <button class="icon-btn delete" data-action="delete" data-id="${r.id}" title="Delete">🗑️</button>
+              </div>
+            </td>
+          </tr>`;
+      }).join('');
+
+      tableContainer.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Reg Number</th>
+              <th>Subject Combination</th>
+              <th>Sex</th>
+              <th>Submitted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+
+      recordCount.textContent = `${records.length} of ${allRecords.length}`;
+    }
+
+    // ============================================================
+    // Stats
+    // ============================================================
+    function updateStats() {
+      const total = allRecords.length;
+      const females = allRecords.filter(r => r.sex === 'Female').length;
+      const males = allRecords.filter(r => r.sex === 'Male').length;
+      const combos = new Set(allRecords.map(r => (r.subjectCombination || '').toUpperCase()).filter(Boolean));
+
+      statTotal.textContent = total;
+      statFemale.textContent = females;
+      statMale.textContent = males;
+      statCombos.textContent = combos.size;
+
+      const pct = (n) => total ? Math.round((n / total) * 100) + '% of total' : '—';
+      statFemalePct.textContent = pct(females);
+      statMalePct.textContent = pct(males);
+    }
+
+    // ============================================================
+    // Combo filter
+    // ============================================================
+    function populateComboFilter() {
+      const combos = [...new Set(
+        allRecords.map(r => (r.subjectCombination || '').trim().toUpperCase()).filter(Boolean)
+      )].sort();
+
+      const current = comboFilter.value;
+      comboFilter.innerHTML = '<option value="all">All combinations</option>' +
+        combos.map(c => `<option value="${escapeHtml(c)}">${escapeHtml(c)}</option>`).join('');
+
+      if ([...comboFilter.options].some(o => o.value === current)) comboFilter.value = current;
+    }
+
+    // ============================================================
+    // Filters
+    // ============================================================
+    function applyFilters() {
+      const q = searchInput.value.trim().toLowerCase();
+      const sex = sexFilter.value;
+      const combo = comboFilter.value;
+
+      const filtered = allRecords.filter(r => {
+        if (sex !== 'all' && r.sex !== sex) return false;
+        if (combo !== 'all' && (r.subjectCombination || '').toUpperCase() !== combo) return false;
+        if (q) {
+          const haystack = [r.fullName, r.regNumber, r.subjectCombination].join(' ').toLowerCase();
+          if (!haystack.includes(q)) return false;
+        }
+        return true;
+      });
+
+      renderTable(filtered);
+    }
+
+    // ============================================================
+    // Row actions
+    // ============================================================
+    tableContainer.addEventListener('click', (e) => {
+      const btn = e.target.closest('button[data-action]');
+      if (!btn) return;
+
+      const id = btn.dataset.id;
+      const action = btn.dataset.action;
+      const record = allRecords.find(r => r.id === id);
+      if (!record) return;
+
+      if (action === 'edit') openEditModal(record);
+      else if (action === 'delete') openDeleteModal(record);
+    });
+
+    // ============================================================
+    // Edit
+    // ============================================================
+    function openEditModal(record) {
+      editDocId.value = record.id;
+      editFullName.value = record.fullName || '';
+      editRegNumber.value = record.regNumber || '';
+      editCombination.value = record.subjectCombination || '';
+      editSex.value = record.sex || 'Female';
+      editModal.classList.add('show');
+      setTimeout(() => editFullName.focus(), 200);
+    }
+
+    function closeEditModal() { editModal.classList.remove('show'); }
+
+    cancelEditBtn.addEventListener('click', closeEditModal);
+    editModal.addEventListener('click', (e) => { if (e.target === editModal) closeEditModal(); });
+
+    editForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const id = editDocId.value;
+      const newReg = (editRegNumber.value || '').trim().toUpperCase();
+
+      if (!editFullName.value.trim() || !newReg || !editCombination.value.trim()) {
+        showToast('All fields are required.', 'error');
+        return;
+      }
+
+      const orig = saveEditBtn.innerHTML;
+      saveEditBtn.disabled = true;
+      saveEditBtn.innerHTML = '<span class="spinner"></span> Saving…';
+
+      try {
+        const clash = await db.collection(COLLECTION)
+          .where('regNumber', '==', newReg)
+          .get();
+
+        const conflict = clash.docs.find(d => d.id !== id);
+        if (conflict) {
+          showToast('❌ Reg number already used by another student.', 'error');
+          saveEditBtn.disabled = false;
+          saveEditBtn.innerHTML = orig;
+          return;
+        }
+
+        await db.collection(COLLECTION).doc(id).update({
+          fullName: editFullName.value.trim(),
+          regNumber: newReg,
+          regNumberLower: newReg.toLowerCase(),
+          subjectCombination: editCombination.value.trim().toUpperCase(),
+          sex: editSex.value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        showToast('✅ Registration updated.', 'success');
+        closeEditModal();
+      } catch (err) {
+        console.error('Update error:', err);
+        showToast('❌ Update failed: ' + err.message, 'error');
+      } finally {
+        saveEditBtn.disabled = false;
+        saveEditBtn.innerHTML = orig;
+      }
+    });
+
+    // ============================================================
+    // Delete
+    // ============================================================
+    function openDeleteModal(record) {
+      pendingDeleteId = record.id;
+      deleteName.textContent = record.fullName || 'this record';
+      deleteModal.classList.add('show');
+    }
+
+    function closeDeleteModal() {
+      deleteModal.classList.remove('show');
+      pendingDeleteId = null;
+    }
+
+    cancelDeleteBtn.addEventListener('click', closeDeleteModal);
+    deleteModal.addEventListener('click', (e) => { if (e.target === deleteModal) closeDeleteModal(); });
+
+    confirmDeleteBtn.addEventListener('click', async () => {
+      if (!pendingDeleteId) return;
+
+      const orig = confirmDeleteBtn.innerHTML;
+      confirmDeleteBtn.disabled = true;
+      confirmDeleteBtn.innerHTML = '<span class="spinner"></span> Deleting…';
+
+      try {
+        await db.collection(COLLECTION).doc(pendingDeleteId).delete();
+        showToast('🗑️ Registration deleted.', 'success');
+        closeDeleteModal();
+      } catch (err) {
+        console.error('Delete error:', err);
+        showToast('❌ Delete failed: ' + err.message, 'error');
+      } finally {
+        confirmDeleteBtn.disabled = false;
+        confirmDeleteBtn.innerHTML = orig;
+      }
+    });
+
+    // ============================================================
+    // CSV Export
+    // ============================================================
+    function exportCSV() {
+      if (!allRecords.length) { showToast('No records to export.', 'error'); return; }
+
+      const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At', 'Doc ID'];
+      const rows = allRecords.map(r => {
+        const date = r.submittedAt?.toDate ? r.submittedAt.toDate().toISOString() : '';
+        return [r.fullName || '', r.regNumber || '', r.subjectCombination || '', r.sex || '', date, r.id || ''];
+      });
+
+      const esc = (v) => {
+        const s = String(v ?? '');
+        return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+      };
+
+      const csv = [headers.map(esc).join(','), ...rows.map(row => row.map(esc).join(','))].join('\r\n');
+      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      const stamp = new Date().toISOString().slice(0, 10);
+
+      link.href = url;
+      link.download = `EDF413_registrations_${stamp}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+
+      showToast(`✅ Exported ${allRecords.length} record(s) to CSV.`, 'success');
+    }
+
+    // ============================================================
+    // XLSX (Excel) Export — fully styled
+    // ============================================================
+    function exportXLSX() {
+      if (!allRecords.length) {
+        showToast('No records to export.', 'error');
+        return;
+      }
+
+      if (typeof XLSX === 'undefined') {
+        showToast('❌ Excel library not loaded.', 'error');
+        return;
+      }
+
+      // ---------- 1. Build rows ----------
+      const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At'];
+
+      const data = allRecords.map(r => {
+        const date = r.submittedAt?.toDate ? r.submittedAt.toDate() : null;
+        const dateStr = date
+          ? date.toLocaleString('en-GB', {
+              day: '2-digit', month: 'short', year: 'numeric',
+              hour: '2-digit', minute: '2-digit'
+            })
+          : '—';
+
+        return [
+          r.fullName || '',
+          r.regNumber || '',
+          r.subjectCombination || '',
+          r.sex || '',
+          dateStr
+        ];
+      });
+
+      // ---------- 2. Worksheet ----------
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
+
+      ws['!cols'] = [
+        { wch: 28 }, { wch: 20 }, { wch: 22 }, { wch: 12 }, { wch: 22 }
+      ];
+
+      // ---------- 3. Header styling ----------
+      const headerStyle = {
+        font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
+        fill: { fgColor: { rgb: '1E4B6E' } },
+        alignment: { horizontal: 'left', vertical: 'center' },
+        border: {
+          top:    { style: 'thin', color: { rgb: '123A54' } },
+          bottom: { style: 'thin', color: { rgb: '123A54' } },
+          left:   { style: 'thin', color: { rgb: '123A54' } },
+          right:  { style: 'thin', color: { rgb: '123A54' } }
+        }
+      };
+
+      headers.forEach((_, i) => {
+        const addr = XLSX.utils.encode_cell({ r: 0, c: i });
+        if (ws[addr]) ws[addr].s = headerStyle;
+      });
+
+      // ---------- 4. Body styling ----------
+      data.forEach((row, rowIdx) => {
+        const r = rowIdx + 1;
+        row.forEach((_, colIdx) => {
+          const addr = XLSX.utils.encode_cell({ r, c: colIdx });
+          if (!ws[addr]) return;
+
+          const isEven = rowIdx % 2 === 0;
+
+          ws[addr].s = {
+            font: { sz: 10, color: { rgb: '0B1C2F' } },
+            fill: { fgColor: { rgb: isEven ? 'FFFFFF' : 'F8FAFC' } },
+            alignment: { horizontal: 'left', vertical: 'center', wrapText: false },
+            border: {
+              top:    { style: 'thin', color: { rgb: 'E6EDF5' } },
+              bottom: { style: 'thin', color: { rgb: 'E6EDF5' } },
+              left:   { style: 'thin', color: { rgb: 'E6EDF5' } },
+              right:  { style: 'thin', color: { rgb: 'E6EDF5' } }
+            }
+          };
+
+          if (colIdx === 3) {
+            if (row[3] === 'Female') {
+              ws[addr].s.font.color = { rgb: '9D174D' };
+              ws[addr].s.font.bold = true;
+            } else if (row[3] === 'Male') {
+              ws[addr].s.font.color = { rgb: '1E40AF' };
+              ws[addr].s.font.bold = true;
+            }
+          }
+
+          if (colIdx === 1) ws[addr].s.font.color = { rgb: '334155' };
+
+          if (colIdx === 2) {
+            ws[addr].s.font.color = { rgb: '075985' };
+            ws[addr].s.font.bold = true;
+          }
+        });
+      });
+
+      // ---------- 5. Freeze + autofilter ----------
+      ws['!freeze'] = { xSplit: 0, ySplit: 1 };
+      ws['!autofilter'] = {
+        ref: XLSX.utils.encode_range({
+          s: { r: 0, c: 0 },
+          e: { r: data.length, c: headers.length - 1 }
+        })
+      };
+
+      // ---------- 6. Summary sheet ----------
+      const total = allRecords.length;
+      const females = allRecords.filter(r => r.sex === 'Female').length;
+      const males = allRecords.filter(r => r.sex === 'Male').length;
+      const combos = new Set(
+        allRecords.map(r => (r.subjectCombination || '').toUpperCase()).filter(Boolean)
+      );
+
+      const summaryData = [
+        ['EDF413 — Registration Summary'],
+        [],
+        ['Course', 'Education and Development in Developing Countries'],
+        ['Course Code', 'EDF413'],
+        ['Generated', new Date().toLocaleString('en-GB')],
+        [],
+        ['Metric', 'Count'],
+        ['Total Registrations', total],
+        ['Female', females],
+        ['Male', males],
+        ['Unique Combinations', combos.size],
+        [],
+        ['Subject Combination', 'Registrations'],
+        ...[...combos].sort().map(c => [
+          c,
+          allRecords.filter(r => (r.subjectCombination || '').toUpperCase() === c).length
+        ])
+      ];
+
+      const wsSummary = XLSX.utils.aoa_to_sheet(summaryData);
+      wsSummary['!cols'] = [{ wch: 30 }, { wch: 50 }];
+
+      if (wsSummary['A1']) {
+        wsSummary['A1'].s = {
+          font: { bold: true, sz: 14, color: { rgb: '0B1C2F' } },
+          alignment: { horizontal: 'left', vertical: 'center' }
+        };
+      }
+
+      [6, 12].forEach(rowIdx => {
+        ['A', 'B'].forEach(col => {
+          const addr = col + (rowIdx + 1);
+          if (wsSummary[addr]) {
+            wsSummary[addr].s = {
+              font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
+              fill: { fgColor: { rgb: '1E4B6E' } },
+              alignment: { horizontal: 'left', vertical: 'center' },
+              border: {
+                top:    { style: 'thin', color: { rgb: '123A54' } },
+                bottom: { style: 'thin', color: { rgb: '123A54' } },
+                left:   { style: 'thin', color: { rgb: '123A54' } },
+                right:  { style: 'thin', color: { rgb: '123A54' } }
+              }
+            };
+          }
+        });
+      });
+
+      // ---------- 7. Workbook ----------
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+      XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
+
+      // ---------- 8. Save ----------
+      const stamp = new Date().toISOString().slice(0, 10);
+      const filename = `EDF413_registrations_${stamp}.xlsx`;
+
+      try {
+        XLSX.writeFile(wb, filename, { bookSST: true, cellStyles: true });
+        showToast(`✅ Exported ${total} record(s) to Excel.`, 'success');
+      } catch (err) {
+        console.error('XLSX write error:', err);
+        showToast('❌ Excel export failed.', 'error');
+      }
+    }
+
+    // ============================================================
+    // Listeners
+    // ============================================================
+    searchInput.addEventListener('input', applyFilters);
+    sexFilter.addEventListener('change', applyFilters);
+    comboFilter.addEventListener('change', applyFilters);
+    refreshBtn.addEventListener('click', () => { startListener(); showToast('Refreshed.', 'success'); });
+    exportCsvBtn.addEventListener('click', exportCSV);
+    exportBtn.addEventListener('click', exportXLSX);
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') { closeEditModal(); closeDeleteModal(); }
+    });
+  </script>
+</body>
+</html>

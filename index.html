@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDF413 · Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: linear-gradient(145deg, #eef2f7 0%, #f8fafc 100%);
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .form-card {
+      max-width: 720px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 32px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15), 0 8px 20px -8px rgba(0, 20, 40, 0.1);
+      padding: 2.5rem 2.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      position: relative;
+    }
+
+    @media (max-width: 540px) {
+      .form-card { padding: 1.75rem 1.25rem; border-radius: 24px; }
+    }
+
+    /* Hidden admin link */
+    .admin-link {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.75rem;
+      font-size: 0.7rem;
+      color: #b0bfcf;
+      text-decoration: none;
+      padding: 0.4rem 0.85rem;
+      border-radius: 40px;
+      transition: 0.2s ease;
+      letter-spacing: 0.04em;
+      font-weight: 500;
+      border: 1px solid transparent;
+    }
+    .admin-link:hover {
+      color: #1e4b6e;
+      background: #f1f5f9;
+      border-color: #e0e8f0;
+    }
+
+    .header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .course-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0b1c2f;
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+
+    .course-code {
+      display: inline-block;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: white;
+      padding: 0.35rem 1.2rem;
+      border-radius: 40px;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, #1e4b6e, #2a6b96);
+      box-shadow: 0 4px 12px rgba(30, 75, 110, 0.25);
+      margin-bottom: 0.75rem;
+    }
+
+    .header-sub {
+      color: #4b5e71;
+      font-size: 0.95rem;
+      font-weight: 400;
+      line-height: 1.5;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .divider {
+      width: 60px;
+      height: 3px;
+      background: linear-gradient(90deg, #1e4b6e, #2a6b96);
+      border-radius: 4px;
+      margin: 1.25rem auto 0;
+    }
+
+    .registration-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      margin-top: 2rem;
+    }
+
+    .form-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+
+    .form-row > .form-group { flex: 1 1 200px; }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .form-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      color: #1e3b4f;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .form-group label .required {
+      color: #c2410c;
+      font-size: 1.1rem;
+      line-height: 1;
+      margin-left: 2px;
+    }
+
+    .form-group input,
+    .form-group select {
+      font-family: 'Inter', sans-serif;
+      font-size: 0.95rem;
+      padding: 0.8rem 1rem;
+      border-radius: 16px;
+      border: 1.5px solid #dae2ed;
+      background: #ffffff;
+      transition: 0.2s ease;
+      color: #0a1e2c;
+      outline: none;
+      width: 100%;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: #2a6b96;
+      box-shadow: 0 0 0 4px rgba(42, 107, 150, 0.15);
+    }
+
+    .form-group input::placeholder { color: #9aabb9; font-size: 0.9rem; }
+
+    .form-group select {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%233b5e7a' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1.2rem center;
+      background-size: 1rem;
+      cursor: pointer;
+    }
+
+    .form-group input:disabled {
+      background: #f8fafc;
+      cursor: not-allowed;
+      color: #64748b;
+    }
+
+    /* Inline field status */
+    .field-status {
+      font-size: 0.75rem;
+      margin-top: 0.15rem;
+      min-height: 1em;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .field-status.checking { color: #6b7f91; }
+    .field-status.valid { color: #059669; font-weight: 500; }
+    .field-status.invalid { color: #c2410c; font-weight: 500; }
+
+    .form-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+    }
+
+    .btn {
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.9rem 2rem;
+      border-radius: 40px;
+      border: none;
+      cursor: pointer;
+      transition: 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+
+    .btn-primary {
+      background: #1e4b6e;
+      color: white;
+      box-shadow: 0 8px 18px -6px rgba(30, 75, 110, 0.35);
+      flex: 1 1 auto;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #123a54;
+      transform: translateY(-1px);
+      box-shadow: 0 12px 22px -8px rgba(30, 75, 110, 0.45);
+    }
+
+    .btn-primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .btn-secondary {
+      background: transparent;
+      color: #1e4b6e;
+      border: 1.5px solid #cbd8e6;
+    }
+
+    .btn-secondary:hover { background: #f0f6fc; border-color: #a0b8cf; }
+
+    .form-footer-note {
+      margin-top: 1.8rem;
+      font-size: 0.78rem;
+      text-align: center;
+      color: #6b7f91;
+      border-top: 1px solid #e6edf5;
+      padding-top: 1.2rem;
+    }
+
+    .input-error {
+      border-color: #c2410c !important;
+      background: #fff9f5;
+    }
+
+    .error-msg {
+      font-size: 0.75rem;
+      color: #c2410c;
+      margin-top: 0.15rem;
+      display: none;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0b1c2f;
+      color: white;
+      padding: 0.9rem 1.8rem;
+      border-radius: 50px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast.success { background: #0f4c2e; }
+    .toast.error { background: #7a1f1f; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2.5px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: inline-block;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="form-card">
+    <a href="admin.html" class="admin-link">Admin →</a>
+
+    <div class="header">
+      <div class="course-code">EDF413</div>
+      <h1 class="course-title">Education and Development in Developing Countries</h1>
+      <p class="header-sub">Fill in your details below to register for this course.</p>
+      <div class="divider"></div>
+    </div>
+
+    <form class="registration-form" id="edf413Form" novalidate>
+      <div class="form-row">
+        <div class="form-group">
+          <label for="fullName">Full Name <span class="required">*</span></label>
+          <input type="text" id="fullName" name="fullName" placeholder="e.g. David Makiyi" autocomplete="name">
+          <div class="error-msg">Please enter your full name.</div>
+        </div>
+        <div class="form-group">
+          <label for="regNumber">Reg Number <span class="required">*</span></label>
+          <input type="text" id="regNumber" name="regNumber" placeholder="e.g. 2025/EDF/413" autocomplete="off">
+          <div class="field-status" id="regStatus"></div>
+          <div class="error-msg">Registration number is required.</div>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label for="subjectCombination">Subject Combination <span class="required">*</span></label>
+          <input type="text" id="subjectCombination" name="subjectCombination" placeholder="e.g. MAT/BIO">
+          <div class="error-msg">Please enter your subject combination.</div>
+        </div>
+        <div class="form-group">
+          <label for="sex">Sex <span class="required">*</span></label>
+          <select id="sex" name="sex">
+            <option value="" disabled selected>Select</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+          <div class="error-msg">Please select your sex.</div>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="reset" class="btn btn-secondary" id="resetBtn">Clear</button>
+        <button type="submit" class="btn btn-primary" id="submitBtn">Submit registration</button>
+      </div>
+    </form>
+
+    <div class="form-footer-note">
+      ⏳ EDF413 · registration closes on March 15, 2025
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // ============================================================
+    // Firebase
+    // ============================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKTBTnSHbZ-aEzIOZZ6ElWpybD93DHXVc",
+      authDomain: "school-7bfaa.firebaseapp.com",
+      projectId: "school-7bfaa",
+      storageBucket: "school-7bfaa.firebasestorage.app",
+      messagingSenderId: "91516216765",
+      appId: "1:91516216765:web:a5a3b45e823b8c8d8d1ed4"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    console.log('✅ Firebase initialized:', firebaseConfig.projectId);
+
+    const COLLECTION = 'edf413_registrations';
+
+    // ============================================================
+    // Elements
+    // ============================================================
+    const form = document.getElementById('edf413Form');
+    const fullName = document.getElementById('fullName');
+    const regNumber = document.getElementById('regNumber');
+    const subjectCombination = document.getElementById('subjectCombination');
+    const sex = document.getElementById('sex');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const toast = document.getElementById('toast');
+    const regStatus = document.getElementById('regStatus');
+
+    // Track reg number validity
+    let regNumberValid = false; // true = unique & valid
+    let regCheckTimeout = null;
+
+    // ============================================================
+    // Toast helper
+    // ============================================================
+    let toastTimeout;
+    function showToast(message, type = 'success') {
+      clearTimeout(toastTimeout);
+      toast.textContent = message;
+      toast.className = 'toast ' + type;
+      void toast.offsetWidth;
+      toast.classList.add('show');
+      toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
+    }
+
+    // ============================================================
+    // Check if reg number already exists in Firestore
+    // ============================================================
+    async function checkRegNumberUnique(regNo) {
+      const snapshot = await db.collection(COLLECTION)
+        .where('regNumber', '==', regNo)
+        .limit(1)
+        .get();
+      return snapshot.empty;
+    }
+
+    // Normalize reg number for comparison (uppercase, trim)
+    function normalizeReg(reg) {
+      return (reg || '').trim().toUpperCase();
+    }
+
+    // ============================================================
+    // Real-time uniqueness validation (with debounce)
+    // ============================================================
+    regNumber.addEventListener('input', function () {
+      const value = this.value.trim();
+      this.classList.remove('input-error');
+      const err = this.closest('.form-group').querySelector('.error-msg');
+      if (err) err.style.display = 'none';
+
+      clearTimeout(regCheckTimeout);
+
+      if (!value) {
+        regStatus.textContent = '';
+        regStatus.className = 'field-status';
+        regNumberValid = false;
+        return;
+      }
+
+      regStatus.textContent = '⏳ Checking availability…';
+      regStatus.className = 'field-status checking';
+      regNumberValid = false;
+
+      regCheckTimeout = setTimeout(async () => {
+        try {
+          const unique = await checkRegNumberUnique(normalizeReg(value));
+          if (unique) {
+            regStatus.textContent = '✓ Available';
+            regStatus.className = 'field-status valid';
+            regNumberValid = true;
+          } else {
+            regStatus.textContent = '✗ Already registered';
+            regStatus.className = 'field-status invalid';
+            this.classList.add('input-error');
+            regNumberValid = false;
+          }
+        } catch (err) {
+          console.error('Check error:', err);
+          regStatus.textContent = '⚠ Could not verify';
+          regStatus.className = 'field-status invalid';
+          regNumberValid = false;
+        }
+      }, 450);
+    });
+
+    // ============================================================
+    // Clear errors on input
+    // ============================================================
+    [fullName, subjectCombination, sex].forEach(field => {
+      field.addEventListener('input', function () {
+        this.classList.remove('input-error');
+        const err = this.closest('.form-group').querySelector('.error-msg');
+        if (err) err.style.display = 'none';
+      });
+      field.addEventListener('change', function () {
+        this.classList.remove('input-error');
+        const err = this.closest('.form-group').querySelector('.error-msg');
+        if (err) err.style.display = 'none';
+      });
+    });
+
+    // ============================================================
+    // Reset
+    // ============================================================
+    resetBtn.addEventListener('click', function () {
+      document.querySelectorAll('.input-error').forEach(el => el.classList.remove('input-error'));
+      document.querySelectorAll('.error-msg').forEach(el => el.style.display = 'none');
+      regStatus.textContent = '';
+      regStatus.className = 'field-status';
+      regNumberValid = false;
+      form.reset();
+    });
+
+    // ============================================================
+    // Validate field
+    // ============================================================
+    function validateField(field, condition) {
+      if (condition) {
+        field.classList.add('input-error');
+        const err = field.closest('.form-group').querySelector('.error-msg');
+        if (err) err.style.display = 'block';
+        return false;
+      }
+      field.classList.remove('input-error');
+      const err = field.closest('.form-group').querySelector('.error-msg');
+      if (err) err.style.display = 'none';
+      return true;
+    }
+
+    // ============================================================
+    // Submit
+    // ============================================================
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      let isValid = true;
+      isValid = validateField(fullName, !fullName.value.trim()) && isValid;
+      isValid = validateField(regNumber, !regNumber.value.trim()) && isValid;
+      isValid = validateField(subjectCombination, !subjectCombination.value.trim()) && isValid;
+      isValid = validateField(sex, !sex.value) && isValid;
+
+      if (!isValid) {
+        const firstError = document.querySelector('.input-error');
+        if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        showToast('Please fill in all required fields.', 'error');
+        return;
+      }
+
+      const originalBtn = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span> Submitting…';
+
+      const normalizedReg = normalizeReg(regNumber.value);
+
+      try {
+        // Double-check uniqueness right before writing (race-condition safe)
+        const isUnique = await checkRegNumberUnique(normalizedReg);
+
+        if (!isUnique) {
+          regNumber.classList.add('input-error');
+          regStatus.textContent = '✗ Already registered';
+          regStatus.className = 'field-status invalid';
+          showToast('❌ This registration number is already registered.', 'error');
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = originalBtn;
+          return;
+        }
+
+        // Save
+        await db.collection(COLLECTION).add({
+          fullName: fullName.value.trim(),
+          regNumber: normalizedReg,
+          regNumberLower: normalizedReg.toLowerCase(), // for case-insensitive queries
+          subjectCombination: subjectCombination.value.trim().toUpperCase(),
+          sex: sex.value,
+          courseCode: 'EDF413',
+          courseTitle: 'Education and Development in Developing Countries',
+          submittedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        showToast('✅ Registration submitted successfully!', 'success');
+        form.reset();
+        regStatus.textContent = '';
+        regStatus.className = 'field-status';
+        regNumberValid = false;
+
+      } catch (error) {
+        console.error('❌ Firestore error:', error);
+        let msg = 'Submission failed. Please try again.';
+        if (error.code === 'permission-denied') msg = 'Permission denied. Check Firestore rules.';
+        else if (error.code === 'unavailable') msg = 'Network error. Check your connection.';
+        showToast('❌ ' + msg, 'error');
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtn;
+      }
+    });
+  </script>
+</body>
+</html>
