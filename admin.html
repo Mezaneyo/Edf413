@@ -24,6 +24,7 @@
       --accent-glow: rgba(99, 102, 241, 0.28);
       --success: #10b981;
       --danger: #ef4444;
+      --warning: #f59e0b;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -62,7 +63,7 @@
       z-index: 0;
     }
 
-    /* ============ LOGIN ============ */
+    /* LOGIN */
     .login-screen {
       min-height: 100vh;
       display: flex;
@@ -88,9 +89,7 @@
     .login-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 3px;
       background: linear-gradient(90deg, var(--accent), var(--accent-2), #ec4899);
     }
@@ -231,7 +230,7 @@
     }
     .login-hint a:hover { color: var(--accent-2); }
 
-    /* ============ DASHBOARD ============ */
+    /* DASHBOARD */
     .dashboard { display: none; min-height: 100vh; position: relative; z-index: 1; }
     .dashboard.show { display: block; }
 
@@ -293,24 +292,16 @@
     }
 
     .admin-chip .dot {
-      width: 7px;
-      height: 7px;
+      width: 7px; height: 7px;
       background: var(--success);
       border-radius: 50%;
       box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
       animation: pulse 2s infinite;
     }
 
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
 
-    .btn-sm {
-      padding: 0.5rem 1rem;
-      font-size: 0.8rem;
-      border-radius: 10px;
-    }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 10px; }
 
     .btn-ghost {
       background: var(--surface);
@@ -340,14 +331,74 @@
     }
     .btn-logout:hover { background: #fee2e2; color: #991b1b; }
 
-    /* ============ CONTAINER ============ */
     .container {
       max-width: 1320px;
       margin: 0 auto;
       padding: 2rem 1.75rem 4rem;
     }
 
-    /* ============ STATS ============ */
+    /* TABS */
+    .dash-tabs {
+      display: flex;
+      gap: 0.4rem;
+      padding: 0.35rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      margin-bottom: 1.75rem;
+      box-shadow: 0 4px 12px -6px rgba(30, 40, 80, 0.05);
+      overflow-x: auto;
+    }
+
+    .dash-tab {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 600;
+      padding: 0.75rem 1.25rem;
+      border: none;
+      background: transparent;
+      color: var(--text-dim);
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      white-space: nowrap;
+      letter-spacing: 0.01em;
+    }
+
+    .dash-tab:hover { color: var(--text); }
+
+    .dash-tab.active {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: 0 8px 16px -6px var(--accent-glow);
+    }
+
+    .dash-tab .count-pill {
+      font-size: 0.68rem;
+      font-weight: 700;
+      padding: 0.15rem 0.5rem;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.25);
+      color: inherit;
+    }
+
+    .dash-tab:not(.active) .count-pill {
+      background: var(--surface-2);
+      color: var(--text-dimmer);
+    }
+
+    .dash-panel { display: none; }
+    .dash-panel.active { display: block; animation: fadeIn 0.25s ease; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* STATS */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -369,9 +420,7 @@
     .stat-card::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 3px;
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
       opacity: 0;
@@ -388,6 +437,8 @@
     .stat-card.female::before { background: linear-gradient(90deg, #ec4899, #f472b6); opacity: 0.9; }
     .stat-card.male::before { background: linear-gradient(90deg, #3b82f6, #60a5fa); opacity: 0.9; }
     .stat-card.combos::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); opacity: 0.9; }
+    .stat-card.checked::before { background: linear-gradient(90deg, #0ea5e9, #38bdf8); opacity: 0.9; }
+    .stat-card.updated::before { background: linear-gradient(90deg, #8b5cf6, #a78bfa); opacity: 0.9; }
 
     .stat-label {
       font-size: 0.68rem;
@@ -410,6 +461,8 @@
     .stat-value.female { color: #db2777; }
     .stat-value.male { color: #2563eb; }
     .stat-value.combos { color: #d97706; }
+    .stat-value.checked { color: #0284c7; }
+    .stat-value.updated { color: #7c3aed; }
 
     .stat-sub {
       font-size: 0.72rem;
@@ -418,7 +471,7 @@
       font-weight: 500;
     }
 
-    /* ============ TOOLBAR ============ */
+    /* TOOLBAR */
     .toolbar {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -497,7 +550,7 @@
       box-shadow: 0 0 0 4px var(--accent-soft);
     }
 
-    /* ============ TABLE ============ */
+    /* TABLE */
     .table-wrap {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -570,8 +623,7 @@
     }
 
     .avatar {
-      width: 34px;
-      height: 34px;
+      width: 34px; height: 34px;
       border-radius: 10px;
       display: flex;
       align-items: center;
@@ -598,14 +650,15 @@
     .badge-male { background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
     .badge-combo { background: #fffbeb; color: #b45309; border: 1px solid #fde68a; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.72rem; }
     .badge-reg { background: var(--surface-2); color: #475569; border: 1px solid var(--border-light); font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.72rem; }
+    .badge-info { background: #e0f2fe; color: #0369a1; border: 1px solid #bae6fd; font-size: 0.7rem; }
+    .badge-update { background: #ede9fe; color: #6d28d9; border: 1px solid #ddd6fe; font-size: 0.7rem; }
 
     .time-cell { font-size: 0.78rem; color: var(--text-dimmer); white-space: nowrap; font-weight: 500; }
 
     .row-actions { display: flex; gap: 0.35rem; }
 
     .icon-btn {
-      width: 30px;
-      height: 30px;
+      width: 30px; height: 30px;
       border-radius: 8px;
       border: 1px solid var(--border);
       cursor: pointer;
@@ -632,7 +685,50 @@
       border-color: #fecaca;
     }
 
-    /* ============ STATES ============ */
+    .diff-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+    }
+
+    .diff-item {
+      display: flex;
+      gap: 0.4rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .diff-field {
+      font-weight: 700;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+    }
+
+    .diff-from {
+      background: #fee2e2;
+      color: #b91c1c;
+      padding: 0.1rem 0.5rem;
+      border-radius: 6px;
+      text-decoration: line-through;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.7rem;
+    }
+
+    .diff-to {
+      background: #d1fae5;
+      color: #047857;
+      padding: 0.1rem 0.5rem;
+      border-radius: 6px;
+      font-weight: 600;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.7rem;
+    }
+
+    .diff-arrow { color: var(--text-dimmer); font-size: 0.75rem; }
+
     .state-box {
       text-align: center;
       padding: 4rem 2rem;
@@ -644,8 +740,7 @@
     .state-box p { font-size: 0.82rem; }
 
     .loader {
-      width: 40px;
-      height: 40px;
+      width: 40px; height: 40px;
       border: 3px solid var(--border);
       border-top-color: var(--accent);
       border-radius: 50%;
@@ -655,7 +750,7 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* ============ MODAL ============ */
+    /* MODAL */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -691,9 +786,7 @@
     .modal::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 3px;
       background: linear-gradient(90deg, var(--accent), var(--accent-2));
       border-radius: 20px 20px 0 0;
@@ -778,7 +871,6 @@
     .btn-danger:hover:not(:disabled) { transform: translateY(-1px); }
     .btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* ============ TOAST ============ */
     .toast {
       position: fixed;
       bottom: 2rem;
@@ -842,6 +934,9 @@
       .topbar h1 small { display: none; }
       .container { padding: 1.25rem 1rem 3rem; }
       .stat-value { font-size: 1.75rem; }
+      .dash-tab { padding: 0.65rem 0.9rem; font-size: 0.78rem; }
+      .dash-tab .tab-label { display: none; }
+      .dash-tab .count-pill { display: inline-block !important; }
 
       table, thead, tbody, th, td, tr { display: block; }
       thead { display: none; }
@@ -879,7 +974,7 @@
   <div class="login-screen" id="loginScreen">
     <div class="login-card">
       <div class="login-brand">
-        <div class="brand-mark">E4</div>
+        <div class="brand-mark">EDF413</div>
       </div>
       <h1>Admin Access</h1>
       <p class="sub">Sign in to manage EDF413 registrations</p>
@@ -911,10 +1006,10 @@
 
     <div class="topbar">
       <div class="topbar-left">
-        <div class="brand-mark">E4</div>
+        <div class="brand-mark">EDF413</div>
         <h1>
-          EDF413 Admin Console
-          <small>EDF413 · Education &amp; Development</small>
+          Admin Console
+          <small>EDF413 · Education and Development in Developing Countries</small>
         </h1>
       </div>
       <div class="topbar-right">
@@ -930,56 +1025,127 @@
     </div>
 
     <div class="container">
-      <div class="stats-grid">
-        <div class="stat-card">
-          <div class="stat-label">Total Registrations</div>
-          <div class="stat-value" id="statTotal">—</div>
-          <div class="stat-sub">All submissions</div>
-        </div>
-        <div class="stat-card female">
-          <div class="stat-label">Female</div>
-          <div class="stat-value female" id="statFemale">—</div>
-          <div class="stat-sub" id="statFemalePct">—</div>
-        </div>
-        <div class="stat-card male">
-          <div class="stat-label">Male</div>
-          <div class="stat-value male" id="statMale">—</div>
-          <div class="stat-sub" id="statMalePct">—</div>
-        </div>
-        <div class="stat-card combos">
-          <div class="stat-label">Combinations</div>
-          <div class="stat-value combos" id="statCombos">—</div>
-          <div class="stat-sub">Unique subject combos</div>
-        </div>
+
+      <!-- TABS -->
+      <div class="dash-tabs">
+        <button class="dash-tab active" id="tabDash" type="button">
+          📋 <span class="tab-label">Registrations</span>
+          <span class="count-pill" id="tabCountReg">0</span>
+        </button>
+        <button class="dash-tab" id="tabChecks" type="button">
+          👁 <span class="tab-label">Checks</span>
+          <span class="count-pill" id="tabCountChecks">0</span>
+        </button>
+        <button class="dash-tab" id="tabUpdates" type="button">
+          ✏️ <span class="tab-label">Updates</span>
+          <span class="count-pill" id="tabCountUpdates">0</span>
+        </button>
       </div>
 
-      <div class="toolbar">
-        <div class="search-box">
-          <input type="text" id="searchInput" placeholder="Search by name, reg number, or combination…">
-        </div>
-        <select class="filter-select" id="sexFilter">
-          <option value="all">All sexes</option>
-          <option value="Female">Female</option>
-          <option value="Male">Male</option>
-        </select>
-        <select class="filter-select" id="comboFilter">
-          <option value="all">All combinations</option>
-        </select>
-      </div>
+      <!-- ============ PANEL 1: REGISTRATIONS ============ -->
+      <div class="dash-panel active" id="panelDash">
 
-      <div class="table-wrap">
-        <div class="table-header-bar">
-          <h2>Registrations</h2>
-          <span class="record-count" id="recordCount">Loading…</span>
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total Registrations</div>
+            <div class="stat-value" id="statTotal">—</div>
+            <div class="stat-sub">All submissions</div>
+          </div>
+          <div class="stat-card female">
+            <div class="stat-label">Female</div>
+            <div class="stat-value female" id="statFemale">—</div>
+            <div class="stat-sub" id="statFemalePct">—</div>
+          </div>
+          <div class="stat-card male">
+            <div class="stat-label">Male</div>
+            <div class="stat-value male" id="statMale">—</div>
+            <div class="stat-sub" id="statMalePct">—</div>
+          </div>
+          <div class="stat-card combos">
+            <div class="stat-label">Combinations</div>
+            <div class="stat-value combos" id="statCombos">—</div>
+            <div class="stat-sub">Unique subject combos</div>
+          </div>
+          <div class="stat-card checked">
+            <div class="stat-label">Checked their status</div>
+            <div class="stat-value checked" id="statChecked">—</div>
+            <div class="stat-sub" id="statCheckedPct">—</div>
+          </div>
+          <div class="stat-card updated">
+            <div class="stat-label">Updated details</div>
+            <div class="stat-value updated" id="statUpdated">—</div>
+            <div class="stat-sub" id="statUpdatedPct">—</div>
+          </div>
         </div>
-        <div id="tableContainer">
-          <div class="state-box">
-            <div class="loader"></div>
-            <h3>Loading registrations…</h3>
-            <p>Fetching from Firestore</p>
+
+        <div class="toolbar">
+          <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Search by name, reg number, or combination…">
+          </div>
+          <select class="filter-select" id="sexFilter">
+            <option value="all">All sexes</option>
+            <option value="Female">Female</option>
+            <option value="Male">Male</option>
+          </select>
+          <select class="filter-select" id="comboFilter">
+            <option value="all">All combinations</option>
+          </select>
+          <select class="filter-select" id="statusFilter">
+            <option value="all">All statuses</option>
+            <option value="checked">👁 Has checked</option>
+            <option value="not-checked">Never checked</option>
+            <option value="updated">✏️ Has updated</option>
+            <option value="not-updated">Never updated</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-header-bar">
+            <h2>Registrations</h2>
+            <span class="record-count" id="recordCount">Loading…</span>
+          </div>
+          <div id="tableContainer">
+            <div class="state-box">
+              <div class="loader"></div>
+              <h3>Loading registrations…</h3>
+              <p>Fetching from Firestore</p>
+            </div>
           </div>
         </div>
       </div>
+
+      <!-- ============ PANEL 2: CHECKS ============ -->
+      <div class="dash-panel" id="panelChecks">
+        <div class="table-wrap">
+          <div class="table-header-bar">
+            <h2>👁 Students who have checked their registration</h2>
+            <span class="record-count" id="checksCount">Loading…</span>
+          </div>
+          <div id="checksContainer">
+            <div class="state-box">
+              <div class="loader"></div>
+              <h3>Loading check activity…</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ PANEL 3: UPDATES ============ -->
+      <div class="dash-panel" id="panelUpdates">
+        <div class="table-wrap">
+          <div class="table-header-bar">
+            <h2>✏️ Update history — what changed and when</h2>
+            <span class="record-count" id="updatesCount">Loading…</span>
+          </div>
+          <div id="updatesContainer">
+            <div class="state-box">
+              <div class="loader"></div>
+              <h3>Loading update history…</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -1040,7 +1206,6 @@
 
   <div class="toast" id="toast"></div>
 
-  <!-- LIBRARIES -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -1049,7 +1214,7 @@
 
   <script>
     // ============================================================
-    // Firebase
+    // Firebase — EDF413 (school-7bfaa project)
     // ============================================================
     const firebaseConfig = {
       apiKey: "AIzaSyAKTBTnSHbZ-aEzIOZZ6ElWpybD93DHXVc",
@@ -1065,10 +1230,9 @@
     const auth = firebase.auth();
 
     const COLLECTION = 'edf413_registrations';
+    const ACTIVITY_COLLECTION = 'edf413_registrations_activity';
 
-    // ============================================================
     // DOM
-    // ============================================================
     const loginScreen = document.getElementById('loginScreen');
     const dashboard = document.getElementById('dashboard');
     const loginForm = document.getElementById('loginForm');
@@ -1079,6 +1243,16 @@
     const adminEmail = document.getElementById('adminEmail');
     const logoutBtn = document.getElementById('logoutBtn');
 
+    const tabDash = document.getElementById('tabDash');
+    const tabChecks = document.getElementById('tabChecks');
+    const tabUpdates = document.getElementById('tabUpdates');
+    const panelDash = document.getElementById('panelDash');
+    const panelChecks = document.getElementById('panelChecks');
+    const panelUpdates = document.getElementById('panelUpdates');
+    const tabCountReg = document.getElementById('tabCountReg');
+    const tabCountChecks = document.getElementById('tabCountChecks');
+    const tabCountUpdates = document.getElementById('tabCountUpdates');
+
     const tableContainer = document.getElementById('tableContainer');
     const recordCount = document.getElementById('recordCount');
     const statTotal = document.getElementById('statTotal');
@@ -1087,12 +1261,22 @@
     const statCombos = document.getElementById('statCombos');
     const statFemalePct = document.getElementById('statFemalePct');
     const statMalePct = document.getElementById('statMalePct');
+    const statChecked = document.getElementById('statChecked');
+    const statCheckedPct = document.getElementById('statCheckedPct');
+    const statUpdated = document.getElementById('statUpdated');
+    const statUpdatedPct = document.getElementById('statUpdatedPct');
     const searchInput = document.getElementById('searchInput');
     const sexFilter = document.getElementById('sexFilter');
     const comboFilter = document.getElementById('comboFilter');
+    const statusFilter = document.getElementById('statusFilter');
     const refreshBtn = document.getElementById('refreshBtn');
     const exportBtn = document.getElementById('exportBtn');
     const exportCsvBtn = document.getElementById('exportCsvBtn');
+
+    const checksContainer = document.getElementById('checksContainer');
+    const checksCount = document.getElementById('checksCount');
+    const updatesContainer = document.getElementById('updatesContainer');
+    const updatesCount = document.getElementById('updatesCount');
 
     const editModal = document.getElementById('editModal');
     const editForm = document.getElementById('editForm');
@@ -1112,8 +1296,13 @@
     const toast = document.getElementById('toast');
 
     let allRecords = [];
+    let activityLog = [];
     let unsubscribe = null;
+    let unsubscribeActivity = null;
     let pendingDeleteId = null;
+    let currentTab = 'dash';
+    let recordsLoaded = false;
+    let activityLoaded = false;
 
     let toastTimeout;
     function showToast(message, type = 'success') {
@@ -1125,9 +1314,6 @@
       toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
-    // ============================================================
-    // Helpers
-    // ============================================================
     const AVATAR_COLORS = [
       'linear-gradient(135deg, #6366f1, #8b5cf6)',
       'linear-gradient(135deg, #ec4899, #f472b6)',
@@ -1168,20 +1354,37 @@
       });
     }
 
-    // ============================================================
+    function relativeTime(timestamp) {
+      if (!timestamp) return '—';
+      const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+      if (isNaN(date.getTime())) return '—';
+      const diffMs = Date.now() - date.getTime();
+      const min = Math.floor(diffMs / 60000);
+      if (min < 1) return 'just now';
+      if (min < 60) return min + ' min ago';
+      const hr = Math.floor(min / 60);
+      if (hr < 24) return hr + ' hr ago';
+      const days = Math.floor(hr / 24);
+      if (days < 7) return days + ' day' + (days > 1 ? 's' : '') + ' ago';
+      return formatDate(timestamp);
+    }
+
     // AUTH
-    // ============================================================
     auth.onAuthStateChanged(user => {
       if (user) {
         loginScreen.style.display = 'none';
         dashboard.classList.add('show');
         adminEmail.textContent = user.email;
-        startListener();
+        startListeners();
       } else {
         loginScreen.style.display = 'flex';
         dashboard.classList.remove('show');
         if (unsubscribe) { unsubscribe(); unsubscribe = null; }
+        if (unsubscribeActivity) { unsubscribeActivity(); unsubscribeActivity = null; }
         allRecords = [];
+        activityLog = [];
+        recordsLoaded = false;
+        activityLoaded = false;
       }
     });
 
@@ -1231,17 +1434,40 @@
       } catch (err) { console.error(err); }
     });
 
-    // ============================================================
-    // Listener
-    // ============================================================
-    function startListener() {
+    // Tabs
+    function setTab(tab) {
+      currentTab = tab;
+      [tabDash, tabChecks, tabUpdates].forEach(t => t.classList.remove('active'));
+      [panelDash, panelChecks, panelUpdates].forEach(p => p.classList.remove('active'));
+
+      if (tab === 'dash') {
+        tabDash.classList.add('active');
+        panelDash.classList.add('active');
+      }
+      if (tab === 'checks') {
+        tabChecks.classList.add('active');
+        panelChecks.classList.add('active');
+        renderChecks();
+      }
+      if (tab === 'updates') {
+        tabUpdates.classList.add('active');
+        panelUpdates.classList.add('active');
+        renderUpdates();
+      }
+    }
+
+    tabDash.addEventListener('click', () => setTab('dash'));
+    tabChecks.addEventListener('click', () => setTab('checks'));
+    tabUpdates.addEventListener('click', () => setTab('updates'));
+
+    // Listeners
+    function startListeners() {
       if (unsubscribe) unsubscribe();
 
       tableContainer.innerHTML = `
         <div class="state-box">
           <div class="loader"></div>
           <h3>Loading registrations…</h3>
-          <p>Connecting to Firestore</p>
         </div>`;
 
       unsubscribe = db.collection(COLLECTION)
@@ -1249,29 +1475,56 @@
         .onSnapshot(
           (snapshot) => {
             allRecords = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            recordsLoaded = true;
             populateComboFilter();
             updateStats();
+            updateTabCounts();
             applyFilters();
+            renderChecks();
+            renderUpdates();
           },
           (error) => {
             console.error(error);
-            let msg = 'Could not load registrations.';
-            if (error.code === 'permission-denied') msg = 'Permission denied. Check Firestore rules.';
-            else if (error.code === 'failed-precondition') msg = 'Index needed. Check Firebase console.';
             tableContainer.innerHTML = `
               <div class="state-box">
                 <div class="icon">⚠️</div>
                 <h3>Connection error</h3>
-                <p>${escapeHtml(msg)}</p>
+                <p>${escapeHtml(error.message || 'Check Firestore rules.')}</p>
               </div>`;
             recordCount.textContent = 'Error';
           }
         );
+
+      if (unsubscribeActivity) unsubscribeActivity();
+      unsubscribeActivity = db.collection(ACTIVITY_COLLECTION)
+        .orderBy('timestamp', 'desc')
+        .limit(500)
+        .onSnapshot(
+          (snapshot) => {
+            activityLog = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            activityLoaded = true;
+            updateTabCounts();
+            renderUpdates();
+          },
+          (error) => {
+            console.warn('Activity log error:', error.message);
+            activityLoaded = true;
+            renderUpdates();
+          }
+        );
     }
 
-    // ============================================================
+    function updateTabCounts() {
+      const total = allRecords.length;
+      const checked = allRecords.filter(r => r.lastCheckedAt).length;
+      const updated = allRecords.filter(r => r.lastUpdatedAt || r.updateCount > 0).length;
+
+      tabCountReg.textContent = total;
+      tabCountChecks.textContent = checked;
+      tabCountUpdates.textContent = updated;
+    }
+
     // Table
-    // ============================================================
     function renderTable(records) {
       if (!records.length) {
         tableContainer.innerHTML = `
@@ -1289,6 +1542,17 @@
         const color = colorForName(name);
         const sexClass = r.sex === 'Female' ? 'badge-female' : 'badge-male';
 
+        const hasChecked = !!r.lastCheckedAt;
+        const hasUpdated = !!r.lastUpdatedAt || (r.updateCount || 0) > 0;
+
+        const checkBadge = hasChecked
+          ? `<span class="badge badge-info" title="Last checked ${escapeHtml(formatDate(r.lastCheckedAt))}">👁 ${r.checkCount || 1}×</span>`
+          : `<span style="color:#8b95ad;font-size:0.72rem;">—</span>`;
+
+        const updateBadge = hasUpdated
+          ? `<span class="badge badge-update" title="Last updated ${escapeHtml(formatDate(r.lastUpdatedAt))}">✏️ ${r.updateCount || 1}×</span>`
+          : `<span style="color:#8b95ad;font-size:0.72rem;">—</span>`;
+
         return `
           <tr>
             <td data-label="Name">
@@ -1300,6 +1564,8 @@
             <td data-label="Reg"><span class="badge badge-reg">${escapeHtml(r.regNumber || '—')}</span></td>
             <td data-label="Combination"><span class="badge badge-combo">${escapeHtml(r.subjectCombination || '—')}</span></td>
             <td data-label="Sex"><span class="badge ${sexClass}">${escapeHtml(r.sex || '—')}</span></td>
+            <td data-label="Checked">${checkBadge}</td>
+            <td data-label="Updated">${updateBadge}</td>
             <td data-label="Submitted" class="time-cell">${escapeHtml(formatDate(r.submittedAt))}</td>
             <td data-label="Actions">
               <div class="row-actions">
@@ -1316,8 +1582,10 @@
             <tr>
               <th>Full Name</th>
               <th>Reg Number</th>
-              <th>Subject Combination</th>
+              <th>Combination</th>
               <th>Sex</th>
+              <th>👁 Checked</th>
+              <th>✏️ Updated</th>
               <th>Submitted</th>
               <th>Actions</th>
             </tr>
@@ -1333,15 +1601,21 @@
       const females = allRecords.filter(r => r.sex === 'Female').length;
       const males = allRecords.filter(r => r.sex === 'Male').length;
       const combos = new Set(allRecords.map(r => (r.subjectCombination || '').toUpperCase()).filter(Boolean));
+      const checked = allRecords.filter(r => r.lastCheckedAt).length;
+      const updated = allRecords.filter(r => r.lastUpdatedAt || (r.updateCount || 0) > 0).length;
 
       statTotal.textContent = total;
       statFemale.textContent = females;
       statMale.textContent = males;
       statCombos.textContent = combos.size;
+      statChecked.textContent = checked;
+      statUpdated.textContent = updated;
 
       const pct = (n) => total ? Math.round((n / total) * 100) + '% of total' : '—';
       statFemalePct.textContent = pct(females);
       statMalePct.textContent = pct(males);
+      statCheckedPct.textContent = pct(checked);
+      statUpdatedPct.textContent = pct(updated);
     }
 
     function populateComboFilter() {
@@ -1360,10 +1634,20 @@
       const q = searchInput.value.trim().toLowerCase();
       const sex = sexFilter.value;
       const combo = comboFilter.value;
+      const status = statusFilter.value;
 
       const filtered = allRecords.filter(r => {
         if (sex !== 'all' && r.sex !== sex) return false;
         if (combo !== 'all' && (r.subjectCombination || '').toUpperCase() !== combo) return false;
+
+        const hasChecked = !!r.lastCheckedAt;
+        const hasUpdated = !!r.lastUpdatedAt || (r.updateCount || 0) > 0;
+
+        if (status === 'checked' && !hasChecked) return false;
+        if (status === 'not-checked' && hasChecked) return false;
+        if (status === 'updated' && !hasUpdated) return false;
+        if (status === 'not-updated' && hasUpdated) return false;
+
         if (q) {
           const haystack = [r.fullName, r.regNumber, r.subjectCombination].join(' ').toLowerCase();
           if (!haystack.includes(q)) return false;
@@ -1374,6 +1658,205 @@
       renderTable(filtered);
     }
 
+    // Checks panel
+    function renderChecks() {
+      if (!recordsLoaded) {
+        checksContainer.innerHTML = `
+          <div class="state-box">
+            <div class="loader"></div>
+            <h3>Loading check activity…</h3>
+          </div>`;
+        checksCount.textContent = 'Loading…';
+        return;
+      }
+
+      const checked = allRecords
+        .filter(r => r.lastCheckedAt)
+        .sort((a, b) => {
+          const ta = a.lastCheckedAt?.toDate ? a.lastCheckedAt.toDate().getTime() : 0;
+          const tb = b.lastCheckedAt?.toDate ? b.lastCheckedAt.toDate().getTime() : 0;
+          return tb - ta;
+        });
+
+      if (!checked.length) {
+        checksContainer.innerHTML = `
+          <div class="state-box">
+            <div class="icon">👁</div>
+            <h3>No check activity yet</h3>
+            <p>When students use the "Check / Edit" tab to view their registration, they'll appear here.</p>
+          </div>`;
+        checksCount.textContent = '0 students';
+        return;
+      }
+
+      const rows = checked.map(r => {
+        const name = r.fullName || 'Unknown';
+        const color = colorForName(name);
+
+        return `
+          <tr>
+            <td data-label="Name">
+              <div class="name-cell">
+                <span class="avatar" style="background:${color}">${escapeHtml(initials(name))}</span>
+                <span>${escapeHtml(name)}</span>
+              </div>
+            </td>
+            <td data-label="Reg"><span class="badge badge-reg">${escapeHtml(r.regNumber || '—')}</span></td>
+            <td data-label="Combination"><span class="badge badge-combo">${escapeHtml(r.subjectCombination || '—')}</span></td>
+            <td data-label="Sex">
+              <span class="badge ${r.sex === 'Female' ? 'badge-female' : 'badge-male'}">${escapeHtml(r.sex || '—')}</span>
+            </td>
+            <td data-label="Times checked">
+              <span class="badge badge-info">${r.checkCount || 1}×</span>
+            </td>
+            <td data-label="Last checked" class="time-cell">
+              ${escapeHtml(formatDate(r.lastCheckedAt))}
+              <br><span style="color:#8b95ad;font-size:0.7rem;">${escapeHtml(relativeTime(r.lastCheckedAt))}</span>
+            </td>
+          </tr>`;
+      }).join('');
+
+      checksContainer.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Full Name</th>
+              <th>Reg Number</th>
+              <th>Combination</th>
+              <th>Sex</th>
+              <th>Times checked</th>
+              <th>Last checked</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+
+      checksCount.textContent = `${checked.length} student${checked.length === 1 ? '' : 's'}`;
+    }
+
+    // Updates panel
+    function renderUpdates() {
+      if (!recordsLoaded && !activityLoaded) {
+        updatesContainer.innerHTML = `
+          <div class="state-box">
+            <div class="loader"></div>
+            <h3>Loading update history…</h3>
+          </div>`;
+        updatesCount.textContent = 'Loading…';
+        return;
+      }
+
+      if (!activityLog.length) {
+        const updatedRecords = allRecords
+          .filter(r => r.lastUpdatedAt || (r.updateCount || 0) > 0)
+          .sort((a, b) => {
+            const ta = a.lastUpdatedAt?.toDate ? a.lastUpdatedAt.toDate().getTime() : 0;
+            const tb = b.lastUpdatedAt?.toDate ? b.lastUpdatedAt.toDate().getTime() : 0;
+            return tb - ta;
+          });
+
+        if (!updatedRecords.length) {
+          updatesContainer.innerHTML = `
+            <div class="state-box">
+              <div class="icon">✏️</div>
+              <h3>No updates yet</h3>
+              <p>When students edit their own registration details, each change will be logged here with before/after values.</p>
+            </div>`;
+          updatesCount.textContent = '0 changes';
+          return;
+        }
+
+        const rows = updatedRecords.map(r => {
+          const name = r.fullName || 'Unknown';
+          const color = colorForName(name);
+          return `
+            <tr>
+              <td data-label="Name">
+                <div class="name-cell">
+                  <span class="avatar" style="background:${color}">${escapeHtml(initials(name))}</span>
+                  <span>${escapeHtml(name)}</span>
+                </div>
+              </td>
+              <td data-label="Reg"><span class="badge badge-reg">${escapeHtml(r.regNumber || '—')}</span></td>
+              <td data-label="Combination"><span class="badge badge-combo">${escapeHtml(r.subjectCombination || '—')}</span></td>
+              <td data-label="Updates"><span class="badge badge-update">${r.updateCount || 1}×</span></td>
+              <td data-label="Last updated" class="time-cell">${escapeHtml(formatDate(r.lastUpdatedAt))}</td>
+            </tr>`;
+        }).join('');
+
+        updatesContainer.innerHTML = `
+          <table>
+            <thead>
+              <tr>
+                <th>Full Name</th>
+                <th>Reg Number</th>
+                <th>Combination</th>
+                <th>Updates</th>
+                <th>Last updated</th>
+              </tr>
+            </thead>
+            <tbody>${rows}</tbody>
+          </table>`;
+
+        updatesCount.textContent = `${updatedRecords.length} record${updatedRecords.length === 1 ? '' : 's'}`;
+        return;
+      }
+
+      const rows = activityLog.map(a => {
+        const name = a.fullName || 'Unknown';
+        const color = colorForName(name);
+
+        let diffHtml = '<span style="color:#8b95ad;font-size:0.75rem;">—</span>';
+        if (a.changes && Object.keys(a.changes).length) {
+          diffHtml = '<div class="diff-list">' + Object.entries(a.changes).map(([field, val]) => {
+            const label = field === 'fullName' ? 'Name'
+                        : field === 'subjectCombination' ? 'Combo'
+                        : field === 'sex' ? 'Sex'
+                        : field;
+            return `
+              <div class="diff-item">
+                <span class="diff-field">${escapeHtml(label)}:</span>
+                <span class="diff-from">${escapeHtml(val.from || '∅')}</span>
+                <span class="diff-arrow">→</span>
+                <span class="diff-to">${escapeHtml(val.to || '∅')}</span>
+              </div>`;
+          }).join('') + '</div>';
+        }
+
+        return `
+          <tr>
+            <td data-label="Student">
+              <div class="name-cell">
+                <span class="avatar" style="background:${color}">${escapeHtml(initials(name))}</span>
+                <span>${escapeHtml(name)}</span>
+              </div>
+            </td>
+            <td data-label="Reg"><span class="badge badge-reg">${escapeHtml(a.regNumber || '—')}</span></td>
+            <td data-label="Changes">${diffHtml}</td>
+            <td data-label="When" class="time-cell">
+              ${escapeHtml(formatDate(a.timestamp))}
+              <br><span style="color:#8b95ad;font-size:0.7rem;">${escapeHtml(relativeTime(a.timestamp))}</span>
+            </td>
+          </tr>`;
+      }).join('');
+
+      updatesContainer.innerHTML = `
+        <table>
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Reg Number</th>
+              <th>Changes</th>
+              <th>When</th>
+            </tr>
+          </thead>
+          <tbody>${rows}</tbody>
+        </table>`;
+
+      updatesCount.textContent = `${activityLog.length} change${activityLog.length === 1 ? '' : 's'}`;
+    }
+
+    // Row actions
     tableContainer.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-action]');
       if (!btn) return;
@@ -1432,8 +1915,23 @@
           regNumberLower: newReg.toLowerCase(),
           subjectCombination: editCombination.value.trim().toUpperCase(),
           sex: editSex.value,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          lastUpdatedBy: 'admin',
+          lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updateCount: firebase.firestore.FieldValue.increment(1)
         });
+
+        try {
+          await db.collection(ACTIVITY_COLLECTION).add({
+            docId: id,
+            regNumber: newReg,
+            fullName: editFullName.value.trim(),
+            action: 'admin_update',
+            changes: {},
+            changedFields: [],
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        } catch (e) { console.warn(e); }
 
         showToast('Registration updated.', 'success');
         closeEditModal();
@@ -1479,16 +1977,19 @@
       }
     });
 
-    // ============================================================
-    // CSV Export
-    // ============================================================
+    // CSV
     function exportCSV() {
       if (!allRecords.length) { showToast('No records to export.', 'error'); return; }
 
-      const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At', 'Doc ID'];
+      const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At', 'Check Count', 'Last Checked', 'Update Count', 'Last Updated'];
       const rows = allRecords.map(r => {
-        const date = r.submittedAt?.toDate ? r.submittedAt.toDate().toISOString() : '';
-        return [r.fullName || '', r.regNumber || '', r.subjectCombination || '', r.sex || '', date, r.id || ''];
+        const sub = r.submittedAt?.toDate ? r.submittedAt.toDate().toISOString() : '';
+        const chk = r.lastCheckedAt?.toDate ? r.lastCheckedAt.toDate().toISOString() : '';
+        const upd = r.lastUpdatedAt?.toDate ? r.lastUpdatedAt.toDate().toISOString() : '';
+        return [
+          r.fullName || '', r.regNumber || '', r.subjectCombination || '', r.sex || '',
+          sub, r.checkCount || 0, chk, r.updateCount || 0, upd
+        ];
       });
 
       const esc = (v) => {
@@ -1510,28 +2011,27 @@
       showToast(`Exported ${allRecords.length} record(s) to CSV.`, 'success');
     }
 
-    // ============================================================
-    // Excel Export
-    // ============================================================
+    // Excel
     function exportXLSX() {
       if (!allRecords.length) { showToast('No records to export.', 'error'); return; }
       if (typeof XLSX === 'undefined') { showToast('Excel library not loaded.', 'error'); return; }
 
-      const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At'];
-
+      const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At', 'Checks', 'Last Checked', 'Updates', 'Last Updated'];
       const data = allRecords.map(r => {
-        const date = r.submittedAt?.toDate ? r.submittedAt.toDate() : null;
-        const dateStr = date
-          ? date.toLocaleString('en-GB', {
-              day: '2-digit', month: 'short', year: 'numeric',
-              hour: '2-digit', minute: '2-digit'
-            })
-          : '—';
-        return [r.fullName || '', r.regNumber || '', r.subjectCombination || '', r.sex || '', dateStr];
+        const sub = r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleString('en-GB') : '—';
+        const chk = r.lastCheckedAt?.toDate ? r.lastCheckedAt.toDate().toLocaleString('en-GB') : '—';
+        const upd = r.lastUpdatedAt?.toDate ? r.lastUpdatedAt.toDate().toLocaleString('en-GB') : '—';
+        return [
+          r.fullName || '', r.regNumber || '', r.subjectCombination || '', r.sex || '',
+          sub, r.checkCount || 0, chk, r.updateCount || 0, upd
+        ];
       });
 
       const ws = XLSX.utils.aoa_to_sheet([headers, ...data]);
-      ws['!cols'] = [{ wch: 28 }, { wch: 20 }, { wch: 22 }, { wch: 12 }, { wch: 22 }];
+      ws['!cols'] = [
+        { wch: 26 }, { wch: 20 }, { wch: 20 }, { wch: 10 },
+        { wch: 22 }, { wch: 8 }, { wch: 22 }, { wch: 8 }, { wch: 22 }
+      ];
 
       const headerStyle = {
         font: { bold: true, color: { rgb: 'FFFFFF' }, sz: 11 },
@@ -1573,8 +2073,8 @@
             if (row[3] === 'Female') { ws[addr].s.font.color = { rgb: 'BE185D' }; ws[addr].s.font.bold = true; }
             else if (row[3] === 'Male') { ws[addr].s.font.color = { rgb: '1D4ED8' }; ws[addr].s.font.bold = true; }
           }
-          if (colIdx === 1) ws[addr].s.font.color = { rgb: '475569' };
-          if (colIdx === 2) { ws[addr].s.font.color = { rgb: 'B45309' }; ws[addr].s.font.bold = true; }
+          if (colIdx === 5 && row[5] > 0) ws[addr].s.font.color = { rgb: '0369A1' };
+          if (colIdx === 7 && row[7] > 0) ws[addr].s.font.color = { rgb: '6D28D9' };
         });
       });
 
@@ -1586,10 +2086,60 @@
         })
       };
 
+      // Activity log sheet
+      const logHeaders = ['Timestamp', 'Student', 'Reg Number', 'Action', 'Fields Changed', 'Before → After'];
+      const logData = activityLog.map(a => {
+        const changes = a.changes || {};
+        const fields = Object.keys(changes).join(', ');
+        const diffs = Object.entries(changes).map(([k, v]) => {
+          const label = k === 'fullName' ? 'Name' : k === 'subjectCombination' ? 'Combo' : k === 'sex' ? 'Sex' : k;
+          return `${label}: "${v.from || '∅'}" → "${v.to || '∅'}"`;
+        }).join(' | ');
+
+        return [
+          a.timestamp?.toDate ? a.timestamp.toDate().toLocaleString('en-GB') : '—',
+          a.fullName || '',
+          a.regNumber || '',
+          a.action === 'student_update' ? 'Student edit' : a.action === 'admin_update' ? 'Admin edit' : a.action || '',
+          fields,
+          diffs
+        ];
+      });
+
+      const wsLog = XLSX.utils.aoa_to_sheet([logHeaders, ...logData]);
+      wsLog['!cols'] = [{ wch: 22 }, { wch: 24 }, { wch: 20 }, { wch: 14 }, { wch: 24 }, { wch: 60 }];
+
+      logHeaders.forEach((_, i) => {
+        const addr = XLSX.utils.encode_cell({ r: 0, c: i });
+        if (wsLog[addr]) wsLog[addr].s = headerStyle;
+      });
+
+      logData.forEach((row, rowIdx) => {
+        const r = rowIdx + 1;
+        row.forEach((_, colIdx) => {
+          const addr = XLSX.utils.encode_cell({ r, c: colIdx });
+          if (!wsLog[addr]) return;
+          wsLog[addr].s = {
+            font: { sz: 10, color: { rgb: '1A1F36' } },
+            fill: { fgColor: { rgb: rowIdx % 2 === 0 ? 'FFFFFF' : 'F4F6FB' } },
+            alignment: { horizontal: 'left', vertical: 'center', wrapText: colIdx === 5 },
+            border: {
+              top:    { style: 'thin', color: { rgb: 'E4E7F0' } },
+              bottom: { style: 'thin', color: { rgb: 'E4E7F0' } },
+              left:   { style: 'thin', color: { rgb: 'E4E7F0' } },
+              right:  { style: 'thin', color: { rgb: 'E4E7F0' } }
+            }
+          };
+        });
+      });
+
+      // Summary sheet
       const total = allRecords.length;
       const females = allRecords.filter(r => r.sex === 'Female').length;
       const males = allRecords.filter(r => r.sex === 'Male').length;
       const combos = new Set(allRecords.map(r => (r.subjectCombination || '').toUpperCase()).filter(Boolean));
+      const checked = allRecords.filter(r => r.lastCheckedAt).length;
+      const updated = allRecords.filter(r => r.lastUpdatedAt || (r.updateCount || 0) > 0).length;
 
       const summaryData = [
         ['EDF413 — Registration Summary'],
@@ -1603,6 +2153,8 @@
         ['Female', females],
         ['Male', males],
         ['Unique Combinations', combos.size],
+        ['Checked their status', checked],
+        ['Updated their details', updated],
         [],
         ['Subject Combination', 'Registrations'],
         ...[...combos].sort().map(c => [
@@ -1621,7 +2173,7 @@
         };
       }
 
-      [6, 12].forEach(rowIdx => {
+      [6, 14].forEach(rowIdx => {
         ['A', 'B'].forEach(col => {
           const addr = col + (rowIdx + 1);
           if (wsSummary[addr]) {
@@ -1636,12 +2188,13 @@
 
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
+      XLSX.utils.book_append_sheet(wb, wsLog, 'Activity Log');
       XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
 
       const stamp = new Date().toISOString().slice(0, 10);
       try {
         XLSX.writeFile(wb, `EDF413_registrations_${stamp}.xlsx`, { bookSST: true, cellStyles: true });
-        showToast(`Exported ${total} record(s) to Excel.`, 'success');
+        showToast(`Exported ${total} registration(s) with ${activityLog.length} activity entries.`, 'success');
       } catch (err) {
         console.error(err);
         showToast('Excel export failed.', 'error');
@@ -1651,7 +2204,8 @@
     searchInput.addEventListener('input', applyFilters);
     sexFilter.addEventListener('change', applyFilters);
     comboFilter.addEventListener('change', applyFilters);
-    refreshBtn.addEventListener('click', () => { startListener(); showToast('Refreshed.', 'success'); });
+    statusFilter.addEventListener('change', applyFilters);
+    refreshBtn.addEventListener('click', () => { startListeners(); showToast('Refreshed.', 'success'); });
     exportCsvBtn.addEventListener('click', exportCSV);
     exportBtn.addEventListener('click', exportXLSX);
 
