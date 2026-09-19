@@ -310,13 +310,6 @@
     }
     .btn-ghost:hover { background: var(--surface-2); color: var(--text); border-color: var(--border-light); }
 
-    .btn-csv {
-      background: #eff6ff;
-      color: #1d4ed8;
-      border: 1px solid #bfdbfe;
-    }
-    .btn-csv:hover { background: #dbeafe; color: #1e40af; }
-
     .btn-excel {
       background: #ecfdf5;
       color: #047857;
@@ -773,7 +766,7 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 2rem;
-      max-width: 460px;
+      max-width: 520px;
       width: 100%;
       box-shadow: 0 30px 60px -20px rgba(30, 40, 80, 0.3);
       transform: scale(0.94);
@@ -870,6 +863,181 @@
     }
     .btn-danger:hover:not(:disabled) { transform: translateY(-1px); }
     .btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Download modal specifics */
+    .radio-cards {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .radio-card {
+      position: relative;
+    }
+
+    .radio-card input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .radio-card label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem 1.15rem;
+      background: var(--surface-2);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+
+    .radio-card label:hover {
+      background: var(--surface-3);
+    }
+
+    .radio-card input:checked + label {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+
+    .radio-card-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .radio-card-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .radio-card-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.15rem;
+    }
+
+    .radio-card-desc {
+      font-size: 0.78rem;
+      color: var(--text-dim);
+      line-height: 1.4;
+    }
+
+    /* Combo checklist */
+    .combo-picker {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.85rem;
+      max-height: 260px;
+      overflow-y: auto;
+      display: none;
+      margin-bottom: 1rem;
+    }
+
+    .combo-picker.show { display: block; }
+
+    .combo-picker-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .combo-picker-toolbar .count {
+      font-size: 0.75rem;
+      color: var(--text-dim);
+      font-weight: 600;
+    }
+
+    .combo-picker-toolbar .link-btn {
+      font-size: 0.75rem;
+      color: var(--accent);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+    }
+    .combo-picker-toolbar .link-btn:hover { background: var(--accent-soft); }
+
+    .combo-item {
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 0.85rem;
+    }
+
+    .combo-item:hover {
+      background: var(--surface-3);
+    }
+
+    .combo-item input[type="checkbox"] {
+      width: 1.05rem;
+      height: 1.05rem;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .combo-item-label {
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text);
+      flex: 1;
+    }
+
+    .combo-item-count {
+      font-size: 0.72rem;
+      color: var(--text-dimmer);
+      font-weight: 500;
+      background: white;
+      padding: 0.15rem 0.55rem;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    /* Preview box */
+    .export-preview {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.06));
+      border: 1px dashed rgba(99, 102, 241, 0.35);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .export-preview strong {
+      color: var(--accent);
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+    }
 
     .toast {
       position: fixed;
@@ -1008,7 +1176,7 @@
       <div class="topbar-left">
         <div class="brand-mark">EDF413</div>
         <h1>
-          Admin Console
+         EDF413 Admin Console
           <small>EDF413 · Education and Development in Developing Countries</small>
         </h1>
       </div>
@@ -1018,15 +1186,13 @@
           <span id="adminEmail">—</span>
         </span>
         <button class="btn btn-sm btn-ghost" id="refreshBtn">↻ Refresh</button>
-        <button class="btn btn-sm btn-csv" id="exportCsvBtn">CSV</button>
-        <button class="btn btn-sm btn-excel" id="exportBtn">Excel</button>
+        <button class="btn btn-sm btn-excel" id="exportBtn">⬇ Download Excel</button>
         <button class="btn btn-sm btn-logout" id="logoutBtn">Sign out</button>
       </div>
     </div>
 
     <div class="container">
 
-      <!-- TABS -->
       <div class="dash-tabs">
         <button class="dash-tab active" id="tabDash" type="button">
           📋 <span class="tab-label">Registrations</span>
@@ -1042,9 +1208,8 @@
         </button>
       </div>
 
-      <!-- ============ PANEL 1: REGISTRATIONS ============ -->
+      <!-- REGISTRATIONS -->
       <div class="dash-panel active" id="panelDash">
-
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-label">Total Registrations</div>
@@ -1114,7 +1279,7 @@
         </div>
       </div>
 
-      <!-- ============ PANEL 2: CHECKS ============ -->
+      <!-- CHECKS -->
       <div class="dash-panel" id="panelChecks">
         <div class="table-wrap">
           <div class="table-header-bar">
@@ -1130,7 +1295,7 @@
         </div>
       </div>
 
-      <!-- ============ PANEL 3: UPDATES ============ -->
+      <!-- UPDATES -->
       <div class="dash-panel" id="panelUpdates">
         <div class="table-wrap">
           <div class="table-header-bar">
@@ -1204,6 +1369,80 @@
     </div>
   </div>
 
+  <!-- DOWNLOAD MODAL -->
+  <div class="modal-overlay" id="downloadModal">
+    <div class="modal">
+      <h2>⬇ Download Excel</h2>
+      <p class="modal-sub">Choose which registrations to include in the file.</p>
+
+      <div class="radio-cards">
+        <div class="radio-card">
+          <input type="radio" name="dlScope" id="dlScopeAll" value="all" checked>
+          <label for="dlScopeAll">
+            <div class="radio-card-icon">📊</div>
+            <div class="radio-card-body">
+              <div class="radio-card-title">All registrations</div>
+              <div class="radio-card-desc">Download the complete list of every registered student.</div>
+            </div>
+          </label>
+        </div>
+
+        <div class="radio-card">
+          <input type="radio" name="dlScope" id="dlScopeByCombo" value="combo">
+          <label for="dlScopeByCombo">
+            <div class="radio-card-icon">🎯</div>
+            <div class="radio-card-body">
+              <div class="radio-card-title">Specific subject combinations</div>
+              <div class="radio-card-desc">Pick one or more combinations — great for splitting lists by class group.</div>
+            </div>
+          </label>
+        </div>
+
+        <div class="radio-card">
+          <input type="radio" name="dlScope" id="dlScopeBySex" value="sex">
+          <label for="dlScopeBySex">
+            <div class="radio-card-icon">👥</div>
+            <div class="radio-card-body">
+              <div class="radio-card-title">Specific sex</div>
+              <div class="radio-card-desc">Download only Female or only Male students.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div class="combo-picker" id="comboPicker">
+        <div class="combo-picker-toolbar">
+          <span class="count" id="comboPickerCount">0 selected</span>
+          <div>
+            <button type="button" class="link-btn" id="selectAllCombos">Select all</button>
+            <button type="button" class="link-btn" id="clearAllCombos">Clear</button>
+          </div>
+        </div>
+        <div id="comboPickerList"></div>
+      </div>
+
+      <div class="field" id="sexPicker" style="display:none;">
+        <label for="dlSex">Choose sex</label>
+        <select id="dlSex">
+          <option value="Female">Female only</option>
+          <option value="Male">Male only</option>
+        </select>
+      </div>
+
+      <div class="export-preview">
+        <span>📄</span>
+        <span>This file will contain <strong id="previewCount">0</strong> registration(s).</span>
+      </div>
+
+      <div class="modal-actions">
+        <button type="button" class="btn btn-cancel" id="cancelDownloadBtn">Cancel</button>
+        <button type="button" class="btn btn-save" id="confirmDownloadBtn" disabled>
+          ⬇ Download
+        </button>
+      </div>
+    </div>
+  </div>
+
   <div class="toast" id="toast"></div>
 
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -1271,7 +1510,6 @@
     const statusFilter = document.getElementById('statusFilter');
     const refreshBtn = document.getElementById('refreshBtn');
     const exportBtn = document.getElementById('exportBtn');
-    const exportCsvBtn = document.getElementById('exportCsvBtn');
 
     const checksContainer = document.getElementById('checksContainer');
     const checksCount = document.getElementById('checksCount');
@@ -1292,6 +1530,21 @@
     const deleteName = document.getElementById('deleteName');
     const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+    const downloadModal = document.getElementById('downloadModal');
+    const dlScopeAll = document.getElementById('dlScopeAll');
+    const dlScopeByCombo = document.getElementById('dlScopeByCombo');
+    const dlScopeBySex = document.getElementById('dlScopeBySex');
+    const comboPicker = document.getElementById('comboPicker');
+    const comboPickerList = document.getElementById('comboPickerList');
+    const comboPickerCount = document.getElementById('comboPickerCount');
+    const selectAllCombos = document.getElementById('selectAllCombos');
+    const clearAllCombos = document.getElementById('clearAllCombos');
+    const sexPicker = document.getElementById('sexPicker');
+    const dlSex = document.getElementById('dlSex');
+    const previewCount = document.getElementById('previewCount');
+    const cancelDownloadBtn = document.getElementById('cancelDownloadBtn');
+    const confirmDownloadBtn = document.getElementById('confirmDownloadBtn');
 
     const toast = document.getElementById('toast');
 
@@ -1977,47 +2230,142 @@
       }
     });
 
-    // CSV
-    function exportCSV() {
-      if (!allRecords.length) { showToast('No records to export.', 'error'); return; }
-
-      const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At', 'Check Count', 'Last Checked', 'Update Count', 'Last Updated'];
-      const rows = allRecords.map(r => {
-        const sub = r.submittedAt?.toDate ? r.submittedAt.toDate().toISOString() : '';
-        const chk = r.lastCheckedAt?.toDate ? r.lastCheckedAt.toDate().toISOString() : '';
-        const upd = r.lastUpdatedAt?.toDate ? r.lastUpdatedAt.toDate().toISOString() : '';
-        return [
-          r.fullName || '', r.regNumber || '', r.subjectCombination || '', r.sex || '',
-          sub, r.checkCount || 0, chk, r.updateCount || 0, upd
-        ];
-      });
-
-      const esc = (v) => {
-        const s = String(v ?? '');
-        return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
-      };
-
-      const csv = [headers.map(esc).join(','), ...rows.map(row => row.map(esc).join(','))].join('\r\n');
-      const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      const stamp = new Date().toISOString().slice(0, 10);
-      link.href = url;
-      link.download = `EDF413_registrations_${stamp}.csv`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      URL.revokeObjectURL(url);
-      showToast(`Exported ${allRecords.length} record(s) to CSV.`, 'success');
+    // ============================================================
+    // DOWNLOAD MODAL
+    // ============================================================
+    function openDownloadModal() {
+      if (!allRecords.length) {
+        showToast('No records to download.', 'error');
+        return;
+      }
+      dlScopeAll.checked = true;
+      comboPicker.classList.remove('show');
+      sexPicker.style.display = 'none';
+      buildComboPicker();
+      updatePreview();
+      downloadModal.classList.add('show');
     }
 
-    // Excel
-    function exportXLSX() {
-      if (!allRecords.length) { showToast('No records to export.', 'error'); return; }
+    function closeDownloadModal() {
+      downloadModal.classList.remove('show');
+    }
+
+    function buildComboPicker() {
+      const combos = [...new Set(
+        allRecords.map(r => (r.subjectCombination || '').trim().toUpperCase()).filter(Boolean)
+      )].sort();
+
+      comboPickerList.innerHTML = combos.map(c => {
+        const count = allRecords.filter(r => (r.subjectCombination || '').toUpperCase() === c).length;
+        return `
+          <label class="combo-item">
+            <input type="checkbox" class="combo-cb" value="${escapeHtml(c)}">
+            <span class="combo-item-label">${escapeHtml(c)}</span>
+            <span class="combo-item-count">${count}</span>
+          </label>`;
+      }).join('');
+
+      comboPickerList.querySelectorAll('.combo-cb').forEach(cb => {
+        cb.addEventListener('change', updatePreview);
+      });
+
+      updateComboPickerCount();
+    }
+
+    function updateComboPickerCount() {
+      const total = comboPickerList.querySelectorAll('.combo-cb').length;
+      const checked = comboPickerList.querySelectorAll('.combo-cb:checked').length;
+      comboPickerCount.textContent = `${checked} of ${total} selected`;
+    }
+
+    function getSelectedCombos() {
+      return [...comboPickerList.querySelectorAll('.combo-cb:checked')].map(cb => cb.value);
+    }
+
+    function getFilteredRecords() {
+      if (dlScopeAll.checked) return allRecords.slice();
+
+      if (dlScopeByCombo.checked) {
+        const selected = getSelectedCombos();
+        if (!selected.length) return [];
+        const set = new Set(selected.map(s => s.toUpperCase()));
+        return allRecords.filter(r => set.has((r.subjectCombination || '').toUpperCase()));
+      }
+
+      if (dlScopeBySex.checked) {
+        return allRecords.filter(r => r.sex === dlSex.value);
+      }
+
+      return allRecords.slice();
+    }
+
+    function updatePreview() {
+      const filtered = getFilteredRecords();
+      previewCount.textContent = filtered.length;
+
+      if (dlScopeByCombo.checked) {
+        updateComboPickerCount();
+      }
+
+      confirmDownloadBtn.disabled = filtered.length === 0;
+    }
+
+    dlScopeAll.addEventListener('change', () => {
+      comboPicker.classList.remove('show');
+      sexPicker.style.display = 'none';
+      updatePreview();
+    });
+
+    dlScopeByCombo.addEventListener('change', () => {
+      comboPicker.classList.toggle('show', dlScopeByCombo.checked);
+      sexPicker.style.display = 'none';
+      updatePreview();
+    });
+
+    dlScopeBySex.addEventListener('change', () => {
+      comboPicker.classList.remove('show');
+      sexPicker.style.display = dlScopeBySex.checked ? 'flex' : 'none';
+      updatePreview();
+    });
+
+    dlSex.addEventListener('change', updatePreview);
+
+    selectAllCombos.addEventListener('click', () => {
+      comboPickerList.querySelectorAll('.combo-cb').forEach(cb => cb.checked = true);
+      updatePreview();
+    });
+
+    clearAllCombos.addEventListener('click', () => {
+      comboPickerList.querySelectorAll('.combo-cb').forEach(cb => cb.checked = false);
+      updatePreview();
+    });
+
+    cancelDownloadBtn.addEventListener('click', closeDownloadModal);
+    downloadModal.addEventListener('click', (e) => {
+      if (e.target === downloadModal) closeDownloadModal();
+    });
+
+    confirmDownloadBtn.addEventListener('click', () => {
+      const filtered = getFilteredRecords();
+      if (!filtered.length) {
+        showToast('No records match your selection.', 'error');
+        return;
+      }
+      doExportXLSX(filtered);
+      closeDownloadModal();
+    });
+
+    exportBtn.addEventListener('click', openDownloadModal);
+
+    // ============================================================
+    // EXCEL EXPORT (accepts filtered records)
+    // ============================================================
+    function doExportXLSX(records) {
+      if (!records.length) { showToast('No records to export.', 'error'); return; }
       if (typeof XLSX === 'undefined') { showToast('Excel library not loaded.', 'error'); return; }
 
       const headers = ['Full Name', 'Reg Number', 'Subject Combination', 'Sex', 'Submitted At', 'Checks', 'Last Checked', 'Updates', 'Last Updated'];
-      const data = allRecords.map(r => {
+      const data = records.map(r => {
         const sub = r.submittedAt?.toDate ? r.submittedAt.toDate().toLocaleString('en-GB') : '—';
         const chk = r.lastCheckedAt?.toDate ? r.lastCheckedAt.toDate().toLocaleString('en-GB') : '—';
         const upd = r.lastUpdatedAt?.toDate ? r.lastUpdatedAt.toDate().toLocaleString('en-GB') : '—';
@@ -2086,70 +2434,32 @@
         })
       };
 
-      // Activity log sheet
-      const logHeaders = ['Timestamp', 'Student', 'Reg Number', 'Action', 'Fields Changed', 'Before → After'];
-      const logData = activityLog.map(a => {
-        const changes = a.changes || {};
-        const fields = Object.keys(changes).join(', ');
-        const diffs = Object.entries(changes).map(([k, v]) => {
-          const label = k === 'fullName' ? 'Name' : k === 'subjectCombination' ? 'Combo' : k === 'sex' ? 'Sex' : k;
-          return `${label}: "${v.from || '∅'}" → "${v.to || '∅'}"`;
-        }).join(' | ');
+      // Summary sheet based on filtered records
+      const total = records.length;
+      const females = records.filter(r => r.sex === 'Female').length;
+      const males = records.filter(r => r.sex === 'Male').length;
+      const combos = new Set(records.map(r => (r.subjectCombination || '').toUpperCase()).filter(Boolean));
+      const checked = records.filter(r => r.lastCheckedAt).length;
+      const updated = records.filter(r => r.lastUpdatedAt || (r.updateCount || 0) > 0).length;
 
-        return [
-          a.timestamp?.toDate ? a.timestamp.toDate().toLocaleString('en-GB') : '—',
-          a.fullName || '',
-          a.regNumber || '',
-          a.action === 'student_update' ? 'Student edit' : a.action === 'admin_update' ? 'Admin edit' : a.action || '',
-          fields,
-          diffs
-        ];
-      });
-
-      const wsLog = XLSX.utils.aoa_to_sheet([logHeaders, ...logData]);
-      wsLog['!cols'] = [{ wch: 22 }, { wch: 24 }, { wch: 20 }, { wch: 14 }, { wch: 24 }, { wch: 60 }];
-
-      logHeaders.forEach((_, i) => {
-        const addr = XLSX.utils.encode_cell({ r: 0, c: i });
-        if (wsLog[addr]) wsLog[addr].s = headerStyle;
-      });
-
-      logData.forEach((row, rowIdx) => {
-        const r = rowIdx + 1;
-        row.forEach((_, colIdx) => {
-          const addr = XLSX.utils.encode_cell({ r, c: colIdx });
-          if (!wsLog[addr]) return;
-          wsLog[addr].s = {
-            font: { sz: 10, color: { rgb: '1A1F36' } },
-            fill: { fgColor: { rgb: rowIdx % 2 === 0 ? 'FFFFFF' : 'F4F6FB' } },
-            alignment: { horizontal: 'left', vertical: 'center', wrapText: colIdx === 5 },
-            border: {
-              top:    { style: 'thin', color: { rgb: 'E4E7F0' } },
-              bottom: { style: 'thin', color: { rgb: 'E4E7F0' } },
-              left:   { style: 'thin', color: { rgb: 'E4E7F0' } },
-              right:  { style: 'thin', color: { rgb: 'E4E7F0' } }
-            }
-          };
-        });
-      });
-
-      // Summary sheet
-      const total = allRecords.length;
-      const females = allRecords.filter(r => r.sex === 'Female').length;
-      const males = allRecords.filter(r => r.sex === 'Male').length;
-      const combos = new Set(allRecords.map(r => (r.subjectCombination || '').toUpperCase()).filter(Boolean));
-      const checked = allRecords.filter(r => r.lastCheckedAt).length;
-      const updated = allRecords.filter(r => r.lastUpdatedAt || (r.updateCount || 0) > 0).length;
+      let filterDesc = 'All registrations';
+      if (dlScopeByCombo.checked) {
+        const picked = getSelectedCombos();
+        filterDesc = picked.length ? 'Combos: ' + picked.join(', ') : 'Combos: (none)';
+      } else if (dlScopeBySex.checked) {
+        filterDesc = 'Sex: ' + dlSex.value;
+      }
 
       const summaryData = [
         ['EDF413 — Registration Summary'],
         [],
         ['Course', 'Education and Development in Developing Countries'],
         ['Course Code', 'EDF413'],
+        ['Filter applied', filterDesc],
         ['Generated', new Date().toLocaleString('en-GB')],
         [],
         ['Metric', 'Count'],
-        ['Total Registrations', total],
+        ['Total in this file', total],
         ['Female', females],
         ['Male', males],
         ['Unique Combinations', combos.size],
@@ -2159,7 +2469,7 @@
         ['Subject Combination', 'Registrations'],
         ...[...combos].sort().map(c => [
           c,
-          allRecords.filter(r => (r.subjectCombination || '').toUpperCase() === c).length
+          records.filter(r => (r.subjectCombination || '').toUpperCase() === c).length
         ])
       ];
 
@@ -2173,7 +2483,7 @@
         };
       }
 
-      [6, 14].forEach(rowIdx => {
+      [7, 15].forEach(rowIdx => {
         ['A', 'B'].forEach(col => {
           const addr = col + (rowIdx + 1);
           if (wsSummary[addr]) {
@@ -2188,13 +2498,22 @@
 
       const wb = XLSX.utils.book_new();
       XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
-      XLSX.utils.book_append_sheet(wb, wsLog, 'Activity Log');
       XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
 
+      // Filename
       const stamp = new Date().toISOString().slice(0, 10);
+      let suffix = 'all';
+      if (dlScopeByCombo.checked) {
+        const picked = getSelectedCombos();
+        suffix = picked.length ? picked.join('_').replace(/[^A-Z0-9_-]/gi, '') : 'combos';
+      } else if (dlScopeBySex.checked) {
+        suffix = dlSex.value.toLowerCase();
+      }
+      const filename = `EDF413_${suffix}_${stamp}.xlsx`;
+
       try {
-        XLSX.writeFile(wb, `EDF413_registrations_${stamp}.xlsx`, { bookSST: true, cellStyles: true });
-        showToast(`Exported ${total} registration(s) with ${activityLog.length} activity entries.`, 'success');
+        XLSX.writeFile(wb, filename, { bookSST: true, cellStyles: true });
+        showToast(`Downloaded ${total} record(s).`, 'success');
       } catch (err) {
         console.error(err);
         showToast('Excel export failed.', 'error');
@@ -2206,11 +2525,13 @@
     comboFilter.addEventListener('change', applyFilters);
     statusFilter.addEventListener('change', applyFilters);
     refreshBtn.addEventListener('click', () => { startListeners(); showToast('Refreshed.', 'success'); });
-    exportCsvBtn.addEventListener('click', exportCSV);
-    exportBtn.addEventListener('click', exportXLSX);
 
     document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') { closeEditModal(); closeDeleteModal(); }
+      if (e.key === 'Escape') {
+        closeEditModal();
+        closeDeleteModal();
+        closeDownloadModal();
+      }
     });
   </script>
 </body>
