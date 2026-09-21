@@ -26,6 +26,7 @@
       --success-soft: rgba(16, 185, 129, 0.08);
       --danger: #ef4444;
       --danger-soft: rgba(239, 68, 68, 0.08);
+      --warning: #f59e0b;
     }
 
     * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -170,6 +171,7 @@
       border: 1px solid rgba(139, 92, 246, 0.18);
       border-radius: 40px;
       margin-bottom: 1.25rem;
+      transition: all 0.25s ease;
     }
 
     .hero-tag::before {
@@ -179,6 +181,13 @@
       background: var(--accent-2);
       border-radius: 50%;
     }
+
+    .hero-tag.closed {
+      color: #b91c1c;
+      background: rgba(239, 68, 68, 0.08);
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+    .hero-tag.closed::before { background: #b91c1c; }
 
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
@@ -325,6 +334,45 @@
       color: var(--text-dim);
     }
 
+    /* ==========================================
+       PORTAL CLOSED BANNER
+       ========================================== */
+    .portal-closed-banner {
+      display: none;
+      align-items: flex-start;
+      gap: 0.85rem;
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      border-radius: 14px;
+      padding: 1rem 1.15rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.85rem;
+      color: #991b1b;
+      line-height: 1.5;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .portal-closed-banner.show { display: flex; }
+
+    .portal-closed-banner .banner-icon {
+      font-size: 1.35rem;
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .portal-closed-banner strong {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+    }
+
+    .portal-closed-banner p {
+      color: #b91c1c;
+      font-size: 0.8rem;
+    }
+
     .field {
       display: flex;
       flex-direction: column;
@@ -362,20 +410,21 @@
 
     .field input::placeholder { color: var(--text-dimmer); }
 
-    .field input:hover,
-    .field select:hover { background: var(--surface-3); }
+    .field input:hover:not(:disabled),
+    .field select:hover:not(:disabled) { background: var(--surface-3); }
 
-    .field input:focus,
-    .field select:focus {
+    .field input:focus:not(:disabled),
+    .field select:focus:not(:disabled) {
       background: var(--surface);
       border-color: var(--accent);
       box-shadow: 0 0 0 4px var(--accent-soft);
     }
 
-    .field input:disabled {
-      opacity: 0.7;
+    .field input:disabled,
+    .field select:disabled {
+      opacity: 0.55;
       cursor: not-allowed;
-      background: var(--surface-2);
+      background: var(--surface-3);
     }
 
     .grid-2 {
@@ -442,6 +491,12 @@
       font-weight: 600;
     }
 
+    .pill input:disabled + label {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: var(--surface-3);
+    }
+
     .pill-icon { font-size: 0.95rem; }
 
     .btn {
@@ -474,9 +529,10 @@
     }
 
     .btn-primary:disabled {
-      opacity: 0.6;
+      opacity: 0.55;
       cursor: not-allowed;
       transform: none;
+      filter: grayscale(0.4);
     }
 
     .btn-primary .arrow { transition: transform 0.2s ease; }
@@ -643,6 +699,13 @@
       transform: translateY(-1px);
     }
 
+    .btn-outline:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      border-color: var(--border);
+      color: var(--text-dimmer);
+    }
+
     .btn-sm {
       padding: 0.7rem 1.1rem;
       font-size: 0.82rem;
@@ -779,10 +842,11 @@
 
   <div class="shell">
 
+    <!-- LEFT PANEL -->
     <aside class="panel-info">
       <div>
         <div class="brand">
-          <div class="brand-mark">E4</div>
+          <div class="brand-mark">EDF413</div>
           <div class="brand-name">
             EDF413
             <small>Course Registration</small>
@@ -790,7 +854,7 @@
         </div>
 
         <div class="hero">
-          <div class="hero-tag">NCE 2026, Lecturer: Elifala</div>
+          <div class="hero-tag" id="heroTag">NCE 2026, Lecturer: Elifala</div>
           <h1>Education &amp; <em>Development</em> in Developing Countries</h1>
           
         </div>
@@ -799,11 +863,11 @@
       <div class="features">
         <div class="feature">
           <div class="feature-icon">📚</div>
-         
+          <span>12-week intensive program</span>
         </div>
         <div class="feature">
           <div class="feature-icon">🌍</div>
-        
+          <span>Case studies from 20+ countries</span>
         </div>
         <div class="feature">
           <div class="feature-icon">✏️</div>
@@ -816,6 +880,7 @@
       </div>
     </aside>
 
+    <!-- RIGHT PANEL -->
     <main class="panel-form">
 
       <div class="tabs">
@@ -827,11 +892,20 @@
         </button>
       </div>
 
-      <!-- ============ TAB 1: REGISTER ============ -->
+      <!-- ==================== TAB 1: REGISTER ==================== -->
       <div class="tab-panel active" id="panelRegister">
         <div class="form-header">
           <h2>Register for this course</h2>
           <p>All fields marked with <span style="color:#8b5cf6">*</span> are required.</p>
+        </div>
+
+        <!-- Portal closed banner -->
+        <div class="portal-closed-banner" id="portalClosedBanner">
+          <div class="banner-icon">🔒</div>
+          <div>
+            <strong>Registration is closed</strong>
+            <p>The admin has temporarily locked the EDF413 registration portal. Please check back later or contact the course coordinator.</p>
+          </div>
         </div>
 
         <form id="edf413Form" novalidate>
@@ -845,7 +919,7 @@
           <div class="grid-2">
             <div class="field">
               <label for="regNumber">Reg Number <span class="req">*</span></label>
-              <input type="text" id="regNumber" name="regNumber" placeholder="NCE/SCI/3464/23" autocomplete="off">
+              <input type="text" id="regNumber" name="regNumber" placeholder="NCE/SCI/12838/23" autocomplete="off">
               <div class="field-status" id="regStatus"></div>
               <div class="error-msg" id="errRegNumber">Registration number is required.</div>
             </div>
@@ -878,18 +952,27 @@
         </form>
       </div>
 
-      <!-- ============ TAB 2: CHECK / EDIT ============ -->
+      <!-- ==================== TAB 2: CHECK / EDIT ==================== -->
       <div class="tab-panel" id="panelCheck">
         <div class="form-header">
           <h2>Check your registration</h2>
           <p>Enter your Reg Number to view or edit your details.</p>
         </div>
 
+        <!-- Portal closed banner (check tab) -->
+        <div class="portal-closed-banner" id="portalClosedBannerCheck">
+          <div class="banner-icon">🔒</div>
+          <div>
+            <strong>Portal is closed</strong>
+            <p>You can still check your registration details, but editing is disabled while the portal is closed.</p>
+          </div>
+        </div>
+
         <div class="find-box">
           <div class="find-row">
             <div class="field">
               <label for="lookupReg">Reg Number</label>
-              <input type="text" id="lookupReg" placeholder="NCE/SCI/NG/62526/23" autocomplete="off">
+              <input type="text" id="lookupReg" placeholder="2025/EDF/413" autocomplete="off">
             </div>
             <button type="button" class="btn btn-primary" id="lookupBtn">
               <span id="lookupBtnText">Find</span>
@@ -975,14 +1058,23 @@
 
     const COLLECTION = 'edf413_registrations';
     const ACTIVITY_COLLECTION = 'edf413_registrations_activity';
+    const SETTINGS_DOC = 'edf413_settings/portal';
 
+    // ============================================================
     // DOM refs
+    // ============================================================
     const toast = document.getElementById('toast');
+    const heroTag = document.getElementById('heroTag');
+    const portalClosedBanner = document.getElementById('portalClosedBanner');
+    const portalClosedBannerCheck = document.getElementById('portalClosedBannerCheck');
+
+    // Tabs
     const tabRegister = document.getElementById('tabRegister');
     const tabCheck = document.getElementById('tabCheck');
     const panelRegister = document.getElementById('panelRegister');
     const panelCheck = document.getElementById('panelCheck');
 
+    // Register form
     const form = document.getElementById('edf413Form');
     const fullName = document.getElementById('fullName');
     const regNumber = document.getElementById('regNumber');
@@ -990,11 +1082,13 @@
     const submitBtn = document.getElementById('submitBtn');
     const regStatus = document.getElementById('regStatus');
 
+    // Lookup
     const lookupReg = document.getElementById('lookupReg');
     const lookupBtn = document.getElementById('lookupBtn');
     const lookupBtnText = document.getElementById('lookupBtnText');
     const resultCard = document.getElementById('resultCard');
 
+    // Self-edit
     const editPanel = document.getElementById('editPanel');
     const editBanner = document.getElementById('editBanner');
     const editSelfForm = document.getElementById('editSelfForm');
@@ -1007,6 +1101,81 @@
     let regNumberValid = false;
     let regCheckTimeout = null;
     let currentFoundRecord = null;
+
+    // ============================================================
+    // PORTAL STATE
+    // ============================================================
+    let portalOpen = true;
+    let unsubscribePortal = null;
+
+    function applyPortalUI(isOpen) {
+      portalOpen = isOpen;
+
+      // Hero tag (Spring 2025 / Closed)
+      if (isOpen) {
+        heroTag.textContent = 'Spring 2025';
+        heroTag.classList.remove('closed');
+      } else {
+        heroTag.textContent = 'Registration Closed';
+        heroTag.classList.add('closed');
+      }
+
+      // Banners
+      if (isOpen) {
+        portalClosedBanner.classList.remove('show');
+        portalClosedBannerCheck.classList.remove('show');
+      } else {
+        portalClosedBanner.classList.add('show');
+        portalClosedBannerCheck.classList.add('show');
+      }
+
+      // Disable/enable register form fields
+      const registerInputs = [
+        fullName, regNumber, subjectCombination,
+        document.getElementById('sexFemale'),
+        document.getElementById('sexMale')
+      ];
+      registerInputs.forEach(el => { if (el) el.disabled = !isOpen; });
+      submitBtn.disabled = !isOpen;
+
+      // Disable/enable edit form fields (if visible)
+      const editInputs = [
+        editSelfFullName,
+        editSelfCombination,
+        document.getElementById('editSexFemale'),
+        document.getElementById('editSexMale')
+      ];
+      editInputs.forEach(el => { if (el) el.disabled = !isOpen; });
+      saveSelfBtn.disabled = !isOpen;
+
+      // Update edit banner if visible
+      if (editBanner.classList.contains('show')) {
+        if (isOpen) {
+          editBanner.innerHTML = '<span>✏️</span> <span>Edit the fields below and click <strong>Save Changes</strong>.</span>';
+        } else {
+          editBanner.innerHTML = '<span>🔒</span> <span>Editing is disabled while the portal is closed.</span>';
+        }
+      }
+    }
+
+    function startPortalListener() {
+      if (unsubscribePortal) unsubscribePortal();
+      unsubscribePortal = db.doc(SETTINGS_DOC).onSnapshot(
+        (doc) => {
+          const isOpen = doc.exists && typeof doc.data().isOpen === 'boolean'
+            ? doc.data().isOpen
+            : true;
+          applyPortalUI(isOpen);
+        },
+        (err) => {
+          console.warn('Portal listener error:', err.message);
+          applyPortalUI(true);
+        }
+      );
+    }
+
+    // Start listening immediately
+    startPortalListener();
 
     // ============================================================
     // Toast
@@ -1065,6 +1234,8 @@
     }
 
     regNumber.addEventListener('input', function () {
+      if (!portalOpen) return;
+
       const value = this.value.trim();
       this.classList.remove('input-error');
       document.getElementById('errRegNumber').classList.remove('show');
@@ -1123,6 +1294,12 @@
     // ============================================================
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
+
+      if (!portalOpen) {
+        showToast('Registration is currently closed.', 'error');
+        return;
+      }
+
       let isValid = true;
 
       if (!fullName.value.trim()) {
@@ -1199,13 +1376,13 @@
         else if (error.code === 'unavailable') msg = 'Network error. Check your connection.';
         showToast(msg, 'error');
       } finally {
-        submitBtn.disabled = false;
+        submitBtn.disabled = !portalOpen;
         submitBtn.innerHTML = orig;
       }
     });
 
     // ============================================================
-    // CHECK TAB — lookup (with activity logging)
+    // CHECK TAB — lookup
     // ============================================================
     async function findRegistration(regValue) {
       const normalized = normalizeReg(regValue);
@@ -1245,7 +1422,7 @@
           const data = { id: doc.id, ...doc.data() };
           currentFoundRecord = data;
 
-          // 🔹 LOG THE CHECK — non-blocking
+          // Log the check (silent)
           try {
             await db.collection(COLLECTION).doc(data.id).update({
               lastCheckedAt: firebase.firestore.FieldValue.serverTimestamp(),
@@ -1298,14 +1475,17 @@
               </div>
             </div>
             <div class="result-actions">
-              <button type="button" class="btn btn-outline btn-sm" id="startEditBtn" style="width:100%;">
-                ✏️ Edit my details
+              <button type="button" class="btn btn-outline btn-sm" id="startEditBtn" style="width:100%;" ${portalOpen ? '' : 'disabled'}>
+                ${portalOpen ? '✏️ Edit my details' : '🔒 Editing disabled'}
               </button>
             </div>`;
 
-          document.getElementById('startEditBtn').addEventListener('click', () => {
-            openSelfEdit(data);
-          });
+          const startEditBtn = document.getElementById('startEditBtn');
+          if (startEditBtn && portalOpen) {
+            startEditBtn.addEventListener('click', () => {
+              openSelfEdit(data);
+            });
+          }
 
           showToast('Registration found!', 'success');
         }
@@ -1341,6 +1521,11 @@
     // SELF-EDIT
     // ============================================================
     function openSelfEdit(record) {
+      if (!portalOpen) {
+        showToast('Editing is disabled while the portal is closed.', 'error');
+        return;
+      }
+
       editSelfId.value = record.id;
       editSelfFullName.value = record.fullName || '';
       editSelfRegNumber.value = record.regNumber || '';
@@ -1348,6 +1533,7 @@
       document.getElementById('editSexFemale').checked = record.sex === 'Female';
       document.getElementById('editSexMale').checked = record.sex === 'Male';
 
+      editBanner.innerHTML = '<span>✏️</span> <span>Edit the fields below and click <strong>Save Changes</strong>.</span>';
       editBanner.classList.add('show');
       editPanel.style.display = 'block';
       editPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -1370,6 +1556,11 @@
 
     editSelfForm.addEventListener('submit', async function (e) {
       e.preventDefault();
+
+      if (!portalOpen) {
+        showToast('Editing is disabled while the portal is closed.', 'error');
+        return;
+      }
 
       const id = editSelfId.value;
       if (!id) {
@@ -1457,7 +1648,7 @@
         console.error(err);
         showToast('Update failed: ' + err.message, 'error');
       } finally {
-        saveSelfBtn.disabled = false;
+        saveSelfBtn.disabled = !portalOpen;
         saveSelfBtn.innerHTML = orig;
       }
     });

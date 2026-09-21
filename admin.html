@@ -23,7 +23,9 @@
       --accent-soft: rgba(99, 102, 241, 0.08);
       --accent-glow: rgba(99, 102, 241, 0.28);
       --success: #10b981;
+      --success-soft: rgba(16, 185, 129, 0.08);
       --danger: #ef4444;
+      --danger-soft: rgba(239, 68, 68, 0.08);
       --warning: #f59e0b;
     }
 
@@ -328,6 +330,196 @@
       max-width: 1320px;
       margin: 0 auto;
       padding: 2rem 1.75rem 4rem;
+    }
+
+    /* ==========================================
+       PORTAL CONTROL CARD
+       ========================================== */
+    .portal-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.35rem 1.5rem;
+      margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      box-shadow: 0 8px 20px -10px rgba(30, 40, 80, 0.08);
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s ease;
+    }
+
+    .portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; bottom: 0;
+      width: 4px;
+      background: var(--success);
+      transition: background 0.25s ease;
+    }
+
+    .portal-card.closed::before { background: var(--danger); }
+
+    .portal-card-left {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex: 1 1 300px;
+    }
+
+    .portal-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      flex-shrink: 0;
+      background: var(--success-soft);
+      color: var(--success);
+      transition: all 0.25s ease;
+    }
+
+    .portal-card.closed .portal-icon {
+      background: var(--danger-soft);
+      color: var(--danger);
+    }
+
+    .portal-info-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+      margin-bottom: 0.15rem;
+    }
+
+    .portal-info-status {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 500;
+    }
+
+    .portal-info-status .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 0.2rem 0.65rem;
+      border-radius: 20px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .status-pill.open {
+      background: var(--success-soft);
+      color: #047857;
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .status-pill.closed {
+      background: var(--danger-soft);
+      color: #b91c1c;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    .status-pill .indicator {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    /* Toggle switch */
+    .portal-toggle {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .portal-toggle-label {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-dim);
+      letter-spacing: 0.01em;
+      transition: color 0.2s ease;
+    }
+
+    .portal-toggle input { display: none; }
+
+    .switch-track {
+      width: 56px;
+      height: 30px;
+      background: #e5e7eb;
+      border-radius: 40px;
+      position: relative;
+      transition: background 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+    }
+
+    .switch-thumb {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(30, 40, 80, 0.15);
+      transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+    }
+
+    .portal-toggle input:checked + .switch-track {
+      background: linear-gradient(135deg, var(--success), #34d399);
+    }
+
+    .portal-toggle input:checked + .switch-track .switch-thumb {
+      transform: translateX(26px);
+    }
+
+    .portal-toggle input:not(:checked) + .switch-track {
+      background: #e5e7eb;
+    }
+
+    .portal-toggle input:not(:checked) + .switch-track .switch-thumb {
+      transform: translateX(0);
+    }
+
+    /* State description under the card */
+    .portal-note {
+      width: 100%;
+      font-size: 0.75rem;
+      color: var(--text-dimmer);
+      padding-top: 0.75rem;
+      margin-top: 0.25rem;
+      border-top: 1px dashed var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      line-height: 1.5;
+    }
+
+    /* Saving state */
+    .portal-toggle.saving .switch-track {
+      opacity: 0.6;
+      pointer-events: none;
     }
 
     /* TABS */
@@ -678,56 +870,14 @@
       border-color: #fecaca;
     }
 
-    .diff-list {
-      display: flex;
-      flex-direction: column;
-      gap: 0.3rem;
-      font-size: 0.72rem;
-    }
-
-    .diff-item {
-      display: flex;
-      gap: 0.4rem;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .diff-field {
-      font-weight: 700;
-      color: var(--text-dim);
-      text-transform: uppercase;
-      font-size: 0.65rem;
-      letter-spacing: 0.05em;
-    }
-
-    .diff-from {
-      background: #fee2e2;
-      color: #b91c1c;
-      padding: 0.1rem 0.5rem;
-      border-radius: 6px;
-      text-decoration: line-through;
-      font-family: 'JetBrains Mono', 'Consolas', monospace;
-      font-size: 0.7rem;
-    }
-
-    .diff-to {
-      background: #d1fae5;
-      color: #047857;
-      padding: 0.1rem 0.5rem;
-      border-radius: 6px;
-      font-weight: 600;
-      font-family: 'JetBrains Mono', 'Consolas', monospace;
-      font-size: 0.7rem;
-    }
-
+    .diff-list { display: flex; flex-direction: column; gap: 0.3rem; font-size: 0.72rem; }
+    .diff-item { display: flex; gap: 0.4rem; align-items: center; flex-wrap: wrap; }
+    .diff-field { font-weight: 700; color: var(--text-dim); text-transform: uppercase; font-size: 0.65rem; letter-spacing: 0.05em; }
+    .diff-from { background: #fee2e2; color: #b91c1c; padding: 0.1rem 0.5rem; border-radius: 6px; text-decoration: line-through; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.7rem; }
+    .diff-to { background: #d1fae5; color: #047857; padding: 0.1rem 0.5rem; border-radius: 6px; font-weight: 600; font-family: 'JetBrains Mono', 'Consolas', monospace; font-size: 0.7rem; }
     .diff-arrow { color: var(--text-dimmer); font-size: 0.75rem; }
 
-    .state-box {
-      text-align: center;
-      padding: 4rem 2rem;
-      color: var(--text-dimmer);
-    }
-
+    .state-box { text-align: center; padding: 4rem 2rem; color: var(--text-dimmer); }
     .state-box .icon { font-size: 2.5rem; margin-bottom: 1rem; opacity: 0.5; }
     .state-box h3 { font-size: 0.95rem; font-weight: 600; color: var(--text-dim); margin-bottom: 0.35rem; }
     .state-box p { font-size: 0.82rem; }
@@ -838,12 +988,7 @@
       cursor: pointer;
     }
 
-    .modal-actions {
-      display: flex;
-      gap: 0.6rem;
-      justify-content: flex-end;
-      margin-top: 1.5rem;
-    }
+    .modal-actions { display: flex; gap: 0.6rem; justify-content: flex-end; margin-top: 1.5rem; }
 
     .btn-cancel { background: var(--surface-2); color: var(--text-dim); border: 1px solid var(--border); }
     .btn-cancel:hover { background: var(--surface-3); color: var(--text); }
@@ -863,181 +1008,6 @@
     }
     .btn-danger:hover:not(:disabled) { transform: translateY(-1px); }
     .btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    /* Download modal specifics */
-    .radio-cards {
-      display: flex;
-      flex-direction: column;
-      gap: 0.6rem;
-      margin-bottom: 1.25rem;
-    }
-
-    .radio-card {
-      position: relative;
-    }
-
-    .radio-card input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
-    .radio-card label {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.85rem;
-      padding: 1rem 1.15rem;
-      background: var(--surface-2);
-      border: 1.5px solid transparent;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: all 0.18s ease;
-    }
-
-    .radio-card label:hover {
-      background: var(--surface-3);
-    }
-
-    .radio-card input:checked + label {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-soft);
-    }
-
-    .radio-card-icon {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      background: white;
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-    }
-
-    .radio-card-body {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .radio-card-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.9rem;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 0.15rem;
-    }
-
-    .radio-card-desc {
-      font-size: 0.78rem;
-      color: var(--text-dim);
-      line-height: 1.4;
-    }
-
-    /* Combo checklist */
-    .combo-picker {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 0.85rem;
-      max-height: 260px;
-      overflow-y: auto;
-      display: none;
-      margin-bottom: 1rem;
-    }
-
-    .combo-picker.show { display: block; }
-
-    .combo-picker-toolbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-bottom: 0.75rem;
-      margin-bottom: 0.65rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .combo-picker-toolbar .count {
-      font-size: 0.75rem;
-      color: var(--text-dim);
-      font-weight: 600;
-    }
-
-    .combo-picker-toolbar .link-btn {
-      font-size: 0.75rem;
-      color: var(--accent);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      padding: 0.25rem 0.5rem;
-      border-radius: 6px;
-    }
-    .combo-picker-toolbar .link-btn:hover { background: var(--accent-soft); }
-
-    .combo-item {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      padding: 0.55rem 0.75rem;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.15s;
-      font-size: 0.85rem;
-    }
-
-    .combo-item:hover {
-      background: var(--surface-3);
-    }
-
-    .combo-item input[type="checkbox"] {
-      width: 1.05rem;
-      height: 1.05rem;
-      accent-color: var(--accent);
-      cursor: pointer;
-      flex-shrink: 0;
-    }
-
-    .combo-item-label {
-      font-family: 'JetBrains Mono', 'Consolas', monospace;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text);
-      flex: 1;
-    }
-
-    .combo-item-count {
-      font-size: 0.72rem;
-      color: var(--text-dimmer);
-      font-weight: 500;
-      background: white;
-      padding: 0.15rem 0.55rem;
-      border-radius: 20px;
-      border: 1px solid var(--border);
-    }
-
-    /* Preview box */
-    .export-preview {
-      background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.06));
-      border: 1px dashed rgba(99, 102, 241, 0.35);
-      border-radius: 12px;
-      padding: 0.9rem 1rem;
-      font-size: 0.82rem;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-    }
-
-    .export-preview strong {
-      color: var(--accent);
-      font-weight: 700;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-    }
 
     .toast {
       position: fixed;
@@ -1106,6 +1076,8 @@
       .dash-tab .tab-label { display: none; }
       .dash-tab .count-pill { display: inline-block !important; }
 
+      .portal-card { flex-direction: column; align-items: flex-start; }
+
       table, thead, tbody, th, td, tr { display: block; }
       thead { display: none; }
       tbody tr {
@@ -1142,7 +1114,7 @@
   <div class="login-screen" id="loginScreen">
     <div class="login-card">
       <div class="login-brand">
-        <div class="brand-mark">EDF413</div>
+        <div class="brand-mark">E4</div>
       </div>
       <h1>Admin Access</h1>
       <p class="sub">Sign in to manage EDF413 registrations</p>
@@ -1174,9 +1146,9 @@
 
     <div class="topbar">
       <div class="topbar-left">
-        <div class="brand-mark">EDF413</div>
+        <div class="brand-mark">E4</div>
         <h1>
-         EDF413 Admin Console
+          Admin Console
           <small>EDF413 · Education and Development in Developing Countries</small>
         </h1>
       </div>
@@ -1192,6 +1164,35 @@
     </div>
 
     <div class="container">
+
+      <!-- ==========================================
+           PORTAL CONTROL
+           ========================================== -->
+      <div class="portal-card" id="portalCard">
+        <div class="portal-card-left">
+          <div class="portal-icon" id="portalIcon">🟢</div>
+          <div>
+            <div class="portal-info-title">Registration Portal</div>
+            <div class="portal-info-status">
+              <span>Current state:</span>
+              <span class="status-pill open" id="portalStatusPill">
+                <span class="indicator"></span>
+                <span id="portalStatusText">Open</span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <label class="portal-toggle" id="portalToggle">
+          <span class="portal-toggle-label" id="portalToggleLabel">Open</span>
+          <input type="checkbox" id="portalSwitch">
+          <span class="switch-track">
+            <span class="switch-thumb"></span>
+          </span>
+        </label>
+        <div class="portal-note" id="portalNote">
+          💡 Students can currently register. Switch off to lock the portal.
+        </div>
+      </div>
 
       <div class="dash-tabs">
         <button class="dash-tab active" id="tabDash" type="button">
@@ -1393,7 +1394,7 @@
             <div class="radio-card-icon">🎯</div>
             <div class="radio-card-body">
               <div class="radio-card-title">Specific subject combinations</div>
-              <div class="radio-card-desc">Pick one or more combinations — great for splitting lists by class group.</div>
+              <div class="radio-card-desc">Pick one or more combinations.</div>
             </div>
           </label>
         </div>
@@ -1470,6 +1471,7 @@
 
     const COLLECTION = 'edf413_registrations';
     const ACTIVITY_COLLECTION = 'edf413_registrations_activity';
+    const SETTINGS_DOC = 'edf413_settings/portal';
 
     // DOM
     const loginScreen = document.getElementById('loginScreen');
@@ -1481,6 +1483,16 @@
     const passwordInput = document.getElementById('password');
     const adminEmail = document.getElementById('adminEmail');
     const logoutBtn = document.getElementById('logoutBtn');
+
+    // Portal
+    const portalCard = document.getElementById('portalCard');
+    const portalIcon = document.getElementById('portalIcon');
+    const portalStatusPill = document.getElementById('portalStatusPill');
+    const portalStatusText = document.getElementById('portalStatusText');
+    const portalToggle = document.getElementById('portalToggle');
+    const portalToggleLabel = document.getElementById('portalToggleLabel');
+    const portalSwitch = document.getElementById('portalSwitch');
+    const portalNote = document.getElementById('portalNote');
 
     const tabDash = document.getElementById('tabDash');
     const tabChecks = document.getElementById('tabChecks');
@@ -1552,10 +1564,12 @@
     let activityLog = [];
     let unsubscribe = null;
     let unsubscribeActivity = null;
+    let unsubscribePortal = null;
     let pendingDeleteId = null;
     let currentTab = 'dash';
     let recordsLoaded = false;
     let activityLoaded = false;
+    let portalOpen = true;
 
     let toastTimeout;
     function showToast(message, type = 'success') {
@@ -1622,18 +1636,88 @@
       return formatDate(timestamp);
     }
 
+    // ============================================================
+    // PORTAL STATE — UI + Firestore
+    // ============================================================
+    function applyPortalUI(isOpen) {
+      portalOpen = isOpen;
+      portalSwitch.checked = isOpen;
+      portalToggleLabel.textContent = isOpen ? 'Open' : 'Closed';
+
+      if (isOpen) {
+        portalCard.classList.remove('closed');
+        portalIcon.textContent = '🟢';
+        portalStatusPill.className = 'status-pill open';
+        portalStatusText.textContent = 'Open';
+        portalNote.textContent = '💡 Students can currently register. Switch off to lock the portal.';
+      } else {
+        portalCard.classList.add('closed');
+        portalIcon.textContent = '🔴';
+        portalStatusPill.className = 'status-pill closed';
+        portalStatusText.textContent = 'Closed';
+        portalNote.textContent = '🔒 Registration is locked. Students will see "Registration is closed" on the form.';
+      }
+    }
+
+    function startPortalListener() {
+      if (unsubscribePortal) unsubscribePortal();
+      unsubscribePortal = db.doc(SETTINGS_DOC).onSnapshot(
+        (doc) => {
+          if (doc.exists && typeof doc.data().isOpen === 'boolean') {
+            applyPortalUI(doc.data().isOpen);
+          } else {
+            // Default: open
+            applyPortalUI(true);
+          }
+        },
+        (error) => {
+          console.warn('Portal listener error:', error.message);
+          applyPortalUI(true);
+        }
+      );
+    }
+
+    portalSwitch.addEventListener('change', async function () {
+      const newState = this.checked;
+      portalToggle.classList.add('saving');
+
+      // Optimistic UI
+      applyPortalUI(newState);
+
+      try {
+        await db.doc(SETTINGS_DOC).set({
+          isOpen: newState,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          updatedBy: auth.currentUser?.email || 'admin'
+        }, { merge: true });
+
+        showToast(newState ? '✅ Portal is now open.' : '🔒 Portal is now closed.', 'success');
+      } catch (err) {
+        console.error('Portal update error:', err);
+        // Revert
+        applyPortalUI(!newState);
+        showToast('Failed to update portal: ' + err.message, 'error');
+      } finally {
+        portalToggle.classList.remove('saving');
+      }
+    });
+
+    // ============================================================
     // AUTH
+    // ============================================================
     auth.onAuthStateChanged(user => {
       if (user) {
         loginScreen.style.display = 'none';
         dashboard.classList.add('show');
         adminEmail.textContent = user.email;
         startListeners();
+        startPortalListener();
       } else {
         loginScreen.style.display = 'flex';
         dashboard.classList.remove('show');
         if (unsubscribe) { unsubscribe(); unsubscribe = null; }
         if (unsubscribeActivity) { unsubscribeActivity(); unsubscribeActivity = null; }
+        if (unsubscribePortal) { unsubscribePortal(); unsubscribePortal = null; }
         allRecords = [];
         activityLog = [];
         recordsLoaded = false;
@@ -1713,7 +1797,6 @@
     tabChecks.addEventListener('click', () => setTab('checks'));
     tabUpdates.addEventListener('click', () => setTab('updates'));
 
-    // Listeners
     function startListeners() {
       if (unsubscribe) unsubscribe();
 
@@ -1911,7 +1994,6 @@
       renderTable(filtered);
     }
 
-    // Checks panel
     function renderChecks() {
       if (!recordsLoaded) {
         checksContainer.innerHTML = `
@@ -1987,7 +2069,6 @@
       checksCount.textContent = `${checked.length} student${checked.length === 1 ? '' : 's'}`;
     }
 
-    // Updates panel
     function renderUpdates() {
       if (!recordsLoaded && !activityLoaded) {
         updatesContainer.innerHTML = `
@@ -2246,9 +2327,7 @@
       downloadModal.classList.add('show');
     }
 
-    function closeDownloadModal() {
-      downloadModal.classList.remove('show');
-    }
+    function closeDownloadModal() { downloadModal.classList.remove('show'); }
 
     function buildComboPicker() {
       const combos = [...new Set(
@@ -2302,11 +2381,7 @@
     function updatePreview() {
       const filtered = getFilteredRecords();
       previewCount.textContent = filtered.length;
-
-      if (dlScopeByCombo.checked) {
-        updateComboPickerCount();
-      }
-
+      if (dlScopeByCombo.checked) updateComboPickerCount();
       confirmDownloadBtn.disabled = filtered.length === 0;
     }
 
@@ -2358,7 +2433,7 @@
     exportBtn.addEventListener('click', openDownloadModal);
 
     // ============================================================
-    // EXCEL EXPORT (accepts filtered records)
+    // EXCEL EXPORT
     // ============================================================
     function doExportXLSX(records) {
       if (!records.length) { showToast('No records to export.', 'error'); return; }
@@ -2434,7 +2509,6 @@
         })
       };
 
-      // Summary sheet based on filtered records
       const total = records.length;
       const females = records.filter(r => r.sex === 'Female').length;
       const males = records.filter(r => r.sex === 'Male').length;
@@ -2500,7 +2574,6 @@
       XLSX.utils.book_append_sheet(wb, ws, 'Registrations');
       XLSX.utils.book_append_sheet(wb, wsSummary, 'Summary');
 
-      // Filename
       const stamp = new Date().toISOString().slice(0, 10);
       let suffix = 'all';
       if (dlScopeByCombo.checked) {
