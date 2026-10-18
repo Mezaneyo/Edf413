@@ -254,6 +254,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
+const auth = firebase.auth(); // <--- IMPORTANT: We need the auth instance
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -652,6 +653,14 @@ $('groups').addEventListener('input', e => { if (e.target.matches('input[data-i]
 $('saveDb').onclick = async () => {
   if (!state.groups.length) { say('Make groups first'); return; }
   
+  // --- CHECK LOGIN STATUS ---
+  const currentUser = auth.currentUser;
+  if (!currentUser) {
+    alert("You are not logged in. Please go to the Home Page, click 'Class Rep Login', and sign in first.");
+    say('❌ Not logged in.');
+    return;
+  }
+
   const btn = $('saveDb');
   const orig = btn.innerHTML;
   btn.disabled = true;
@@ -703,7 +712,7 @@ $('saveDb').onclick = async () => {
   } catch (err) {
     console.error(err);
     say('❌ Error: ' + err.message);
-    alert('Failed to save. Make sure you are logged in as a rep on the home page first.');
+    alert('Failed to save. Check the console for details.\nError: ' + err.message);
   } finally {
     btn.disabled = false;
     btn.innerHTML = orig;
@@ -712,6 +721,11 @@ $('saveDb').onclick = async () => {
 
 // ---- RESET DATABASE ----
 $('resetDb').onclick = async () => {
+  if (!auth.currentUser) {
+    alert("You are not logged in. Please sign in on the Home Page first.");
+    return;
+  }
+
   if (!confirm("Are you sure you want to DELETE all published groups? Students will not be able to check their groups until you publish again.")) return;
   
   const btn = $('resetDb');
