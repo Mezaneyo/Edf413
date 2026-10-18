@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>EDF413 group maker</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<style>
+  :root{
+    --bg:#eef1f3; --panel:#ffffff; --ink:#16222b; --muted:#5b6b77; --line:#d3dbe0;
+    --brand:#0e5a63; --brand-ink:#ffffff; --soft:#e2eff1; --focus:#d99a00;
+    box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#0f171c; --panel:#17222a; --ink:#e8eef1; --muted:#93a4b0; --line:#2a3944;
+      --brand:#5cc3cc; --brand-ink:#08262a; --soft:#173840; --focus:#f0b429;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#0f171c; --panel:#17222a; --ink:#e8eef1; --muted:#93a4b0; --line:#2a3944;
+    --brand:#5cc3cc; --brand-ink:#08262a; --soft:#173840; --focus:#f0b429;
+  }
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%; scroll-padding-top:env(safe-area-inset-top,0px)}
+  [hidden]{display:none!important}
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:"Avenir Next","Segoe UI",system-ui,-apple-system,sans-serif;
+    line-height:1.45; padding:20px 16px 48px;
+  }
+  .wrap{max-width:1180px; margin:0 auto}
+  h1{font-size:1.75rem; letter-spacing:-.02em; margin:0 0 2px; font-weight:750}
+  h2{font-size:1.15rem; margin:22px 0 10px}
+  .sub{margin:0 0 18px; color:var(--muted)}
+  button,input,select{font:inherit; color:inherit}
+  button{cursor:pointer}
+  :focus-visible{outline:3px solid var(--focus); outline-offset:2px}
+
+  .panel{
+    background:var(--panel); border:1px solid var(--line); border-radius:12px;
+    padding:16px; display:grid; gap:16px;
+    grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+    align-items:start;
+  }
+  .field{display:grid; gap:6px; align-content:start}
+  .field.wide{grid-column:1/-1}
+  .lbl{font-size:.85rem; font-weight:650; color:var(--muted)}
+
+  .seg{display:flex; flex-wrap:wrap; border:1px solid var(--line); border-radius:9px; overflow:hidden}
+  .seg button{flex:1 1 auto; border:0; background:transparent; padding:9px 12px; min-height:42px; border-right:1px solid var(--line)}
+  .seg button:last-child{border-right:0}
+  .seg button[aria-pressed="true"]{background:var(--brand); color:var(--brand-ink); font-weight:650}
+
+  .stepper{display:flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; width:max-content}
+  .stepper button{width:44px; min-height:42px; border:0; background:var(--soft); font-size:1.2rem}
+  .stepper input{
+    width:68px; text-align:center; border:0; border-left:1px solid var(--line); border-right:1px solid var(--line);
+    background:transparent; font-variant-numeric:tabular-nums; font-size:1.05rem; font-weight:650;
+  }
+  .check{display:flex; gap:10px; align-items:center; min-height:42px}
+  .check input{width:20px; height:20px; accent-color:var(--brand)}
+  .check.off{opacity:.45}
+  .hint{font-size:.85rem; color:var(--muted); margin:0}
+
+  .chips{display:flex; flex-wrap:wrap; gap:8px}
+  .chip{border:1px solid var(--line); border-radius:999px; padding:6px 12px; background:transparent; display:inline-flex; gap:8px; align-items:center; min-height:38px}
+  .chip::before{content:""; width:10px; height:10px; border-radius:50%; background:hsl(var(--h) 65% 50%)}
+  .chip small{color:var(--muted); font-variant-numeric:tabular-nums}
+  .chip[aria-pressed="false"]{opacity:.45; text-decoration:line-through}
+
+  .actions{display:flex; flex-wrap:wrap; gap:10px; align-items:center}
+  .actions button,.btn{border:1px solid var(--line); background:transparent; border-radius:9px; padding:9px 16px; min-height:42px}
+  .actions .primary,.btn.primary{background:var(--brand); color:var(--brand-ink); border-color:var(--brand); font-weight:700}
+  #status{color:var(--muted); font-size:.9rem}
+
+  /* import */
+  .drop{display:grid; gap:4px; justify-items:center; width:100%; padding:34px 16px; border:2px dashed var(--line); border-radius:12px; background:var(--panel); text-align:center}
+  .drop.over{border-color:var(--brand); background:var(--soft)}
+  .drop span{color:var(--muted); font-size:.9rem}
+  #impMsg{color:var(--muted); min-height:1.4em; margin:10px 2px}
+  .dup{border:1px solid var(--line); border-radius:12px; background:var(--panel); margin:0 0 12px; padding:6px 14px 8px; min-width:0}
+  .dup legend{font-weight:700; padding:0 6px}
+  .opt{display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-top:1px solid var(--line); min-height:42px}
+  .opt:first-of-type{border-top:0}
+  .opt input{margin-top:3px; width:18px; height:18px; flex:none; accent-color:var(--brand)}
+  .opt small{display:block; color:var(--muted)}
+  .ulist{background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden}
+  .urow{display:grid; grid-template-columns:auto 1fr; gap:6px 10px; padding:10px 12px; border-top:1px solid var(--line); align-items:center}
+  .urow:first-child{border-top:0}
+  .urow input[type=checkbox]{width:20px; height:20px; accent-color:var(--brand)}
+  .urow input[type=text],.urow select{border:1px solid var(--line); border-radius:8px; padding:7px 9px; background:transparent; min-height:40px; min-width:0}
+  .urow select option{background:var(--panel); color:var(--ink)}
+  .meta{grid-column:2; display:flex; flex-wrap:wrap; gap:8px; align-items:center; font-size:.85rem; color:var(--muted)}
+
+  .fields{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:6px; flex:1; min-width:0}
+  .fields input,.fields select,.in{border:1px solid var(--line); border-radius:8px; padding:7px 9px; background:transparent; min-height:40px; min-width:0; width:100%}
+  .fields select option,.in option{background:var(--panel); color:var(--ink)}
+  .opt .fields+small{margin-top:4px}
+  #aMsg{color:var(--muted); font-size:.9rem}
+  #summary{margin:20px 2px 12px; font-weight:600}
+  #summary span{color:var(--muted); font-weight:400}
+  #groups{display:grid; gap:14px; grid-template-columns:repeat(auto-fill,minmax(290px,1fr)); align-items:start}
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; break-inside:avoid}
+  .card header{display:flex; align-items:center; gap:10px; padding:10px 12px; background:var(--soft); border-bottom:1px solid var(--line)}
+  .card header input{flex:1; min-width:0; border:0; background:transparent; font-size:1.1rem; font-weight:750; letter-spacing:-.01em; padding:4px 2px; border-radius:6px}
+  .card header .count{font-variant-numeric:tabular-nums; color:var(--muted); font-size:.9rem; white-space:nowrap}
+  .card ul{list-style:none; margin:0; padding:4px 0}
+  .card li{display:grid; grid-template-columns:1fr auto; gap:2px 10px; padding:8px 12px; border-top:1px solid var(--line)}
+  .card li:first-child{border-top:0}
+  .nm{font-weight:600}
+  .rg{grid-column:1; font-size:.82rem; color:var(--muted); font-variant-numeric:tabular-nums}
+  .tag{grid-row:1/3; grid-column:2; align-self:center; font-size:.78rem; font-weight:650; padding:3px 9px; border-radius:999px; white-space:nowrap; background:hsl(var(--h) 60% 90%); color:hsl(var(--h) 55% 24%)}
+  @media (prefers-color-scheme: dark){ .tag{background:hsl(var(--h) 35% 22%); color:hsl(var(--h) 70% 82%)} }
+  .lead{display:inline-block; margin-left:8px; vertical-align:2px; padding:1px 7px; border-radius:999px; font-size:.68rem; font-weight:750; letter-spacing:.04em; text-transform:uppercase; background:var(--brand); color:var(--brand-ink)}
+  .empty{padding:32px; text-align:center; color:var(--muted); border:1px dashed var(--line); border-radius:12px}
+
+  @media (prefers-reduced-motion: no-preference){
+    .card{animation:pop .18s ease-out}
+    @keyframes pop{from{opacity:.4; transform:translateY(4px)}to{opacity:1; transform:none}}
+  }
+  @media print{
+    body{background:#fff; color:#000; padding:0}
+    .panel,.actions,#status,#importView{display:none}
+    .card{border-color:#999}
+    .card header,.tag,.lead{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+    .card header{background:#eee}
+    .tag{background:#eee; color:#000}
+    .lead{background:#0e5a63; color:#fff}
+    #groups{grid-template-columns:repeat(2,1fr)}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- Step 1: upload and review -->
+<section id="importView">
+  <h1>EDF413 group maker</h1>
+  <p class="sub">Check the class list, add or edit students, choose which duplicates to keep, then make groups. You can also upload more files.</p>
+  <button type="button" class="drop" id="drop">
+    <strong>Choose files, or drop them here</strong>
+    <span>Excel, Word, PDF, PowerPoint, CSV or text · you can add several files</span>
+  </button>
+  <input type="file" id="file" multiple hidden accept=".xlsx,.xlsm,.xls,.ods,.csv,.tsv,.txt,.docx,.pdf,.pptx">
+  <p id="impMsg" role="status"></p>
+  <h2>Add a student</h2>
+  <section class="panel" id="addBox" aria-label="Add a student" style="margin-bottom:8px">
+    <div class="field"><label class="lbl" for="aN">Full name</label><input type="text" id="aN" class="in" autocomplete="off"></div>
+    <div class="field"><label class="lbl" for="aR">Reg number</label><input type="text" id="aR" class="in" placeholder="NCE/SCI/001/23" autocomplete="off"></div>
+    <div class="field"><label class="lbl" for="aC">Subject combination</label><input type="text" id="aC" class="in" list="comboList" placeholder="MAT/COM" autocomplete="off"></div>
+    <div class="field"><label class="lbl" for="aS">Gender</label><select id="aS" class="in"><option value="F">Female</option><option value="M">Male</option><option value="U">Unknown</option></select></div>
+    <div class="field wide actions"><button type="button" class="btn primary" id="aAdd">Add student</button><span id="aMsg" role="status"></span></div>
+  </section>
+  <datalist id="comboList"></datalist>
+  <div id="review" hidden></div>
+</section>
+
+<!-- Step 2: make groups -->
+<div id="makerView" hidden>
+  <h1>EDF413 group maker</h1>
+  <p class="sub" id="sub"></p>
+
+  <section class="panel" aria-label="Group settings">
+    <div class="field">
+      <span class="lbl">Split by</span>
+      <div class="seg" id="segBy">
+        <button type="button" data-v="count">Number of groups</button>
+        <button type="button" data-v="size">People per group</button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="num" id="numLbl">How many groups</label>
+      <div class="stepper">
+        <button type="button" id="dec" aria-label="Decrease">−</button>
+        <input id="num" type="number" inputmode="numeric" min="1">
+        <button type="button" id="inc" aria-label="Increase">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="start">First group number</label>
+      <div class="stepper">
+        <button type="button" id="sdec" aria-label="Decrease">−</button>
+        <input id="start" type="number" inputmode="numeric" min="1">
+        <button type="button" id="sinc" aria-label="Increase">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label class="lbl" for="first">Students joining the first group</label>
+      <div class="stepper">
+        <button type="button" id="fdec" aria-label="Decrease">−</button>
+        <input id="first" type="number" inputmode="numeric" min="0">
+        <button type="button" id="finc" aria-label="Increase">+</button>
+      </div>
+      <p class="hint">The first group already exists, so only this many go into it. 0 = split evenly.</p>
+    </div>
+    <div class="field">
+      <span class="lbl">How to mix</span>
+      <div class="seg" id="segMode">
+        <button type="button" data-v="random">Random</button>
+        <button type="button" data-v="mix">Spread combinations</button>
+        <button type="button" data-v="together">Keep combinations together</button>
+      </div>
+    </div>
+    <div class="field">
+      <span class="lbl">Gender</span>
+      <label class="check" id="balWrap"><input type="checkbox" id="bal" checked> Balance male and female</label>
+      <p class="hint" id="balHint" hidden>Not used when combinations are kept together.</p>
+      <label class="check" id="leadFirstWrap"><input type="checkbox" id="leadFirst"> Also give the first group a leader</label>
+    </div>
+    <div class="field wide">
+      <span class="lbl">Include these subject combinations</span>
+      <div class="chips" id="combos"></div>
+    </div>
+    <div class="field wide actions">
+      <button type="button" class="primary" id="shuffle">Reshuffle</button>
+      <button type="button" id="leaders">New leaders</button>
+      <button type="button" id="pdf">Export PDF</button>
+      <button type="button" id="copy">Copy as text</button>
+      <button type="button" id="csv">Download CSV</button>
+      <button type="button" id="print">Print</button>
+      <button type="button" id="back">Change students</button>
+      <span id="status" role="status"></span>
+    </div>
+  </section>
+
+  <p id="summary" aria-live="polite"></p>
+  <main id="groups"></main>
+</div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const SEX = {F:'Female', M:'Male', U:'Unknown'};
+
+/* ================= IMPORT ================= */
+const imp = {recs:[], sets:[]};   // recs: {id,n,r,c,s,f,inc}; sets: {ids, pick}  (pick = id | 'all' | null)
+const REG = /\b[A-Z]{2,4}(?:\/[A-Z]{1,3})*\/\d{1,4}\/\d{2}\b/i;
+const COMBO = /\b[A-Z]{3,4}\s*\/\s*[A-Z]{3,4}\b/;
+
+// Turn one row (a list of cells) into a student, or null if it does not look like one.
+function toStudent(cells, loose){
+  let s = cells.map(c => String(c == null ? '' : c).trim()).filter(Boolean).join('\t');
+  const rm = s.match(REG), reg = rm ? rm[0].toUpperCase() : '';
+  if (rm) s = s.replace(rm[0], '\t');
+  const cm = s.match(COMBO), c = cm ? cm[0].replace(/\s/g, '') : '';
+  if (cm) s = s.replace(cm[0], '\t');
+  let parts = s.split('\t').map(x => x.trim()).filter(Boolean), sex = 'U';
+  const si = parts.findIndex(x => /^(f|m|female|male)$/i.test(x));
+  if (si > -1) { sex = parts[si][0].toUpperCase(); parts.splice(si, 1); }
+  else if (parts.length) {
+    const m = parts[parts.length - 1].match(/^(.*\S)\s+(female|male|f|m)$/i);
+    if (m) { sex = m[2][0].toUpperCase(); parts[parts.length - 1] = m[1]; }
+  }
+  const n = parts.join(' ').replace(/^[\s\d.)\-]+/, '').replace(/[\s|,;:\-]+$/, '').replace(/\s+/g, ' ');
+  if (!/[A-Za-z]{2}/.test(n)) return null;
+  if (loose ? !(/^[A-Za-z'.\-\s]{5,60}$/.test(n) && n.split(' ').length >= 2) : !(reg || c)) return null;
+  return {n, r:reg, c:c || '—', s:sex};
+}
+
+async function readRows(file){
+  const ext = file.name.split('.').pop().toLowerCase();
+  const sheetRows = wb => wb.SheetNames.flatMap(k => XLSX.utils.sheet_to_json(wb.Sheets[k], {header:1, raw:false, defval:''}));
+  if (['xlsx','xlsm','xls','ods'].includes(ext)) return sheetRows(XLSX.read(await file.arrayBuffer()));
+  if (ext === 'csv' || ext === 'tsv') return sheetRows(XLSX.read(await file.text(), {type:'string'}));
+  if (ext === 'txt') return (await file.text()).split(/\r?\n/).map(l => l.split(/\t|\s{2,}|\|/));
+  if (ext === 'docx') {
+    const html = (await mammoth.convertToHtml({arrayBuffer: await file.arrayBuffer()})).value;
+    const d = new DOMParser().parseFromString(html, 'text/html'), rows = [];
+    d.querySelectorAll('tr').forEach(tr => rows.push([...tr.cells].map(c => c.textContent)));
+    d.querySelectorAll('p,li').forEach(p => { if (!p.closest('table')) rows.push(p.textContent.split(/\t|\s{2,}|\|/)); });
+    return rows;
+  }
+  if (ext === 'pptx') {
+    const z = await JSZip.loadAsync(await file.arrayBuffer()), rows = [];
+    const slides = Object.keys(z.files).filter(k => /^ppt\/slides\/slide\d+\.xml$/.test(k)).sort((a, b) => a.match(/\d+/) - b.match(/\d+/));
+    const txt = el => [...el.getElementsByTagName('a:t')].map(t => t.textContent).join('');
+    const inTbl = el => { for (; el; el = el.parentNode) if (el.nodeName === 'a:tbl') return true; return false; };
+    for (const k of slides) {
+      const doc = new DOMParser().parseFromString(await z.file(k).async('string'), 'application/xml');
+      [...doc.getElementsByTagName('a:tr')].forEach(tr => rows.push([...tr.getElementsByTagName('a:tc')].map(txt)));
+      [...doc.getElementsByTagName('a:p')].forEach(p => { if (!inTbl(p)) rows.push(txt(p).split(/\t|\s{2,}|\|/)); });
+    }
+    return rows;
+  }
+  if (ext === 'pdf') {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf = await pdfjsLib.getDocument({data: await file.arrayBuffer()}).promise, rows = [];
+    for (let p = 1; p <= pdf.numPages; p++) {
+      const items = (await (await pdf.getPage(p)).getTextContent()).items.filter(i => i.str.trim());
+      const lines = {};
+      items.forEach(i => (lines[Math.round(i.transform[5] / 4)] ||= []).push(i));
+      Object.keys(lines).sort((a, b) => b - a).forEach(y => {
+        const row = [], its = lines[y].sort((a, b) => a.transform[4] - b.transform[4]);
+        let end = null;
+        its.forEach(i => {
+          if (end === null || i.transform[4] - end > 6) row.push(i.str); else row[row.length - 1] += ' ' + i.str;
+          end = i.transform[4] + i.width;
+        });
+        rows.push(row);
+      });
+    }
+    return rows;
+  }
+  throw new Error('unsupported');
+}
+
+const nkey = n => n.toLowerCase().replace(/[^a-z ]/g, ' ').split(/\s+/).filter(Boolean).sort().join(' ');
+const score = r => (r.r ? 2 : 0) + (r.s !== 'U' ? 1 : 0) + (r.c !== '—' ? 1 : 0);
+
+// Group records that share a reg number or the same name (in any order).
+function analyse(){
+  const keep = new Map(imp.sets.map(s => [s.ids.join(','), s.pick]));
+  const P = imp.recs.map((_, i) => i), seen = {};
+  const find = i => P[i] === i ? i : (P[i] = find(P[i]));
+  imp.recs.forEach((r, i) => [r.r && 'r' + r.r, 'n' + nkey(r.n)].filter(Boolean).forEach(k => {
+    if (k in seen) P[find(i)] = find(seen[k]); else seen[k] = i;
+  }));
+  const m = {};
+  imp.recs.forEach((_, i) => (m[find(i)] ||= []).push(i));
+  imp.sets = Object.values(m).map(ids => {
+    const k = ids.join(',');
+    return {ids, pick: keep.has(k) ? keep.get(k) : ids.reduce((b, i) => score(imp.recs[i]) > score(imp.recs[b]) ? i : b, ids[0])};
+  });
+}
+
+function finalList(){
+  const out = [];
+  imp.sets.forEach(s => {
+    if (s.ids.length > 1) { if (s.pick === 'all') s.ids.forEach(i => out.push(imp.recs[i])); else if (s.pick !== null) out.push(imp.recs[s.pick]); }
+    else if (imp.recs[s.ids[0]].inc) out.push(imp.recs[s.ids[0]]);
+  });
+  return out.filter(r => r.n.trim());
+}
+function updateGo(){ const n = finalList().length; $('go').disabled = !n; $('go').textContent = n ? `Continue with ${n} student${n === 1 ? '' : 's'}` : 'No students selected'; }
+
+const fields = r => `<div class="fields">
+  <input type="text" data-id="${r.id}" data-f="n" value="${esc(r.n)}" aria-label="Full name" placeholder="Full name">
+  <input type="text" data-id="${r.id}" data-f="r" value="${esc(r.r)}" aria-label="Reg number" placeholder="Reg number">
+  <input type="text" data-id="${r.id}" data-f="c" value="${esc(r.c === '—' ? '' : r.c)}" list="comboList" aria-label="Subject combination" placeholder="Combination">
+  <select data-id="${r.id}" data-f="s" aria-label="Gender">${Object.keys(SEX).map(k => `<option value="${k}"${r.s === k ? ' selected' : ''}>${SEX[k]}</option>`).join('')}</select></div>`;
+
+function renderReview(){
+  const R = $('review');
+  $('comboList').innerHTML = [...new Set(imp.recs.map(r => r.c).filter(c => c !== '—'))].sort().map(c => `<option value="${esc(c)}">`).join('');
+  if (!imp.recs.length) { R.hidden = true; return; }
+  R.hidden = false;
+  const dups = imp.sets.map((s, k) => [s, k]).filter(([s]) => s.ids.length > 1), uniq = imp.sets.filter(s => s.ids.length === 1);
+  R.innerHTML = `
+    <p><b>${imp.recs.length}</b> rows · <b>${uniq.length + dups.length}</b> different students · <b>${dups.length}</b> duplicated</p>
+    <div class="actions"><button type="button" class="btn primary" id="go"></button><button type="button" class="btn" id="recheck">Re-check duplicates</button><button type="button" class="btn" id="clear">Clear list</button></div>
+    ${dups.length ? `<h2>Duplicates: choose which entry to keep</h2><p class="hint">You can edit any entry. After changing a name or reg number, press Re-check duplicates.</p>` + dups.map(([s, k]) => `
+      <fieldset class="dup"><legend>${s.ids.length} entries look like the same student</legend>
+        ${s.ids.map(i => `<div class="opt"><input type="radio" name="d${k}" value="${i}"${s.pick === i ? ' checked' : ''} aria-label="Keep this entry"><div style="flex:1;min-width:0">${fields(imp.recs[i])}<small>from ${esc(imp.recs[i].f)}</small></div></div>`).join('')}
+        <label class="opt"><input type="radio" name="d${k}" value="all"${s.pick === 'all' ? ' checked' : ''}><span>Keep all (they are different people)</span></label>
+        <label class="opt"><input type="radio" name="d${k}" value=""${s.pick === null ? ' checked' : ''}><span>Leave this student out</span></label>
+      </fieldset>`).join('') : '<p class="hint">No duplicates found.</p>'}
+    <h2>Students (${uniq.length})</h2>
+    <p class="hint">Edit any detail, or untick someone to leave them out.</p>
+    <div class="ulist">${uniq.map(s => { const r = imp.recs[s.ids[0]]; return `
+      <div class="urow"><input type="checkbox" data-id="${r.id}" data-f="inc"${r.inc ? ' checked' : ''} aria-label="Include ${esc(r.n)}">${fields(r)}</div>`; }).join('')}</div>`;
+  updateGo();
+}
+
+async function addFiles(files){
+  const msgs = [];
+  for (const f of files) {
+    $('impMsg').textContent = 'Reading ' + f.name + '…';
+    try {
+      const rows = await readRows(f);
+      let found = rows.map(r => toStudent(r)).filter(Boolean);
+      if (!found.length) found = rows.map(r => toStudent(r, true)).filter(Boolean);
+      found.forEach(x => imp.recs.push({...x, f:f.name, inc:true, id:imp.recs.length}));
+      msgs.push(found.length ? `${f.name}: ${found.length} found` : `${f.name}: no students found`);
+    } catch (e) {
+      msgs.push(`${f.name}: ${e.message === 'unsupported' ? 'file type not supported (old .doc/.ppt files should be saved as .docx/.pptx)' : 'could not be read'}`);
+    }
+  }
+  analyse(); renderReview();
+  $('impMsg').textContent = msgs.join(' · ');
+}
+
+$('drop').onclick = () => $('file').click();
+$('file').onchange = e => { addFiles([...e.target.files]); e.target.value = ''; };
+['dragenter','dragover'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.add('over'); }));
+['dragleave','drop'].forEach(t => $('drop').addEventListener(t, e => { e.preventDefault(); $('drop').classList.remove('over'); }));
+$('drop').addEventListener('drop', e => addFiles([...e.dataTransfer.files]));
+$('review').addEventListener('change', e => {
+  const t = e.target;
+  if (t.type === 'radio') { const v = t.value; imp.sets[+t.name.slice(1)].pick = v === '' ? null : v === 'all' ? 'all' : +v; }
+  else if (t.dataset.f) {
+    const r = imp.recs[+t.dataset.id], k = t.dataset.f;
+    let v = t.type === 'checkbox' ? t.checked : t.value;
+    if (k === 'n') v = v.replace(/\s+/g, ' ').trim();
+    if (k === 'r') v = v.replace(/\s/g, '').toUpperCase();
+    if (k === 'c') v = v.replace(/\s/g, '').toUpperCase() || '—';
+    r[k] = v;
+    if (k === 'r' || k === 'c') t.value = v === '—' ? '' : v;
+  }
+  updateGo();
+});
+$('review').addEventListener('click', e => {
+  if (e.target.id === 'go') load(finalList().map(r => ({n:r.n.trim(), r:r.r, c:r.c, s:r.s})));
+  if (e.target.id === 'recheck') { analyse(); renderReview(); $('impMsg').textContent = 'Duplicates re-checked.'; }
+  if (e.target.id === 'clear') { imp.recs = []; imp.sets = []; $('impMsg').textContent = ''; renderReview(); }
+});
+
+$('aAdd').onclick = () => {
+  const n = $('aN').value.replace(/\s+/g, ' ').trim();
+  if (!n) { $('aMsg').textContent = 'Enter a name first.'; $('aN').focus(); return; }
+  const r = {n, r:$('aR').value.replace(/\s/g, '').toUpperCase(), c:$('aC').value.replace(/\s/g, '').toUpperCase() || '—', s:$('aS').value, f:'added by hand', inc:true, id:imp.recs.length};
+  imp.recs.push(r); analyse(); renderReview();
+  const dup = imp.sets.find(s => s.ids.includes(r.id)).ids.length > 1;
+  ['aN','aR','aC'].forEach(i => $(i).value = '');
+  $('aMsg').textContent = `Added ${n}` + (dup ? '. This student matches someone already in the list, so choose which entry to keep.' : '.');
+  const inp = document.querySelector(`#review [data-id="${r.id}"][data-f="n"]`);
+  if (inp) inp.scrollIntoView({block:'center'});
+};
+['aN','aR','aC'].forEach(i => $(i).addEventListener('keydown', e => { if (e.key === 'Enter') $('aAdd').click(); }));
+
+// The class list from EDF413_FINAL-1wed.xlsx: [name, reg number, combination, sex]
+const DEFAULT = [["MASTER VALENTINO","NCE/SCI/192/22","MAT/AGR","M"],["Leonard Jamikele","NCE/ME/SCI/010/25","AGR/BIO","M"],["Misheck Gunde","NCE/SCI/087/23","MAT/COM","M"],["ARTHUR KAMIJA","NCE/SCI/121/23","AGR/BIO","M"],["Samuel junior Majamanda","NCE/SCI/164/23","MAT/COM","M"],["Hajirah Ngara","NCE/NG/SCI/063/23","MAT/CHE","F"],["Limbani Thosi","NCE/SCI/226/22","MAT/AGR","M"],["DEBORAH MWAGOMBA","NCE/SCI/246/23","AGR/BIO","F"],["CHIKUMBUTSO ENOCK","NCE/NG/SCI/086/23","MAT/HEC","M"],["ANDREW KAMWENDO","NCE/ME/SCI/025/24","AGR/BIO","M"],["Atupele Macloud","NCE/SCI/196/23","MAT/HEC","F"],["Lumbani Kaunga","NCE/SCI/136/23","MAT/BIO","M"],["Vitumbiko M. Kamanga","NCE/SCI/112/23","MAT/CHE","F"],["Blessings Chikhungwa","NCE/SCI/049/23","AGR/BIO","M"],["Lucy Mkwaira","NCE/SCI/209/23","AGR/BIO","F"],["GEORGE CHIMANGIRE","NVE/ME/SCI/004/25","AGR/BIO","M"],["ALEPHAH TSAMBA","NCE/SCI/333/23","AGR/BIO","F"],["Emmanuel Matemba","NCE/NG/SCI/137/23","MAT/COM","M"],["ENOCK YAKOBE","NCE/NG/SCI/183/23","AGR/BIO","M"],["Carolyn Kampheni","NCE/SCI/023/22","MAT/BIO","F"],["Temwa Mkandawire","NCE/SCI/205/23","MAT/PHY","F"],["BRENDA NGOZA","NCE/SCI/262/23","MAT/PHY","F"],["Kelvin H. Chaweza","NCE/NG/SCI/082/23","MAT/COM","M"],["Tirzah Mbewe","NCE/SCI/193/23","MAT/BIO","F"],["IDAH KUSAWANJE","NCE/NG/SCI/032/23","MAT/AGR","F"],["Tiyanjane Makandanje","NCE/SCI/165/23","AGR/BIO","F"],["CATHERINE CHILANGA","NCE/SCI/051/23","MAT/HEC","F"],["Blessings Osman","NCE/SCI/285/23","MAT/HEC","M"],["KAFUMBATA AUBREY","NCE/SCI/107/23","MAT/COM","M"],["KENNETH BLESSINGS LIZAKUWE","NCE/SCI/148/23","MAT/COM","M"],["Chisomo Chipatangwe","NCE/NG/SCI/090/23","MAT/HEC","M"],["Ethel Kamanga","NCE/SCI/111/23","MAT/HEC","F"],["KALUMBI SAMUEL W.","NCE/NG/SCI/110/23","BIO/HEC","M"],["anderson Lyford","NCE/SCI/187/22","AGR/HEC","M"],["Martin James","NCE/SCI/075/22","MAT/AGR","M"],["Tadeo Chimtali","NCE/SCI/054/23","AGR/BIO","M"],["MANUEL MIKELI BANDA","NCE/SCI/022/23","MAT/HEC","M"],["GREEN CHRISTOPHER JACKSON","NCE/SCI/094/23","MAT/CHE","M"],["BRENDA THOMAS","NCE/SCI/332/23","AGR/BIO","F"],["CYNTHIA MTELEMUKA","NCE/SCI/229/23","MAT/AGR","F"],["ISMAEL MTOLOWA","NCE/SCI/234/23","AGR/BIO","M"],["SINGENIRE NKHATA","NCE/ME/SCI/041/25","AGR/BIO","F"],["ESTERY NG'AMBI","NCE/NG/SCI/062/23","MAT/AGR","F"],["MAJOR TRYMORE","NCE/ME/SCI/030/24","AGR/BIO","M"],["JOYCE NDHLOVU","NCE/NG/SCI/059/23","MAT/CHE","F"],["EVELYN ZAMAGUNTHI","NCE/ME/SCI/051/25","AGR/BIO","F"],["Bexter Shonga","NCE/SCI/315/23","MAT/HEC","M"],["Dyless Mlenga","NCE/SCI/210/23","MAT/BIO","F"],["Madalitso Chikaponya","NCE/SCI/048/23","MAT/COM","M"],["GLORY MACKINLY","NCE/ME/SCI/023/25","AGR/BIO","F"],["Alex Atupele Kuchilunda","NCE/SCI/089/22","AGR/BIO","M"],["Loveness c Leckiam","NCE/SCI/071/21","MAT/CHE","F"],["Njerema victor Samuel","NCE/SCI/265/23","MAT/PHY","M"],["Matias pindani","NCE/SCI/303/23","AGR/BIO","M"],["GILBERT MARK","NCE/SCI/083/23","AGR/BIO","M"],["Tonthozo Bailo","NCE/NG/SCI/002/23","MAT/BIO","F"],["Glory Jeremiah","NCE/SCI/098/23","MAT/AGR","F"],["Grace moyo","NCE/NG/SCI/051/23","MAT/PHY","F"],["Patrick Gabriel Ng'ambi","NCE/SCI/208/22","AGR/HEC","M"],["Blessings Bandah","NCE/SCI/023/23","MAT/BIO","M"],["JAIROSI FRANK","NCE/SCI/095/23","MAT/COM","M"],["Lucy mandalasi","NCE/SCI/178/23","MAT/CHE","F"],["KENNEDY ACKIM","NCE/SCI/002/23","MAT/COM","M"],["Mphatso Thom","NCE/ME/SCI/049/25","AGR/BIO","M"],["JANNET KAIMBA","NCE/ME/SCI/013/25","MAT/CHE","F"],["David Chikuta","NCE/SCI/165/22","MAT/PHY","M"],["Yona Chimwendere","NCE/SCI/056/23","AGR/BIO","M"],["Cecilia Doviko Banda","NCE/ME/SCI/007/25","AGR/BIO","F"],["ABEL MICHAEL GOSPEL","NCE/SCI/001/23","MAT/HEC","M"],["Fred Kayange","NCE/SCI/138/23","MAT/COM","M"],["LYDIA KHUNYULI MHANGO","NCE/NG/SCI/034/23","MAT/AGR","F"],["POTIPHER KABONGA","NCE/NG/SCI/105/23","AGR/BIO","M"],["Olivia Blaston","NCE/SCI/026/23","MAT/CHE","F"],["Olivia Sokosi","NCE/SCI/324/23","AGR/BIO","F"],["Mirriam Chimtsitsi","NCE/SCI/055/23","AGR/BIO","F"],["Citrex Allan Sankhulani","NCE/ME/SCI/033/24","MAT/COM","M"],["Atupele Mulebe","NCE/NG/SCI/055/23","MAT/PHY","F"],["Bernadetta Mnelemba","NCE/NG/SCI/049/23","AGR/BIO","F"],["Emma Brazio","NCE/NG/SCI/006/23","AGR/BIO","F"],["MARLON MARTIN","NCE/ME/SCI/026/25","AGR/BIO","M"],["Chikondi Ndriva","NCE/NG/SCI/060/23","BIO/HEC","F"],["Norah Mphote","NCE/SCI/219/23","MAT/PHY","F"],["Felason Jepter","NCE/NG/SCI/103/23","BIO/HEC","M"],["HALMITON KEFFA PHIRI","NCE/ME/SCI/044/25","AGR/BIO","M"],["Boston Emmanuel Wilson","NCE/SCI/337/23","MAT/AGR","M"],["Ackim Chonde","NCE/ME/SCI/006/25","MAT/CHE","M"],["DALITSO PHIRI R","NCE/SCI/297/23","MAT/AGR","M"],["Ackim Chonde","NCE/ME/SCI/006/25","MAT/CHE","M"],["Hanipher kalako","NCE/SCI/108/23","AGR/BIO","F"],["William Phiri","NCE/SCI/299/23","MAT/COM","M"],["Bernadetta Kadyaulesi","NCE/ME/SCI/020/24","AGR/BIO","F"],["Lucy mandalasi","NCE/SCI/178/23","MAT/CHE","F"],["Getrude Mpoya","NCE/SCI/222/23","MAT/AGR","F"],["WILLIAM KATHUMBA","NCE/SCI/130/23","MAT/HEC","M"],["ISAAC ZINGWANGWA","NCE/SCI/346/23","MAT/PHY","M"],["Priscilla kambewa","NCE/SCI/117/23","MAT/CHE","F"],["Grenah Chilembwe","NCE/NG/SCI/012/23","BIO/HEC","F"],["Regina Kwenda Kamadzi","NCE/SCI/110/23","MAT/COM","F"],["Martin Mtonga","NCE/SCI/236/23","MAT/AGR","M"],["Chisomo Msiska","NCE/SCI/224/23","MAT/AGR","M"],["Trintus Banda","NCE/SCI/008/23","AGR/BIO","F"],["Maureen Kumwenda","NCE/SCI/143/23","MAT/PHY","F"],["Regina Kwenda Kamadzi","NCE/SCL/110/23","MAT/COM","F"],["JAMISON SAUKAN","NCE/SCI/096/23","MAT/COM","M"],["MPHATSO VELLIANO","NCE/SCI/052/22","MAT/BIO","F"],["Fanuel Luka","NCE/SCI/152/23","MAT/PHY","M"],["ASANTE DICKSON","NCE/SCI/067/23","MAT/CHE","M"],["Jacob D Banda","NCE/SCI/019/23","MAT/HEC","M"],["AARON CHISALE","NCE/SCI/060/23","MAT/BIO","M"],["STEVEN BONFACE KULUPANDO","NCE/SCI/142/23","MAT/COM","M"],["GEORGE CHIMANGIRE","NCE/ME/SCI/004/25","AGR/BIO","M"],["WISEMAN KAMANGA","NCE/SCI/113/23","MAT/AGR","M"],["JOYCE NDHLOVU","NCE/NG/SCI/059/23","MAT/CHE","F"],["Kondwani Daniel Msefula","NCE/SCI/107/22","MAT/CHE","M"],["Madalitso Makawa","NCE/SCI/167/23","MAT/AGR","F"],["Gladys Dalikeni","NCE/SCI/014/22","AGR/BIO","F"],["Mary Sichula","NCE/SCI/316/23","AGR/BIO","F"],["PATRICIA JULY","NCE/NG/SCI/023/23","AGR/HEC","F"],["Wezzie Ziba","NCE/SCI/345/23","AGR/BIO","F"],["Steven Nkhanyepa","NCE/NG/SCI/121/23","MAT/BIO","M"],["Aubrey Henry Chakalamba","NCE/SCI/032/23","AGR/BIO","M"],["Mabvuto Govati","NCE/ME/SCI/008/25","AGR/BIO","M"],["Kelvin Chateka","NCE/SCI/038/23","AGR/BIO","M"],["Hope Kachaje","NCE/SCI/104/23","AGR/BIO","M"],["LYDIA KHUNYULI MHANGO","NCE/NG/SCI/034/23","MAT/AGR","F"],["Patience Masina","NCE/SCI/186/23","MAT/COM","F"],["Arthur N Mponda","NCE/NG/SCI/147/23","MAT/AGR","M"],["FRED CHAVULA","NCE/SCI/041/23","MAT/PHY","M"],["Stella panganani","NCE/NG/SCI/067/23","MAT/PHY","F"],["LUSUNGU CHIONI","NCE/NG/SCI/015/23","AGR/BIO","F"],["Chikondi Kamwani","NCE/ME/SCI/015/25","AGR/BIO","F"],["Angella msamira","NCE/SCI/223/23","MAT/PHY","F"],["Enosi Mussa Kenvas","NCE/ME/SCI/019/25","AGR/BIO","M"],["LUCY MBVUNDULA","NCE/NG/SCI/046/23","AGR/BIO","F"],["Getrude Makanyanga","NCE/SCI/166/23","MAT/BIO","F"],["Prospelina Mtonga","NCE/SCI/235/23","MAT/BIO","F"],["Sheila Mtenje","NCE/SCI/231/23","AGR/BIO","F"],["Shelifa Bwanali","NCE/NG/SCI/008/23","AGR/HEC","F"],["Bridget K. Magombo","NCE/SCI/161/23","MAT/AGR","F"],["HASTINGS MUKOKO","NCE/ME/SCI/036/25","MAT/COM","M"],["JOANA SUBILI","NCE/SCI/049/22","MAT/CHE","F"],["DAVID MAKIYI","NCE/SCI/168/23","MAT/BIO","M"],["ENOCK SAKHULA","NCE/SCI/308/23","MAT/BIO","M"],["ALEX LIMBANI","NCE/SCI/147/23","MAT/AGR","M"],["FELIX CHIDULA","NCE/SCI/043/23","MAT/COM","M"],["SOFTER GANIZANI CHIDZAYE","NCE/SCI/044/23","MAT/PHY","M"],["FADHWILA ISMAIL MWAWA","NCE/SCI/257/23","MAT/BIO","F"],["FRANK TEMBETANI","NCE/NG/SCI/178/23","AGR/BIO","M"],["ASPHARD CHAKUNKHULIRA","NCE/SCI/060/22","AGR/HEC","M"],["ELICY KANGOYA","NCE/SCI/122/23","MAT/HEC","F"],["LAMECK MJAHON","NCE/NG/SCI/141/23","MAT/CHE","M"],["HOPE ADRIAN CHIMGANG'A","NCE/NG/SCI/089/23","MAT/COM","M"],["AUSTIN KAIPA","NCE/ME/SCI/014/25","AGR/BIO","M"],["HARISON MATUTA","NCE/SCI/190/23","AGR/BIO","M"],["HALIMA KISHOMBE","NCE/NG/SCI/035/23","MAT/CHE","F"],["Citrex Allan Sankhulani","NCE/ME/SCI/033/24","MAT/COM","M"],["MIRRIUM BANDA","NCE/SCI/011/23","MAT/PHY","F"],["CHISOMO EMMANUEL","NCE/SCI/070/23","MAT/COM","M"],["LUIS BEZAI","NCE/SCI/218/23","MAT/COM","M"],["AGGRY MEDSON MSIKA","NCE/SCI/225/23","MAT/COM","M"],["AUBRY CHAKALAMBA","NCE/SCI/032/23","ARI/BIO","M"],["COLLAS MSUKWA","NCE/SCI/227/23","MAT/HEC","F"],["LAZARUS BANDA","NCE/SCI/012/23","MAT/HEC","M"],["MARK MARUWO","NCE/ME/SCI/025/24","AGRI/BIO","M"]];
+imp.recs = DEFAULT.map((x, i) => ({n:x[0], r:x[1], c:x[2], s:x[3], f:'EDF413_FINAL-1wed.xlsx', inc:true, id:i}));
+analyse(); renderReview();
+$('impMsg').textContent = `Loaded ${imp.recs.length} students from EDF413_FINAL-1wed.xlsx.`;
+
+/* ================= GROUP MAKER ================= */
+let STUDENTS = [], COMBOS = [], HUE = {};
+const state = {
+  by:'count', count:4, size:7, mode:'mix', balance:true, off:new Set(),
+  start:20, first:1, leadFirst:false,
+  groups:[], names:[], leaders:[]
+};
+const pool = () => STUDENTS.filter(s => !state.off.has(s.c));
+const existingFirst = () => state.first > 0 && state.groups.length > 1;
+
+function load(list){
+  STUDENTS = list;
+  COMBOS = [...new Set(list.map(s => s.c))].sort();
+  HUE = Object.fromEntries(COMBOS.map((c, i) => [c, Math.round(i * 360 / COMBOS.length + 200) % 360]));
+  state.off = new Set();
+  state.count = Math.max(1, Math.min(state.count, list.length));
+  state.first = Math.min(state.first, list.length);
+  $('combos').innerHTML = COMBOS.map(c => {
+    const n = list.filter(s => s.c === c).length;
+    return `<button type="button" class="chip" style="--h:${HUE[c]}" data-c="${esc(c)}" aria-pressed="true">${esc(c)} <small>${n}</small></button>`;
+  }).join('');
+  $('sub').textContent = `${list.length} students · duplicates checked`;
+  $('importView').hidden = true; $('makerView').hidden = false;
+  syncControls(); regenerate(); window.scrollTo(0, 0);
+}
+
+function shuffle(a){
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+function sortBy(a, ...keys){
+  return a.map((v, i) => [v, i]).sort((x, y) => {
+    for (const k of keys) { const p = k(x[0]), q = k(y[0]); if (p < q) return -1; if (p > q) return 1; }
+    return x[1] - y[1];
+  }).map(x => x[0]);
+}
+function sizesFor(N, g){
+  const f = Math.min(state.first, N);
+  if (f > 0 && g > 1) {
+    const rest = N - f, m = g - 1, base = Math.floor(rest / m), extra = rest % m;
+    return [f, ...Array.from({length:m}, (_, k) => base + (k >= m - extra ? 1 : 0))];
+  }
+  const base = Math.floor(N / g), extra = N % g;
+  return Array.from({length:g}, (_, k) => base + (k >= g - extra ? 1 : 0));
+}
+
+function build(){
+  const people = pool(), N = people.length;
+  if (!N) { state.groups = []; state.names = []; state.leaders = []; return; }
+  const f = Math.min(state.first, N);
+  let g = state.by === 'count' ? state.count : (f > 0 ? 1 + Math.max(1, Math.floor((N - f) / state.size)) : Math.max(1, Math.floor(N / state.size)));
+  g = Math.max(1, Math.min(g, f > 0 ? N - f + 1 : N));
+  const sizes = sizesFor(N, g);
+  shuffle(people);
+  const groups = Array.from({length:g}, () => []);
+
+  if (state.mode === 'together') {
+    const ordered = sortBy(people, s => s.c);
+    let i = 0;
+    groups.forEach((grp, k) => { grp.push(...ordered.slice(i, i + sizes[k])); i += sizes[k]; });
+  } else {
+    const spread = state.mode === 'mix', balance = state.balance;
+    const cCount = groups.map(() => ({})), sCount = groups.map(() => ({F:0, M:0, U:0}));
+    const size = {}; people.forEach(s => size[s.c] = (size[s.c] || 0) + 1);
+    const ordered = spread ? sortBy(people, s => -size[s.c], s => s.c) : people;
+    ordered.forEach(st => {
+      let best = [], bestScore = Infinity;
+      groups.forEach((grp, k) => {
+        if (grp.length >= sizes[k]) return;
+        const sc = (spread ? (cCount[k][st.c] || 0) : 0) + (balance ? sCount[k][st.s] : 0) + (spread || balance ? 0 : grp.length);
+        if (sc < bestScore) { bestScore = sc; best = [k]; } else if (sc === bestScore) best.push(k);
+      });
+      const k = best[Math.floor(Math.random() * best.length)];
+      groups[k].push(st);
+      cCount[k][st.c] = (cCount[k][st.c] || 0) + 1;
+      sCount[k][st.s]++;
+    });
+  }
+  groups.forEach(grp => grp.sort((a, b) => a.n.localeCompare(b.n)));
+  state.groups = groups;
+  state.names = groups.map((_, i) => 'Group ' + (state.start + i));
+  pickLeaders();
+}
+
+function pickLeaders(){
+  state.leaders = state.groups.map((g, i) =>
+    (i === 0 && existingFirst() && !state.leadFirst) ? null : g[Math.floor(Math.random() * g.length)]);
+}
+
+function render(){
+  const box = $('groups');
+  const total = state.groups.reduce((n, g) => n + g.length, 0);
+  if (!total) { box.innerHTML = '<div class="empty">Turn on at least one subject combination to make groups.</div>'; $('summary').textContent = ''; return; }
+  const sizes = state.groups.map(g => g.length), lo = Math.min(...sizes), hi = Math.max(...sizes);
+  const per = sizes.length <= 12 ? sizes.join(', ') : (lo === hi ? lo : lo + '–' + hi);
+  $('summary').innerHTML = `${total} students in ${state.groups.length} groups <span>· ${per} in each</span>`;
+  box.innerHTML = state.groups.map((g, i) => {
+    const f = g.filter(s => s.s === 'F').length, m = g.filter(s => s.s === 'M').length, u = g.length - f - m;
+    const rows = g.map(s => `
+      <li>
+        <span class="nm">${esc(s.n)}${s === state.leaders[i] ? '<span class="lead">Leader</span>' : ''}</span>
+        <span class="rg">${esc(s.r || '')}</span>
+        <span class="tag" style="--h:${HUE[s.c]}">${esc(s.c)}</span>
+      </li>`).join('');
+    return `<article class="card">
+      <header>
+        <input value="${esc(state.names[i])}" data-i="${i}" aria-label="Group name">
+        <span class="count">${g.length} · ${f}F ${m}M${u ? ' ' + u + '?' : ''}</span>
+      </header>
+      <ul>${rows}</ul>
+    </article>`;
+  }).join('');
+}
+
+function regenerate(){ build(); render(); $('status').textContent = ''; }
+
+function syncControls(){
+  document.querySelectorAll('#segBy button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === state.by));
+  document.querySelectorAll('#segMode button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === state.mode));
+  $('numLbl').textContent = state.by === 'count' ? 'How many groups' : 'How many people per group';
+  $('num').value = state.by === 'count' ? state.count : state.size;
+  $('start').value = state.start;
+  $('first').value = state.first;
+  $('leadFirst').checked = state.leadFirst;
+  $('leadFirstWrap').classList.toggle('off', state.first === 0);
+  $('leadFirst').disabled = state.first === 0;
+  const together = state.mode === 'together';
+  $('bal').disabled = together;
+  $('balWrap').classList.toggle('off', together);
+  $('balHint').hidden = !together;
+}
+
+function setNum(v){
+  const N = pool().length || 1;
+  v = Math.max(1, Math.min(Math.round(Number(v)) || 1, N));
+  if (state.by === 'count') state.count = v; else state.size = v;
+  syncControls(); regenerate();
+}
+function setFirst(v){ state.first = Math.max(0, Math.min(Math.round(Number(v)) || 0, pool().length)); syncControls(); regenerate(); }
+function setStart(v){
+  state.start = Math.max(1, Math.round(Number(v)) || 1);
+  syncControls();
+  state.names = state.groups.map((_, i) => 'Group ' + (state.start + i));
+  render();
+}
+
+document.querySelectorAll('#segBy button').forEach(b => b.onclick = () => { state.by = b.dataset.v; syncControls(); regenerate(); });
+document.querySelectorAll('#segMode button').forEach(b => b.onclick = () => { state.mode = b.dataset.v; syncControls(); regenerate(); });
+$('bal').onchange = e => { state.balance = e.target.checked; regenerate(); };
+$('num').onchange = e => setNum(e.target.value);
+$('dec').onclick = () => setNum((state.by === 'count' ? state.count : state.size) - 1);
+$('inc').onclick = () => setNum((state.by === 'count' ? state.count : state.size) + 1);
+$('start').onchange = e => setStart(e.target.value);
+$('sdec').onclick = () => setStart(state.start - 1);
+$('sinc').onclick = () => setStart(state.start + 1);
+$('first').onchange = e => setFirst(e.target.value);
+$('fdec').onclick = () => setFirst(state.first - 1);
+$('finc').onclick = () => setFirst(state.first + 1);
+$('leadFirst').onchange = e => {
+  state.leadFirst = e.target.checked;
+  if (state.groups.length) {
+    const g = state.groups[0];
+    state.leaders[0] = (existingFirst() && !state.leadFirst) ? null : (state.leaders[0] || g[Math.floor(Math.random() * g.length)]);
+    render();
+  }
+};
+$('shuffle').onclick = regenerate;
+$('leaders').onclick = () => { pickLeaders(); render(); };
+$('print').onclick = () => window.print();
+$('back').onclick = () => { $('makerView').hidden = true; $('importView').hidden = false; window.scrollTo(0, 0); };
+
+$('combos').onclick = e => {
+  const b = e.target.closest('.chip'); if (!b) return;
+  const c = b.dataset.c;
+  if (state.off.has(c)) state.off.delete(c); else state.off.add(c);
+  b.setAttribute('aria-pressed', !state.off.has(c));
+  setNum(state.by === 'count' ? state.count : state.size);
+};
+$('groups').addEventListener('input', e => { if (e.target.matches('input[data-i]')) state.names[+e.target.dataset.i] = e.target.value; });
+
+// ---- export: text and CSV
+function asText(){
+  return state.groups.map((g, i) =>
+    state.names[i] + ' (' + g.length + ')\n' +
+    g.map(s => `  ${s.n} – ${s.r} – ${s.c}${s === state.leaders[i] ? ' (Leader)' : ''}`).join('\n')
+  ).join('\n\n');
+}
+function asCSV(){
+  const q = v => '"' + String(v).replace(/"/g, '""') + '"';
+  const rows = [['Group','Name','Reg Number','Subject Combination','Sex','Leader']];
+  state.groups.forEach((g, i) => g.forEach(s => rows.push([
+    state.names[i], s.n, s.r, s.c, s.s === 'F' ? 'Female' : s.s === 'M' ? 'Male' : '', s === state.leaders[i] ? 'Yes' : ''])));
+  return rows.map(r => r.map(q).join(',')).join('\r\n');
+}
+function say(t){ $('status').textContent = t; setTimeout(() => { if ($('status').textContent === t) $('status').textContent = ''; }, 2500); }
+function download(blob, name){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 4000);
+}
+$('copy').onclick = async () => {
+  const text = asText();
+  try { await navigator.clipboard.writeText(text); say('Copied'); }
+  catch {
+    const t = document.createElement('textarea'); t.value = text; document.body.appendChild(t);
+    t.select(); const ok = document.execCommand('copy'); t.remove();
+    say(ok ? 'Copied' : 'Copy failed');
+  }
+};
+$('csv').onclick = () => { download(new Blob(['\ufeff' + asCSV()], {type:'text/csv;charset=utf-8'}), 'EDF413-groups.csv'); say('Downloaded'); };
+
+// ---- export: PDF (built in the page, no library needed)
+const W_REG  = [278,278,355,556,556,889,667,191,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,278,278,584,584,584,556,1015,667,667,722,722,667,611,778,722,278,500,667,556,833,722,778,667,778,722,667,611,722,667,944,667,667,611,278,278,278,469,556,333,556,556,500,556,556,278,556,556,222,222,500,222,833,556,556,556,556,333,500,278,556,500,722,500,500,500,334,260,334,584];
+const W_BOLD = [278,333,474,556,556,889,722,238,333,333,389,584,278,333,278,278,556,556,556,556,556,556,556,556,556,556,333,333,584,584,584,611,975,722,722,722,722,667,611,778,722,278,556,722,611,833,722,778,667,778,722,667,611,722,667,944,667,667,611,333,278,333,584,556,333,556,611,556,611,556,333,611,611,278,278,556,278,889,611,611,611,611,389,556,333,611,556,778,556,556,500,389,280,389,584];
+
+function exportPDF(){
+  if (!state.groups.length) { say('Nothing to export'); return; }
+  const PW = 612, PH = 792, M = 44, CW = PW - 2 * M;
+  const INK = '0.09 0.13 0.17', GREY = '0.36 0.42 0.47', LINE = '0.80 0.82 0.84', BAND = '0.955 0.96 0.965', HEAD = '0.055 0.353 0.388';
+  const f = n => (+n).toFixed(2), Y = y => PH - y;
+  const enc = s => String(s).replace(/\u2014/g, '\x97').replace(/\u2013/g, '\x96').replace(/[^\x20-\xFF]/g, '?').replace(/[\\()]/g, '\\$&');
+  const tw = (s, bold, size) => {
+    const t = bold ? W_BOLD : W_REG; let w = 0;
+    for (const ch of String(s)) { const c = ch.charCodeAt(0); w += (c >= 32 && c <= 126) ? t[c - 32] : (c === 8212 ? 1000 : c === 183 ? 278 : 556); }
+    return w * size / 1000;
+  };
+  const fit = (s, bold, size, max) => {
+    s = String(s);
+    if (tw(s, bold, size) <= max) return s;
+    while (s.length > 1 && tw(s + '...', bold, size) > max) s = s.slice(0, -1);
+    return s + '...';
+  };
+  const txt = (x, y, s, bold, size, color) => `BT /${bold ? 'F2' : 'F1'} ${f(size)} Tf ${color} rg ${f(x)} ${f(Y(y))} Td (${enc(s)}) Tj ET`;
+  const pages = []; let ops = [], label = '';
+  const newPage = l => { if (ops.length || label) pages.push({ops:ops.join('\n'), label}); ops = []; label = l; };
+  const text = (x, y, s, bold, size, color) => ops.push(txt(x, y, s, bold, size, color));
+  const rect = (x, y, w, h, c) => ops.push(`${c} rg ${f(x)} ${f(Y(y + h))} ${f(w)} ${f(h)} re f`);
+  const hline = y => ops.push(`${LINE} RG 0.6 w ${f(M)} ${f(Y(y))} m ${f(M + CW)} ${f(Y(y))} l S`);
+
+  // table that starts a new page (with its header repeated) when it runs out of room
+  function table(y, cols, rows, rh, boldLast){
+    const head = () => {
+      rect(M, y, CW, rh, HEAD);
+      let x = M; cols.forEach(c => { text(x + 6, y + rh / 2 + 3.5, c.h, true, 9, '1 1 1'); x += c.w; });
+      y += rh;
+    };
+    head();
+    rows.forEach((r, k) => {
+      if (y + rh > PH - M - 14) { newPage(label); y = M; head(); }
+      const bold = boldLast && k === rows.length - 1;
+      if (k % 2) rect(M, y, CW, rh, BAND);
+      let x = M;
+      r.forEach((v, j) => { const b = bold || cols[j].b; text(x + 6, y + rh / 2 + 3.5, fit(v, b, 9.5, cols[j].w - 10), b, 9.5, INK); x += cols[j].w; });
+      y += rh; hline(y);
+    });
+  }
+
+  const G = state.groups, names = state.names;
+  const num = i => names[i].replace(/^Group\s*/i, '');
+  const cnt = g => { const m = g.filter(s => s.s === 'M').length, fe = g.filter(s => s.s === 'F').length; return [m, fe, g.length - m - fe]; };
+
+  // summary page
+  newPage('Summary');
+  text(M, M + 20, 'EDF413 \u2014 Student Groupings', true, 20, INK);
+  text(M, M + 38, 'Education and Development in Developing Countries', false, 11, GREY);
+  text(M, M + 54, 'Generated: ' + new Date().toLocaleString().replace(/\s/g, ' '), false, 9.5, GREY);
+  text(M, M + 82, 'Summary', true, 13, INK);
+  let tm = 0, tf = 0, tt = 0;
+  const srows = G.map((g, i) => {
+    const [m, fe] = cnt(g), L = state.leaders[i];
+    tm += m; tf += fe; tt += g.length;
+    return [num(i), L ? L.n : '\u2014', L ? SEX[L.s] : '\u2014', m, fe, g.length];
+  });
+  srows.push(['TOTAL', '\u2014', '\u2014', tm, tf, tt]);
+  table(M + 94, [{h:'Group', w:50}, {h:'Group Leader', w:190, b:1}, {h:'Leader Sex', w:80}, {h:'Males', w:60}, {h:'Females', w:70}, {h:'Total', w:CW - 450}], srows, 20, true);
+
+  // one page per group
+  G.forEach((g, i) => {
+    newPage(names[i]);
+    const [m, fe, u] = cnt(g), L = state.leaders[i];
+    text(M, M + 20, fit(names[i], true, 20, CW), true, 20, INK);
+    text(M, M + 38, `${g.length} students \u00B7 ${m} Males / ${fe} Females${u ? ' / ' + u + ' Unknown' : ''} \u00B7 Leader: ${L ? L.n : '\u2014'}`, false, 10.5, GREY);
+    table(M + 56, [{h:'#', w:30}, {h:'Full Name', w:160, b:1}, {h:'Reg Number', w:110}, {h:'Combination', w:85}, {h:'Sex', w:55}, {h:'Role', w:CW - 440}],
+      g.map((s, j) => [j + 1, s.n, s.r, s.c, SEX[s.s], s === L ? 'Group Leader' : 'Member']), 24);
+  });
+  newPage('');
+
+  // assemble the PDF file
+  const n = pages.length, objs = [null];
+  const kids = pages.map((_, i) => `${5 + 2 * i} 0 R`).join(' ');
+  objs[1] = '<< /Type /Catalog /Pages 2 0 R >>';
+  objs[2] = `<< /Type /Pages /Kids [${kids}] /Count ${n} >>`;
+  objs[3] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>';
+  objs[4] = '<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>';
+  pages.forEach((p, i) => {
+    const foot = `EDF413 \u2014 ${p.label} \u2014 Page ${i + 1} of ${n}`;
+    const c = p.ops + '\n' + txt((PW - tw(foot, false, 8.5)) / 2, PH - 24, foot, false, 8.5, GREY);
+    objs[5 + 2 * i] = `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents ${6 + 2 * i} 0 R >>`;
+    objs[6 + 2 * i] = `<< /Length ${c.length} >>\nstream\n${c}\nendstream`;
+  });
+  const info = objs.length;
+  objs[info] = '<< /Title (EDF413 Student Groupings) /Producer (EDF413 group maker) >>';
+  let out = '%PDF-1.4\n', off = [];
+  for (let i = 1; i < objs.length; i++) { off[i] = out.length; out += `${i} 0 obj\n${objs[i]}\nendobj\n`; }
+  const xref = out.length;
+  out += `xref\n0 ${objs.length}\n0000000000 65535 f \n`;
+  for (let i = 1; i < objs.length; i++) out += String(off[i]).padStart(10, '0') + ' 00000 n \n';
+  out += `trailer\n<< /Size ${objs.length} /Root 1 0 R /Info ${info} 0 R >>\nstartxref\n${xref}\n%%EOF`;
+  const bytes = new Uint8Array(out.length);
+  for (let i = 0; i < out.length; i++) bytes[i] = out.charCodeAt(i) & 255;
+  download(new Blob([bytes], {type:'application/pdf'}), 'EDF413-groups.pdf');
+  say('PDF downloaded');
+}
+$('pdf').onclick = exportPDF;
+</script>
+</body>
+</html>

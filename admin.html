@@ -332,9 +332,7 @@
       padding: 2rem 1.75rem 4rem;
     }
 
-    /* ==========================================
-       PORTAL CONTROL CARD
-       ========================================== */
+    /* PORTAL CONTROL */
     .portal-card {
       background: var(--surface);
       border: 1px solid var(--border);
@@ -438,7 +436,6 @@
       background: currentColor;
     }
 
-    /* Toggle switch */
     .portal-toggle {
       position: relative;
       display: inline-flex;
@@ -502,7 +499,6 @@
       transform: translateX(0);
     }
 
-    /* State description under the card */
     .portal-note {
       width: 100%;
       font-size: 0.75rem;
@@ -516,7 +512,6 @@
       line-height: 1.5;
     }
 
-    /* Saving state */
     .portal-toggle.saving .switch-track {
       opacity: 0.6;
       pointer-events: none;
@@ -916,7 +911,7 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       padding: 2rem;
-      max-width: 520px;
+      max-width: 560px;
       width: 100%;
       box-shadow: 0 30px 60px -20px rgba(30, 40, 80, 0.3);
       transform: scale(0.94);
@@ -1008,6 +1003,107 @@
     }
     .btn-danger:hover:not(:disabled) { transform: translateY(-1px); }
     .btn-danger:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* Download modal */
+    .radio-cards { display: flex; flex-direction: column; gap: 0.6rem; margin-bottom: 1.25rem; }
+    .radio-card { position: relative; }
+    .radio-card input { position: absolute; opacity: 0; pointer-events: none; }
+    .radio-card label {
+      display: flex; align-items: flex-start; gap: 0.85rem;
+      padding: 1rem 1.15rem;
+      background: var(--surface-2);
+      border: 1.5px solid transparent;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.18s ease;
+    }
+    .radio-card label:hover { background: var(--surface-3); }
+    .radio-card input:checked + label {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-soft);
+    }
+    .radio-card-icon {
+      width: 36px; height: 36px;
+      border-radius: 10px;
+      background: white;
+      border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+    .radio-card-body { flex: 1; min-width: 0; }
+    .radio-card-title { font-family: 'Space Grotesk', sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); margin-bottom: 0.15rem; }
+    .radio-card-desc { font-size: 0.78rem; color: var(--text-dim); line-height: 1.4; }
+
+    .combo-picker {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 0.85rem;
+      max-height: 260px;
+      overflow-y: auto;
+      display: none;
+      margin-bottom: 1rem;
+    }
+    .combo-picker.show { display: block; }
+
+    .combo-picker-toolbar {
+      display: flex; justify-content: space-between; align-items: center;
+      padding-bottom: 0.75rem; margin-bottom: 0.65rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .combo-picker-toolbar .count { font-size: 0.75rem; color: var(--text-dim); font-weight: 600; }
+    .combo-picker-toolbar .link-btn {
+      font-size: 0.75rem; color: var(--accent);
+      background: none; border: none; cursor: pointer; font-weight: 600;
+      padding: 0.25rem 0.5rem; border-radius: 6px;
+    }
+    .combo-picker-toolbar .link-btn:hover { background: var(--accent-soft); }
+
+    .combo-item {
+      display: flex; align-items: center; gap: 0.7rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+      font-size: 0.85rem;
+    }
+    .combo-item:hover { background: var(--surface-3); }
+    .combo-item input[type="checkbox"] {
+      width: 1.05rem; height: 1.05rem;
+      accent-color: var(--accent);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .combo-item-label {
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.82rem; font-weight: 600; color: var(--text); flex: 1;
+    }
+    .combo-item-count {
+      font-size: 0.72rem; color: var(--text-dimmer); font-weight: 500;
+      background: white; padding: 0.15rem 0.55rem; border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .export-preview {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.06));
+      border: 1px dashed rgba(99, 102, 241, 0.35);
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      font-size: 0.82rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .export-preview strong {
+      color: var(--accent);
+      font-weight: 700;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem;
+    }
 
     .toast {
       position: fixed;
@@ -1106,6 +1202,31 @@
       .name-cell::before { display: none; }
       .row-actions { justify-content: flex-end; }
     }
+    
+    .custom-btn {
+  display: inline-block;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none; /* Removes underline */
+  color: #ffffff;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  border: none;
+  cursor: pointer;
+}
+
+.custom-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  opacity: 0.9;
+}
+
+.custom-btn:active {
+  transform: translateY(0);
+}
   </style>
 </head>
 <body>
@@ -1146,7 +1267,7 @@
 
     <div class="topbar">
       <div class="topbar-left">
-        <div class="brand-mark">E4</div>
+        <div class="brand-mark">EDF413</div>
         <h1>
           Admin Console
           <small>EDF413 · Education and Development in Developing Countries</small>
@@ -1158,6 +1279,7 @@
           <span id="adminEmail">—</span>
         </span>
         <button class="btn btn-sm btn-ghost" id="refreshBtn">↻ Refresh</button>
+        <a href="groups.html" class="custom-btn">Groups</a>
         <button class="btn btn-sm btn-excel" id="exportBtn">⬇ Download Excel</button>
         <button class="btn btn-sm btn-logout" id="logoutBtn">Sign out</button>
       </div>
@@ -1165,9 +1287,7 @@
 
     <div class="container">
 
-      <!-- ==========================================
-           PORTAL CONTROL
-           ========================================== -->
+      <!-- PORTAL CONTROL -->
       <div class="portal-card" id="portalCard">
         <div class="portal-card-left">
           <div class="portal-icon" id="portalIcon">🟢</div>
@@ -1446,12 +1566,20 @@
 
   <div class="toast" id="toast"></div>
 
+  <!-- ============================================================
+       LIBRARIES — Excel + Firebase SDK
+       MUST come before your own script below
+       ============================================================ -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js"></script>
+
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
+  <!-- ============================================================
+       YOUR CODE — comes after the SDKs have loaded
+       ============================================================ -->
   <script>
     // ============================================================
     // Firebase — EDF413 (school-7bfaa project)
@@ -1468,12 +1596,13 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const auth = firebase.auth();
+    console.log('✅ Firebase initialized:', firebaseConfig.projectId);
 
     const COLLECTION = 'edf413_registrations';
     const ACTIVITY_COLLECTION = 'edf413_registrations_activity';
     const SETTINGS_DOC = 'edf413_settings/portal';
 
-    // DOM
+    // DOM refs
     const loginScreen = document.getElementById('loginScreen');
     const dashboard = document.getElementById('dashboard');
     const loginForm = document.getElementById('loginForm');
@@ -1484,7 +1613,6 @@
     const adminEmail = document.getElementById('adminEmail');
     const logoutBtn = document.getElementById('logoutBtn');
 
-    // Portal
     const portalCard = document.getElementById('portalCard');
     const portalIcon = document.getElementById('portalIcon');
     const portalStatusPill = document.getElementById('portalStatusPill');
@@ -1637,7 +1765,7 @@
     }
 
     // ============================================================
-    // PORTAL STATE — UI + Firestore
+    // PORTAL STATE
     // ============================================================
     function applyPortalUI(isOpen) {
       portalOpen = isOpen;
@@ -1666,7 +1794,6 @@
           if (doc.exists && typeof doc.data().isOpen === 'boolean') {
             applyPortalUI(doc.data().isOpen);
           } else {
-            // Default: open
             applyPortalUI(true);
           }
         },
@@ -1680,8 +1807,6 @@
     portalSwitch.addEventListener('change', async function () {
       const newState = this.checked;
       portalToggle.classList.add('saving');
-
-      // Optimistic UI
       applyPortalUI(newState);
 
       try {
@@ -1694,7 +1819,6 @@
         showToast(newState ? '✅ Portal is now open.' : '🔒 Portal is now closed.', 'success');
       } catch (err) {
         console.error('Portal update error:', err);
-        // Revert
         applyPortalUI(!newState);
         showToast('Failed to update portal: ' + err.message, 'error');
       } finally {
@@ -1771,7 +1895,6 @@
       } catch (err) { console.error(err); }
     });
 
-    // Tabs
     function setTab(tab) {
       currentTab = tab;
       [tabDash, tabChecks, tabUpdates].forEach(t => t.classList.remove('active'));
@@ -1860,7 +1983,6 @@
       tabCountUpdates.textContent = updated;
     }
 
-    // Table
     function renderTable(records) {
       if (!records.length) {
         tableContainer.innerHTML = `
@@ -2190,7 +2312,6 @@
       updatesCount.textContent = `${activityLog.length} change${activityLog.length === 1 ? '' : 's'}`;
     }
 
-    // Row actions
     tableContainer.addEventListener('click', (e) => {
       const btn = e.target.closest('button[data-action]');
       if (!btn) return;
@@ -2311,9 +2432,7 @@
       }
     });
 
-    // ============================================================
     // DOWNLOAD MODAL
-    // ============================================================
     function openDownloadModal() {
       if (!allRecords.length) {
         showToast('No records to download.', 'error');
@@ -2432,9 +2551,7 @@
 
     exportBtn.addEventListener('click', openDownloadModal);
 
-    // ============================================================
     // EXCEL EXPORT
-    // ============================================================
     function doExportXLSX(records) {
       if (!records.length) { showToast('No records to export.', 'error'); return; }
       if (typeof XLSX === 'undefined') { showToast('Excel library not loaded.', 'error'); return; }
