@@ -3,202 +3,113 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EDF413 · Registration</title>
+  <title>Course Registration</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f7f8fc;
-      --surface: #ffffff;
-      --surface-2: #f4f6fb;
-      --surface-3: #eaedf6;
-      --border: #e4e7f0;
-      --border-light: #d8dde9;
-      --text: #1a1f36;
-      --text-dim: #5a6482;
-      --text-dimmer: #8b95ad;
-      --accent: #6366f1;
-      --accent-2: #8b5cf6;
+      --bg: #f7f8fc; --surface: #ffffff; --surface-2: #f4f6fb; --surface-3: #eaedf6;
+      --border: #e4e7f0; --border-light: #d8dde9;
+      --text: #1a1f36; --text-dim: #5a6482; --text-dimmer: #8b95ad;
+      --accent: #6366f1; --accent-2: #8b5cf6;
       --accent-soft: rgba(99, 102, 241, 0.08);
       --accent-glow: rgba(99, 102, 241, 0.28);
-      --success: #10b981;
-      --success-soft: rgba(16, 185, 129, 0.08);
-      --danger: #ef4444;
-      --danger-soft: rgba(239, 68, 68, 0.08);
-      --warning: #f59e0b;
+      --success: #10b981; --success-soft: rgba(16, 185, 129, 0.08);
+      --danger: #ef4444; --danger-soft: rgba(239, 68, 68, 0.08);
     }
-
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     html, body { height: 100%; }
-
     body {
-      background: var(--bg);
-      color: var(--text);
+      background: var(--bg); color: var(--text);
       font-family: 'Inter', system-ui, sans-serif;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem 1rem;
-      position: relative;
-      overflow-x: hidden;
+      display: flex; align-items: center; justify-content: center;
+      padding: 2rem 1rem; position: relative; overflow-x: hidden;
     }
-
     body::before {
-      content: '';
-      position: fixed;
-      top: -30%;
-      left: -15%;
-      width: 700px;
-      height: 700px;
+      content: ''; position: fixed; top: -30%; left: -15%;
+      width: 700px; height: 700px;
       background: radial-gradient(circle, rgba(99, 102, 241, 0.10) 0%, transparent 65%);
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
     body::after {
-      content: '';
-      position: fixed;
-      bottom: -30%;
-      right: -15%;
-      width: 700px;
-      height: 700px;
+      content: ''; position: fixed; bottom: -30%; right: -15%;
+      width: 700px; height: 700px;
       background: radial-gradient(circle, rgba(139, 92, 246, 0.09) 0%, transparent 65%);
-      pointer-events: none;
-      z-index: 0;
+      pointer-events: none; z-index: 0;
     }
 
     .shell {
-      width: 100%;
-      max-width: 1100px;
-      display: grid;
-      grid-template-columns: 1fr 1.15fr;
+      width: 100%; max-width: 1100px;
+      display: grid; grid-template-columns: 1fr 1.15fr;
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 28px;
-      overflow: hidden;
-      box-shadow:
-        0 30px 60px -30px rgba(30, 40, 80, 0.15),
-        0 8px 24px -12px rgba(30, 40, 80, 0.08);
-      position: relative;
-      z-index: 1;
-      min-height: 620px;
+      border-radius: 28px; overflow: hidden;
+      box-shadow: 0 30px 60px -30px rgba(30, 40, 80, 0.15), 0 8px 24px -12px rgba(30, 40, 80, 0.08);
+      position: relative; z-index: 1; min-height: 620px;
     }
 
-    /* LEFT PANEL */
     .panel-info {
       background: linear-gradient(155deg, #ffffff 0%, #f4f6fb 100%);
       padding: 3rem 2.5rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      display: flex; flex-direction: column; justify-content: space-between;
       border-right: 1px solid var(--border);
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
-
     .panel-info::before {
-      content: '';
-      position: absolute;
-      top: -80px;
-      right: -80px;
-      width: 280px;
-      height: 280px;
+      content: ''; position: absolute; top: -80px; right: -80px;
+      width: 280px; height: 280px;
       background: radial-gradient(circle, rgba(99, 102, 241, 0.10), transparent 70%);
       pointer-events: none;
     }
 
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      position: relative;
-      z-index: 1;
-    }
-
+    .brand { display: flex; align-items: center; gap: 0.6rem; position: relative; z-index: 1; }
     .brand-mark {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
+      width: 38px; height: 38px; border-radius: 10px;
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: 'Space Grotesk', sans-serif;
-      font-weight: 700;
-      font-size: 0.95rem;
-      color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Grotesk', sans-serif; font-weight: 700;
+      font-size: 0.95rem; color: white;
       box-shadow: 0 8px 20px -6px var(--accent-glow);
-      letter-spacing: -0.02em;
     }
-
     .brand-name {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
-      letter-spacing: 0.02em;
-      color: var(--text);
+      font-size: 0.95rem; font-weight: 600;
+      letter-spacing: 0.02em; color: var(--text);
     }
-
     .brand-name small {
-      display: block;
-      font-size: 0.7rem;
-      font-weight: 500;
-      color: var(--text-dimmer);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      margin-top: 0.1rem;
+      display: block; font-size: 0.7rem; font-weight: 500;
+      color: var(--text-dimmer); letter-spacing: 0.08em;
+      text-transform: uppercase; margin-top: 0.1rem;
     }
 
-    .hero {
-      position: relative;
-      z-index: 1;
-      margin: 3rem 0;
-    }
-
+    .hero { position: relative; z-index: 1; margin: 3rem 0; }
     .hero-tag {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      font-size: 0.68rem;
-      font-weight: 600;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--accent-2);
-      padding: 0.35rem 0.75rem;
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent-2); padding: 0.35rem 0.75rem;
       background: var(--accent-soft);
       border: 1px solid rgba(139, 92, 246, 0.18);
-      border-radius: 40px;
-      margin-bottom: 1.25rem;
-      transition: all 0.25s ease;
+      border-radius: 40px; margin-bottom: 1.25rem;
     }
-
     .hero-tag::before {
-      content: '';
-      width: 6px;
-      height: 6px;
-      background: var(--accent-2);
-      border-radius: 50%;
+      content: ''; width: 6px; height: 6px;
+      background: var(--accent-2); border-radius: 50%;
     }
-
     .hero-tag.closed {
       color: #b91c1c;
       background: rgba(239, 68, 68, 0.08);
       border-color: rgba(239, 68, 68, 0.25);
     }
     .hero-tag.closed::before { background: #b91c1c; }
-
     .hero h1 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 2rem;
-      font-weight: 700;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-      color: var(--text);
-      margin-bottom: 1rem;
+      font-size: 2rem; font-weight: 700;
+      line-height: 1.15; letter-spacing: -0.02em;
+      color: var(--text); margin-bottom: 1rem;
     }
-
     .hero h1 em {
       font-style: normal;
       background: linear-gradient(135deg, #6366f1, #a855f7);
@@ -206,283 +117,170 @@
       background-clip: text;
       -webkit-text-fill-color: transparent;
     }
-
     .hero p {
-      color: var(--text-dim);
-      font-size: 0.9rem;
-      line-height: 1.6;
-      max-width: 340px;
+      color: var(--text-dim); font-size: 0.9rem;
+      line-height: 1.6; max-width: 340px;
     }
 
-    .features {
-      display: flex;
-      flex-direction: column;
-      gap: 0.85rem;
-      position: relative;
-      z-index: 1;
-    }
-
+    .features { display: flex; flex-direction: column; gap: 0.85rem; position: relative; z-index: 1; }
     .feature {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      font-size: 0.82rem;
-      color: var(--text-dim);
-      font-weight: 500;
+      display: flex; align-items: center; gap: 0.75rem;
+      font-size: 0.82rem; color: var(--text-dim); font-weight: 500;
     }
-
     .feature-icon {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      flex-shrink: 0;
+      width: 28px; height: 28px; border-radius: 8px;
+      background: var(--surface); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem; flex-shrink: 0;
       box-shadow: 0 2px 4px rgba(30, 40, 80, 0.04);
     }
 
     .panel-footer {
-      position: relative;
-      z-index: 1;
-      font-size: 0.72rem;
-      color: var(--text-dimmer);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-weight: 500;
+      position: relative; z-index: 1;
+      font-size: 0.72rem; color: var(--text-dimmer);
+      display: flex; align-items: center; gap: 0.5rem;
+      font-weight: 500; flex-wrap: wrap;
     }
-
     .panel-footer a {
-      color: var(--accent);
-      text-decoration: none;
-      font-weight: 600;
-      transition: color 0.15s;
+      color: var(--accent); text-decoration: none;
+      font-weight: 600; transition: color 0.15s;
     }
     .panel-footer a:hover { color: var(--accent-2); }
 
-    /* RIGHT PANEL */
     .panel-form {
       padding: 3rem 2.75rem;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
+      display: flex; flex-direction: column; justify-content: center;
       background: var(--surface);
     }
 
-    /* Tabs */
     .tabs {
-      display: flex;
-      gap: 0.4rem;
-      padding: 0.35rem;
-      background: var(--surface-2);
-      border-radius: 12px;
+      display: flex; gap: 0.4rem; padding: 0.35rem;
+      background: var(--surface-2); border-radius: 12px;
       margin-bottom: 1.75rem;
     }
-
     .tab-btn {
-      flex: 1;
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.82rem;
-      font-weight: 600;
-      padding: 0.7rem 1rem;
-      border: none;
-      background: transparent;
-      color: var(--text-dim);
-      border-radius: 9px;
-      cursor: pointer;
+      flex: 1; font-family: 'Space Grotesk', sans-serif;
+      font-size: 0.82rem; font-weight: 600;
+      padding: 0.7rem 1rem; border: none; background: transparent;
+      color: var(--text-dim); border-radius: 9px; cursor: pointer;
       transition: all 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       gap: 0.4rem;
-      letter-spacing: 0.01em;
     }
-
     .tab-btn:hover { color: var(--text); }
-
     .tab-btn.active {
-      background: var(--surface);
-      color: var(--accent);
+      background: var(--surface); color: var(--accent);
       box-shadow: 0 2px 8px -2px rgba(30, 40, 80, 0.08);
     }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; animation: fadeIn 0.25s ease; }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(6px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
     .form-header { margin-bottom: 1.75rem; }
-
     .form-header h2 {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 1.35rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      color: var(--text);
+      font-size: 1.35rem; font-weight: 600;
+      letter-spacing: -0.01em; color: var(--text);
       margin-bottom: 0.35rem;
     }
+    .form-header p { font-size: 0.85rem; color: var(--text-dim); }
 
-    .form-header p {
-      font-size: 0.85rem;
-      color: var(--text-dim);
-    }
-
-    /* ==========================================
-       PORTAL CLOSED BANNER
-       ========================================== */
     .portal-closed-banner {
-      display: none;
-      align-items: flex-start;
-      gap: 0.85rem;
-      background: #fef2f2;
-      border: 1.5px solid #fecaca;
-      border-radius: 14px;
-      padding: 1rem 1.15rem;
-      margin-bottom: 1.5rem;
-      font-size: 0.85rem;
-      color: #991b1b;
-      line-height: 1.5;
-      animation: fadeIn 0.3s ease;
+      display: none; align-items: flex-start; gap: 0.85rem;
+      background: #fef2f2; border: 1.5px solid #fecaca;
+      border-radius: 14px; padding: 1rem 1.15rem;
+      margin-bottom: 1.5rem; font-size: 0.85rem;
+      color: #991b1b; line-height: 1.5;
     }
-
     .portal-closed-banner.show { display: flex; }
-
     .portal-closed-banner .banner-icon {
-      font-size: 1.35rem;
-      flex-shrink: 0;
-      line-height: 1;
+      font-size: 1.35rem; flex-shrink: 0; line-height: 1;
     }
-
     .portal-closed-banner strong {
-      display: block;
-      font-weight: 700;
+      display: block; font-weight: 700;
       margin-bottom: 0.2rem;
       font-family: 'Space Grotesk', sans-serif;
       font-size: 0.95rem;
     }
-
-    .portal-closed-banner p {
-      color: #b91c1c;
-      font-size: 0.8rem;
-    }
+    .portal-closed-banner p { color: #b91c1c; font-size: 0.8rem; }
 
     .field {
-      display: flex;
-      flex-direction: column;
-      gap: 0.45rem;
-      margin-bottom: 1.15rem;
+      display: flex; flex-direction: column;
+      gap: 0.45rem; margin-bottom: 1.15rem;
     }
-
     .field label {
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
       color: var(--text-dim);
-      display: flex;
-      align-items: center;
-      gap: 0.3rem;
+      display: flex; align-items: center; gap: 0.3rem;
     }
-
     .field label .req { color: var(--accent-2); }
-
-    .field input,
-    .field select {
+    .field input, .field select {
       font-family: 'Inter', sans-serif;
-      font-size: 0.92rem;
-      padding: 0.85rem 1.05rem;
+      font-size: 0.92rem; padding: 0.85rem 1.05rem;
       background: var(--surface-2);
       border: 1.5px solid transparent;
-      border-radius: 12px;
-      color: var(--text);
-      outline: none;
-      transition: all 0.18s ease;
-      width: 100%;
-      appearance: none;
+      border-radius: 12px; color: var(--text);
+      outline: none; transition: all 0.18s ease;
+      width: 100%; appearance: none;
     }
-
     .field input::placeholder { color: var(--text-dimmer); }
-
-    .field input:hover:not(:disabled),
-    .field select:hover:not(:disabled) { background: var(--surface-3); }
-
-    .field input:focus:not(:disabled),
-    .field select:focus:not(:disabled) {
+    .field input:hover:not(:disabled) { background: var(--surface-3); }
+    .field input:focus:not(:disabled) {
       background: var(--surface);
       border-color: var(--accent);
       box-shadow: 0 0 0 4px var(--accent-soft);
     }
-
-    .field input:disabled,
-    .field select:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
+    .field input:disabled {
+      opacity: 0.55; cursor: not-allowed;
       background: var(--surface-3);
     }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
+    .field input.locked-field {
+      background: linear-gradient(135deg, rgba(99, 102, 241, 0.06), rgba(139, 92, 246, 0.06));
+      border: 1.5px solid rgba(99, 102, 241, 0.25);
+      color: var(--accent);
+      font-weight: 700;
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      letter-spacing: 0.02em;
+      cursor: not-allowed;
+      opacity: 1;
+    }
+    .field-hint {
+      font-size: 0.68rem; color: var(--text-dimmer);
+      font-weight: 500;
+      display: flex; align-items: center; gap: 0.3rem;
+      margin-top: 0.1rem;
     }
 
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
     .field-status {
-      font-size: 0.72rem;
-      display: flex;
-      align-items: center;
-      gap: 0.35rem;
-      min-height: 1em;
-      font-weight: 500;
+      font-size: 0.72rem; display: flex;
+      align-items: center; gap: 0.35rem;
+      min-height: 1em; font-weight: 500;
     }
     .field-status.checking { color: var(--text-dimmer); }
     .field-status.valid { color: var(--success); }
     .field-status.invalid { color: var(--danger); }
 
-    /* Pills */
-    .pills {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.6rem;
-    }
-
+    .pills { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
     .pill { position: relative; }
-
-    .pill input {
-      position: absolute;
-      opacity: 0;
-      pointer-events: none;
-    }
-
+    .pill input { position: absolute; opacity: 0; pointer-events: none; }
     .pill label {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      padding: 0.85rem 1rem;
+      display: flex; align-items: center; justify-content: center;
+      gap: 0.5rem; padding: 0.85rem 1rem;
       background: var(--surface-2);
       border: 1.5px solid transparent;
-      border-radius: 12px;
-      cursor: pointer;
-      font-size: 0.88rem;
-      font-weight: 500;
-      color: var(--text-dim);
-      transition: all 0.18s ease;
-      text-transform: none;
-      letter-spacing: normal;
+      border-radius: 12px; cursor: pointer;
+      font-size: 0.88rem; font-weight: 500;
+      color: var(--text-dim); transition: all 0.18s ease;
+      text-transform: none; letter-spacing: normal;
     }
-
-    .pill label:hover {
-      background: var(--surface-3);
-      color: var(--text);
-    }
-
+    .pill label:hover { background: var(--surface-3); color: var(--text); }
     .pill input:checked + label {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.10), rgba(139, 92, 246, 0.10));
       border-color: var(--accent);
@@ -490,306 +288,184 @@
       box-shadow: 0 0 0 3px var(--accent-soft);
       font-weight: 600;
     }
-
     .pill input:disabled + label {
-      opacity: 0.55;
-      cursor: not-allowed;
+      opacity: 0.55; cursor: not-allowed;
       background: var(--surface-3);
     }
-
     .pill-icon { font-size: 0.95rem; }
 
     .btn {
       font-family: 'Space Grotesk', sans-serif;
-      font-size: 0.95rem;
-      font-weight: 600;
+      font-size: 0.95rem; font-weight: 600;
       letter-spacing: 0.01em;
       padding: 1rem 1.5rem;
-      border: none;
-      border-radius: 12px;
+      border: none; border-radius: 12px;
       cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      transition: all 0.2s ease;
-      width: 100%;
-      margin-top: 0.75rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 0.5rem; transition: all 0.2s ease;
+      width: 100%; margin-top: 0.75rem;
     }
-
     .btn-primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: white;
       box-shadow: 0 12px 24px -8px var(--accent-glow);
     }
-
     .btn-primary:hover:not(:disabled) {
       transform: translateY(-1px);
       box-shadow: 0 16px 32px -8px var(--accent-glow);
     }
-
     .btn-primary:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      transform: none;
-      filter: grayscale(0.4);
+      opacity: 0.55; cursor: not-allowed;
+      transform: none; filter: grayscale(0.4);
     }
-
     .btn-primary .arrow { transition: transform 0.2s ease; }
     .btn-primary:hover:not(:disabled) .arrow { transform: translateX(3px); }
 
-    .input-error {
-      border-color: var(--danger) !important;
-      background: rgba(239, 68, 68, 0.05) !important;
-    }
-
-    .error-msg {
-      font-size: 0.72rem;
-      color: var(--danger);
-      display: none;
-      font-weight: 500;
-    }
-    .error-msg.show { display: block; }
-
-    /* Find box */
-    .find-box {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-    }
-
-    .find-box .field { margin-bottom: 0; }
-
-    .find-row {
-      display: flex;
-      gap: 0.6rem;
-      align-items: flex-end;
-    }
-
-    .find-row .field { flex: 1; margin-bottom: 0; }
-
-    .find-row .btn {
-      margin-top: 0;
-      width: auto;
-      padding: 0.85rem 1.25rem;
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
-
-    /* Result card */
-    .result-card {
-      display: none;
-      border-radius: 16px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      border: 1px solid var(--border);
-      animation: fadeIn 0.3s ease;
-    }
-
-    .result-card.show { display: block; }
-
-    .result-card.found {
-      background: var(--success-soft);
-      border-color: rgba(16, 185, 129, 0.25);
-    }
-
-    .result-card.not-found {
-      background: var(--danger-soft);
-      border-color: rgba(239, 68, 68, 0.25);
-    }
-
-    .result-header {
-      display: flex;
-      align-items: center;
-      gap: 0.7rem;
-      margin-bottom: 0.75rem;
-    }
-
-    .result-icon {
-      width: 34px;
-      height: 34px;
-      border-radius: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      flex-shrink: 0;
-      color: white;
-      font-weight: 700;
-    }
-
-    .result-card.found .result-icon { background: var(--success); }
-    .result-card.not-found .result-icon { background: var(--danger); }
-
-    .result-title {
-      font-family: 'Space Grotesk', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-    }
-
-    .result-card.found .result-title { color: #047857; }
-    .result-card.not-found .result-title { color: #b91c1c; }
-
-    .result-sub {
-      font-size: 0.82rem;
-      color: var(--text-dim);
-      line-height: 1.5;
-    }
-
-    .details {
-      display: flex;
-      flex-direction: column;
-      gap: 0.7rem;
-      margin-top: 0.85rem;
-      padding-top: 0.85rem;
-      border-top: 1px dashed rgba(16, 185, 129, 0.25);
-    }
-
-    .detail-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 1rem;
-      font-size: 0.85rem;
-    }
-
-    .detail-label {
-      font-size: 0.7rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-      color: var(--text-dimmer);
-      flex-shrink: 0;
-    }
-
-    .detail-value {
-      font-weight: 600;
-      color: var(--text);
-      text-align: right;
-      word-break: break-word;
-    }
-
-    .detail-value.mono {
-      font-family: 'JetBrains Mono', 'Consolas', monospace;
-      font-size: 0.8rem;
-      background: white;
-      padding: 0.2rem 0.6rem;
-      border-radius: 6px;
-      border: 1px solid var(--border);
-    }
-
-    .result-actions {
-      display: flex;
-      gap: 0.6rem;
-      margin-top: 1.25rem;
-    }
-
     .btn-outline {
-      background: var(--surface);
-      color: var(--accent);
-      border: 1.5px solid var(--accent);
-      box-shadow: none;
+      background: var(--surface); color: var(--accent);
+      border: 1.5px solid var(--accent); box-shadow: none;
     }
-
     .btn-outline:hover:not(:disabled) {
       background: var(--accent-soft);
       transform: translateY(-1px);
     }
 
-    .btn-outline:disabled {
-      opacity: 0.55;
-      cursor: not-allowed;
-      border-color: var(--border);
-      color: var(--text-dimmer);
+    .input-error {
+      border-color: var(--danger) !important;
+      background: rgba(239, 68, 68, 0.05) !important;
+    }
+    .error-msg {
+      font-size: 0.72rem; color: var(--danger);
+      display: none; font-weight: 500;
+    }
+    .error-msg.show { display: block; }
+
+    .find-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 1.5rem; margin-bottom: 1.5rem;
+    }
+    .find-box .field { margin-bottom: 0; }
+    .find-row { display: flex; gap: 0.6rem; align-items: flex-end; }
+    .find-row .field { flex: 1; margin-bottom: 0; }
+    .find-row .btn {
+      margin-top: 0; width: auto;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.85rem; flex-shrink: 0;
     }
 
-    .btn-sm {
-      padding: 0.7rem 1.1rem;
-      font-size: 0.82rem;
-      margin-top: 0;
+    .result-card {
+      display: none; border-radius: 16px;
+      padding: 1.5rem; margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+      animation: fadeIn 0.3s ease;
     }
+    .result-card.show { display: block; }
+    .result-card.found {
+      background: var(--success-soft);
+      border-color: rgba(16, 185, 129, 0.25);
+    }
+    .result-card.not-found {
+      background: var(--danger-soft);
+      border-color: rgba(239, 68, 68, 0.25);
+    }
+    .result-header {
+      display: flex; align-items: center;
+      gap: 0.7rem; margin-bottom: 0.75rem;
+    }
+    .result-icon {
+      width: 34px; height: 34px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; flex-shrink: 0;
+      color: white; font-weight: 700;
+    }
+    .result-card.found .result-icon { background: var(--success); }
+    .result-card.not-found .result-icon { background: var(--danger); }
+    .result-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 1rem; font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+    .result-card.found .result-title { color: #047857; }
+    .result-card.not-found .result-title { color: #b91c1c; }
+    .result-sub { font-size: 0.82rem; color: var(--text-dim); line-height: 1.5; }
+
+    .details {
+      display: flex; flex-direction: column;
+      gap: 0.7rem; margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px dashed rgba(16, 185, 129, 0.25);
+    }
+    .detail-row {
+      display: flex; justify-content: space-between;
+      align-items: center; gap: 1rem; font-size: 0.85rem;
+    }
+    .detail-label {
+      font-size: 0.7rem; font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-dimmer); flex-shrink: 0;
+    }
+    .detail-value {
+      font-weight: 600; color: var(--text);
+      text-align: right; word-break: break-word;
+    }
+    .detail-value.mono {
+      font-family: 'JetBrains Mono', 'Consolas', monospace;
+      font-size: 0.8rem; background: white;
+      padding: 0.2rem 0.6rem; border-radius: 6px;
+      border: 1px solid var(--border);
+    }
+
+    .result-actions { display: flex; gap: 0.6rem; margin-top: 1.25rem; }
+    .btn-sm { padding: 0.7rem 1.1rem; font-size: 0.82rem; margin-top: 0; }
 
     .edit-banner {
       background: linear-gradient(135deg, rgba(99, 102, 241, 0.08), rgba(139, 92, 246, 0.08));
       border: 1px solid rgba(99, 102, 241, 0.2);
-      border-radius: 12px;
-      padding: 0.85rem 1rem;
-      font-size: 0.82rem;
-      color: var(--accent);
-      font-weight: 500;
-      margin-bottom: 1.25rem;
-      display: none;
-      align-items: center;
-      gap: 0.5rem;
+      border-radius: 12px; padding: 0.85rem 1rem;
+      font-size: 0.82rem; color: var(--accent); font-weight: 500;
+      margin-bottom: 1.25rem; display: none;
+      align-items: center; gap: 0.5rem;
     }
-
     .edit-banner.show { display: flex; }
 
-    /* Toast */
     .toast {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
+      position: fixed; bottom: 2rem; left: 50%;
       transform: translateX(-50%) translateY(150px);
-      background: white;
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 0.85rem 1.6rem;
-      border-radius: 12px;
-      font-size: 0.88rem;
-      font-weight: 500;
+      background: white; border: 1px solid var(--border);
+      color: var(--text); padding: 0.85rem 1.6rem;
+      border-radius: 12px; font-size: 0.88rem; font-weight: 500;
       box-shadow: 0 20px 40px -10px rgba(30, 40, 80, 0.18);
-      opacity: 0;
-      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      gap: 0.6rem;
-      max-width: 90vw;
+      opacity: 0; transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 1000; display: flex; align-items: center;
+      gap: 0.6rem; max-width: 90vw;
     }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-      opacity: 1;
-    }
-
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
     .toast.success { border-color: rgba(16, 185, 129, 0.3); }
     .toast.success::before {
-      content: '✓';
-      width: 20px; height: 20px;
-      background: var(--success);
-      color: white;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.7rem; font-weight: 700;
-      flex-shrink: 0;
+      content: '✓'; width: 20px; height: 20px;
+      background: var(--success); color: white;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 0.7rem; font-weight: 700; flex-shrink: 0;
     }
-
     .toast.error { border-color: rgba(239, 68, 68, 0.3); }
     .toast.error::before {
-      content: '!';
-      width: 20px; height: 20px;
-      background: var(--danger);
-      color: white;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700;
-      flex-shrink: 0;
+      content: '!'; width: 20px; height: 20px;
+      background: var(--danger); color: white;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
     }
-
     .toast.info { border-color: rgba(99, 102, 241, 0.3); }
     .toast.info::before {
-      content: 'i';
-      width: 20px; height: 20px;
-      background: var(--accent);
-      color: white;
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 0.75rem; font-weight: 700;
-      flex-shrink: 0;
+      content: 'i'; width: 20px; height: 20px;
+      background: var(--accent); color: white;
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
     }
 
     .spinner {
@@ -800,19 +476,26 @@
       animation: spin 0.7s linear infinite;
       display: inline-block;
     }
-
     .spinner-dark {
       border-color: rgba(99, 102, 241, 0.2);
       border-top-color: var(--accent);
     }
-
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* Group Check Styles */
+    .group-card {
+      background: var(--surface); border: 2px solid var(--accent);
+      border-radius: 12px; padding: 1.5rem; margin-top: 1rem;
+    }
+    .group-card h3 { font-family: 'Space Grotesk', sans-serif; font-size: 1.5rem; color: var(--accent); margin-bottom: 0.5rem; }
+    .group-card ul { list-style: none; margin-top: 1rem; }
+    .group-card li { padding: 0.6rem 0; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; font-size: 0.9rem; }
+    .group-card li:last-child { border-bottom: none; }
+    .group-card li.you { background: var(--accent-soft); font-weight: 600; padding-left: 0.5rem; border-radius: 6px; }
+    .group-leader { font-size: 0.65rem; font-weight: 700; text-transform: uppercase; color: var(--success); background: var(--success-soft); padding: 2px 6px; border-radius: 4px; margin-left: 6px; }
+
     @media (max-width: 900px) {
-      .shell {
-        grid-template-columns: 1fr;
-        max-width: 520px;
-      }
+      .shell { grid-template-columns: 1fr; max-width: 520px; }
       .panel-info {
         padding: 2rem 2rem 1.75rem;
         border-right: none;
@@ -824,7 +507,6 @@
       .features { display: none; }
       .panel-form { padding: 2rem 2rem 2.25rem; }
     }
-
     @media (max-width: 520px) {
       body { padding: 1rem 0.75rem; }
       .shell { border-radius: 20px; }
@@ -842,11 +524,10 @@
 
   <div class="shell">
 
-    <!-- LEFT PANEL -->
     <aside class="panel-info">
       <div>
         <div class="brand">
-          <div class="brand-mark">EDF413</div>
+          <div class="brand-mark">E4</div>
           <div class="brand-name">
             EDF413
             <small>Course Registration</small>
@@ -854,9 +535,9 @@
         </div>
 
         <div class="hero">
-          <div class="hero-tag" id="heroTag">NCE 2026, Lecturer: Elifala</div>
+          <div class="hero-tag" id="heroTag">Spring 2025</div>
           <h1>Education &amp; <em>Development</em> in Developing Countries</h1>
-          
+          <p>Join a community of educators exploring how learning transforms societies across the Global South.</p>
         </div>
       </div>
 
@@ -866,8 +547,8 @@
           <span>12-week intensive program</span>
         </div>
         <div class="feature">
-          <div class="feature-icon">🌍</div>
-          <span>Case studies from 20+ countries</span>
+          <div class="feature-icon">👥</div>
+          <span>Check your group assignment</span>
         </div>
         <div class="feature">
           <div class="feature-icon">✏️</div>
@@ -876,30 +557,34 @@
       </div>
 
       <div class="panel-footer">
-        <a href="admin.html">Admin portal →</a>
+        <a href="home.html">← All courses</a>
+        <span style="color:#d8dde9;">·</span>
+        <a href="contact.html">Contact</a>
       </div>
     </aside>
 
-    <!-- RIGHT PANEL -->
     <main class="panel-form">
 
+      <!-- TABS -->
       <div class="tabs">
         <button class="tab-btn active" id="tabRegister" type="button">
           <span>✚</span> Register
         </button>
         <button class="tab-btn" id="tabCheck" type="button">
-          <span>🔍</span> Check Registration 
+          <span>🔍</span> Check / Edit
+        </button>
+        <button class="tab-btn" id="tabGroup" type="button">
+          <span>👥</span> My Group
         </button>
       </div>
 
-      <!-- ==================== TAB 1: REGISTER ==================== -->
+      <!-- TAB 1: REGISTER -->
       <div class="tab-panel active" id="panelRegister">
         <div class="form-header">
           <h2>Register for this course</h2>
           <p>All fields marked with <span style="color:#8b5cf6">*</span> are required.</p>
         </div>
 
-        <!-- Portal closed banner -->
         <div class="portal-closed-banner" id="portalClosedBanner">
           <div class="banner-icon">🔒</div>
           <div>
@@ -909,7 +594,6 @@
         </div>
 
         <form id="edf413Form" novalidate>
-
           <div class="field">
             <label for="fullName">Full Name <span class="req">*</span></label>
             <input type="text" id="fullName" name="fullName" placeholder="e.g. David Makiyi" autocomplete="name">
@@ -919,7 +603,7 @@
           <div class="grid-2">
             <div class="field">
               <label for="regNumber">Reg Number <span class="req">*</span></label>
-              <input type="text" id="regNumber" name="regNumber" placeholder="NCE/SCI/12838/23" autocomplete="off">
+              <input type="text" id="regNumber" name="regNumber" placeholder="2025/EDF/413" autocomplete="off">
               <div class="field-status" id="regStatus"></div>
               <div class="error-msg" id="errRegNumber">Registration number is required.</div>
             </div>
@@ -952,20 +636,11 @@
         </form>
       </div>
 
-      <!-- ==================== TAB 2: CHECK / EDIT ==================== -->
+      <!-- TAB 2: CHECK / EDIT -->
       <div class="tab-panel" id="panelCheck">
         <div class="form-header">
           <h2>Check your registration</h2>
           <p>Enter your Reg Number to view or edit your details.</p>
-        </div>
-
-        <!-- Portal closed banner (check tab) -->
-        <div class="portal-closed-banner" id="portalClosedBannerCheck">
-          <div class="banner-icon">🔒</div>
-          <div>
-            <strong>Portal is closed</strong>
-            <p>You can still check your registration details, but editing is disabled while the portal is closed.</p>
-          </div>
         </div>
 
         <div class="find-box">
@@ -989,26 +664,22 @@
 
           <form id="editSelfForm" novalidate>
             <input type="hidden" id="editSelfId">
-
             <div class="field">
               <label for="editSelfFullName">Full Name <span class="req">*</span></label>
               <input type="text" id="editSelfFullName" placeholder="Full name">
               <div class="error-msg" id="errEditFullName">Please enter your full name.</div>
             </div>
-
             <div class="grid-2">
               <div class="field">
                 <label for="editSelfRegNumber">Reg Number</label>
                 <input type="text" id="editSelfRegNumber" disabled>
               </div>
-
               <div class="field">
                 <label for="editSelfCombination">Subject Combination <span class="req">*</span></label>
                 <input type="text" id="editSelfCombination" placeholder="MAT/BIO">
                 <div class="error-msg" id="errEditCombination">Subject combination is required.</div>
               </div>
             </div>
-
             <div class="field">
               <label>Sex <span class="req">*</span></label>
               <div class="pills">
@@ -1023,7 +694,6 @@
               </div>
               <div class="error-msg" id="errEditSex">Please select your sex.</div>
             </div>
-
             <button type="submit" class="btn btn-primary" id="saveSelfBtn">
               💾 Save Changes
             </button>
@@ -1031,50 +701,70 @@
         </div>
       </div>
 
+      <!-- TAB 3: MY GROUP -->
+      <div class="tab-panel" id="panelGroup">
+        <div class="form-header">
+          <h2>Check your group</h2>
+          <p>Enter your Reg Number to see your group members and download the list.</p>
+        </div>
+
+        <div class="find-box">
+          <div class="find-row">
+            <div class="field">
+              <label for="groupReg">Reg Number</label>
+              <input type="text" id="groupReg" placeholder="e.g. NCE/SCI/001/23" autocomplete="off">
+            </div>
+            <button type="button" class="btn btn-primary" id="groupBtn">
+              <span id="groupBtnText">Find</span>
+            </button>
+          </div>
+        </div>
+
+        <div id="groupResult" style="display: none;"></div>
+      </div>
+
     </main>
   </div>
 
   <div class="toast" id="toast"></div>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
   <script>
-    // ============================================================
-    // Firebase — EDF413 (school-7bfaa project)
-    // ============================================================
+    // Firebase (shared project)
     const firebaseConfig = {
-      apiKey: "AIzaSyAKTBTnSHbZ-aEzIOZZ6ElWpybD93DHXVc",
-      authDomain: "school-7bfaa.firebaseapp.com",
-      projectId: "school-7bfaa",
-      storageBucket: "school-7bfaa.firebasestorage.app",
-      messagingSenderId: "91516216765",
-      appId: "1:91516216765:web:a5a3b45e823b8c8d8d1ed4"
+      apiKey: "AIzaSyAx8yobJ7Y1wDQYyx5pnlb-uZe4aC864Sk",
+      authDomain: "mayopa-1.firebaseapp.com",
+      projectId: "mayopa-1",
+      storageBucket: "mayopa-1.firebasestorage.app",
+      messagingSenderId: "35872448468",
+      appId: "1:35872448468:web:0da5efea8528dc38080041",
+      measurementId: "G-R0V3997HT9"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    console.log('✅ Firebase initialized:', firebaseConfig.projectId);
 
     const COLLECTION = 'edf413_registrations';
     const ACTIVITY_COLLECTION = 'edf413_registrations_activity';
     const SETTINGS_DOC = 'edf413_settings/portal';
 
-    // ============================================================
-    // DOM refs
-    // ============================================================
+    // DOM
     const toast = document.getElementById('toast');
     const heroTag = document.getElementById('heroTag');
     const portalClosedBanner = document.getElementById('portalClosedBanner');
-    const portalClosedBannerCheck = document.getElementById('portalClosedBannerCheck');
 
-    // Tabs
     const tabRegister = document.getElementById('tabRegister');
     const tabCheck = document.getElementById('tabCheck');
+    const tabGroup = document.getElementById('tabGroup');
+    
     const panelRegister = document.getElementById('panelRegister');
     const panelCheck = document.getElementById('panelCheck');
+    const panelGroup = document.getElementById('panelGroup');
 
-    // Register form
+    // Register Form
     const form = document.getElementById('edf413Form');
     const fullName = document.getElementById('fullName');
     const regNumber = document.getElementById('regNumber');
@@ -1082,13 +772,11 @@
     const submitBtn = document.getElementById('submitBtn');
     const regStatus = document.getElementById('regStatus');
 
-    // Lookup
+    // Lookup Form
     const lookupReg = document.getElementById('lookupReg');
     const lookupBtn = document.getElementById('lookupBtn');
     const lookupBtnText = document.getElementById('lookupBtnText');
     const resultCard = document.getElementById('resultCard');
-
-    // Self-edit
     const editPanel = document.getElementById('editPanel');
     const editBanner = document.getElementById('editBanner');
     const editSelfForm = document.getElementById('editSelfForm');
@@ -1098,88 +786,66 @@
     const editSelfCombination = document.getElementById('editSelfCombination');
     const saveSelfBtn = document.getElementById('saveSelfBtn');
 
+    // Group Form
+    const groupReg = document.getElementById('groupReg');
+    const groupBtn = document.getElementById('groupBtn');
+    const groupBtnText = document.getElementById('groupBtnText');
+    const groupResult = document.getElementById('groupResult');
+
     let regNumberValid = false;
     let regCheckTimeout = null;
     let currentFoundRecord = null;
-
-    // ============================================================
-    // PORTAL STATE
-    // ============================================================
     let portalOpen = true;
     let unsubscribePortal = null;
 
+    function normalizeReg(r) { return (r || '').replace(/\s+/g, '').toUpperCase(); }
+
+    [regNumber, lookupReg, groupReg].forEach(input => {
+      if (!input) return;
+      input.addEventListener('input', function () {
+        const cleaned = this.value.replace(/\s+/g, '');
+        if (this.value !== cleaned) {
+          const pos = this.selectionStart;
+          const removed = this.value.length - cleaned.length;
+          this.value = cleaned;
+          try { this.setSelectionRange(pos - removed, pos - removed); } catch (e) {}
+        }
+      });
+    });
+
     function applyPortalUI(isOpen) {
       portalOpen = isOpen;
-
-      // Hero tag (Spring 2025 / Closed)
       if (isOpen) {
         heroTag.textContent = 'Spring 2025';
         heroTag.classList.remove('closed');
+        portalClosedBanner.classList.remove('show');
       } else {
         heroTag.textContent = 'Registration Closed';
         heroTag.classList.add('closed');
-      }
-
-      // Banners
-      if (isOpen) {
-        portalClosedBanner.classList.remove('show');
-        portalClosedBannerCheck.classList.remove('show');
-      } else {
         portalClosedBanner.classList.add('show');
-        portalClosedBannerCheck.classList.add('show');
       }
 
-      // Disable/enable register form fields
-      const registerInputs = [
-        fullName, regNumber, subjectCombination,
-        document.getElementById('sexFemale'),
-        document.getElementById('sexMale')
-      ];
+      const registerInputs = [fullName, regNumber, subjectCombination, document.getElementById('sexFemale'), document.getElementById('sexMale')];
       registerInputs.forEach(el => { if (el) el.disabled = !isOpen; });
       submitBtn.disabled = !isOpen;
 
-      // Disable/enable edit form fields (if visible)
-      const editInputs = [
-        editSelfFullName,
-        editSelfCombination,
-        document.getElementById('editSexFemale'),
-        document.getElementById('editSexMale')
-      ];
+      const editInputs = [editSelfFullName, editSelfCombination, document.getElementById('editSexFemale'), document.getElementById('editSexMale')];
       editInputs.forEach(el => { if (el) el.disabled = !isOpen; });
       saveSelfBtn.disabled = !isOpen;
-
-      // Update edit banner if visible
-      if (editBanner.classList.contains('show')) {
-        if (isOpen) {
-          editBanner.innerHTML = '<span>✏️</span> <span>Edit the fields below and click <strong>Save Changes</strong>.</span>';
-        } else {
-          editBanner.innerHTML = '<span>🔒</span> <span>Editing is disabled while the portal is closed.</span>';
-        }
-      }
     }
 
     function startPortalListener() {
       if (unsubscribePortal) unsubscribePortal();
       unsubscribePortal = db.doc(SETTINGS_DOC).onSnapshot(
         (doc) => {
-          const isOpen = doc.exists && typeof doc.data().isOpen === 'boolean'
-            ? doc.data().isOpen
-            : true;
+          const isOpen = doc.exists && typeof doc.data().isOpen === 'boolean' ? doc.data().isOpen : true;
           applyPortalUI(isOpen);
         },
-        (err) => {
-          console.warn('Portal listener error:', err.message);
-          applyPortalUI(true);
-        }
+        (err) => { console.warn('Portal error:', err); applyPortalUI(true); }
       );
     }
-
-    // Start listening immediately
     startPortalListener();
 
-    // ============================================================
-    // Toast
-    // ============================================================
     let toastTimeout;
     function showToast(message, type = 'success') {
       clearTimeout(toastTimeout);
@@ -1190,56 +856,38 @@
       toastTimeout = setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
-    // ============================================================
-    // Tabs
-    // ============================================================
-    tabRegister.addEventListener('click', () => {
-      tabRegister.classList.add('active');
-      tabCheck.classList.remove('active');
-      panelRegister.classList.add('active');
-      panelCheck.classList.remove('active');
-    });
-
-    tabCheck.addEventListener('click', () => {
-      tabCheck.classList.add('active');
-      tabRegister.classList.remove('active');
-      panelCheck.classList.add('active');
-      panelRegister.classList.remove('active');
-      setTimeout(() => lookupReg.focus(), 200);
-    });
-
-    // ============================================================
-    // Helpers
-    // ============================================================
-    function normalizeReg(r) {
-      return (r || '').trim().toUpperCase();
-    }
-
     function escapeHtml(s) {
       if (s == null) return '';
-      return String(s)
-        .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+      return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
-    // ============================================================
-    // REGISTER TAB — reg number availability
-    // ============================================================
+    // TABS
+    tabRegister.addEventListener('click', () => {
+      tabRegister.classList.add('active'); tabCheck.classList.remove('active'); tabGroup.classList.remove('active');
+      panelRegister.classList.add('active'); panelCheck.classList.remove('active'); panelGroup.classList.remove('active');
+    });
+    tabCheck.addEventListener('click', () => {
+      tabCheck.classList.add('active'); tabRegister.classList.remove('active'); tabGroup.classList.remove('active');
+      panelCheck.classList.add('active'); panelRegister.classList.remove('active'); panelGroup.classList.remove('active');
+      setTimeout(() => lookupReg.focus(), 200);
+    });
+    tabGroup.addEventListener('click', () => {
+      tabGroup.classList.add('active'); tabRegister.classList.remove('active'); tabCheck.classList.remove('active');
+      panelGroup.classList.add('active'); panelRegister.classList.remove('active'); panelCheck.classList.remove('active');
+      setTimeout(() => groupReg.focus(), 200);
+    });
+
+    // REG CHECK
     async function checkRegNumberUnique(regNo) {
-      const snap = await db.collection(COLLECTION)
-        .where('regNumber', '==', regNo)
-        .limit(1)
-        .get();
+      const snap = await db.collection(COLLECTION).where('regNumber', '==', regNo).limit(1).get();
       return snap.empty;
     }
 
     regNumber.addEventListener('input', function () {
       if (!portalOpen) return;
-
-      const value = this.value.trim();
+      const value = normalizeReg(this.value);
       this.classList.remove('input-error');
       document.getElementById('errRegNumber').classList.remove('show');
-
       clearTimeout(regCheckTimeout);
 
       if (!value) {
@@ -1255,19 +903,18 @@
 
       regCheckTimeout = setTimeout(async () => {
         try {
-          const unique = await checkRegNumberUnique(normalizeReg(value));
+          const unique = await checkRegNumberUnique(value);
           if (unique) {
             regStatus.textContent = '✓ Available';
             regStatus.className = 'field-status valid';
             regNumberValid = true;
           } else {
-            regStatus.textContent = '✕ Already registered — use "Check / Edit" tab';
+            regStatus.textContent = '✕ Already registered';
             regStatus.className = 'field-status invalid';
             this.classList.add('input-error');
             regNumberValid = false;
           }
         } catch (err) {
-          console.error(err);
           regStatus.textContent = '⚠ Could not verify';
           regStatus.className = 'field-status invalid';
           regNumberValid = false;
@@ -1284,62 +931,29 @@
     });
 
     document.querySelectorAll('input[name="sex"]').forEach(r => {
-      r.addEventListener('change', () => {
-        document.getElementById('errSex').classList.remove('show');
-      });
+      r.addEventListener('change', () => { document.getElementById('errSex').classList.remove('show'); });
     });
 
-    // ============================================================
-    // REGISTER TAB — submit
-    // ============================================================
+    // SUBMIT REGISTRATION
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
-
-      if (!portalOpen) {
-        showToast('Registration is currently closed.', 'error');
-        return;
-      }
+      if (!portalOpen) { showToast('Registration is closed.', 'error'); return; }
 
       let isValid = true;
-
-      if (!fullName.value.trim()) {
-        fullName.classList.add('input-error');
-        document.getElementById('errFullName').classList.add('show');
-        isValid = false;
-      }
-
-      if (!regNumber.value.trim()) {
-        regNumber.classList.add('input-error');
-        document.getElementById('errRegNumber').classList.add('show');
-        isValid = false;
-      }
-
-      if (!subjectCombination.value.trim()) {
-        subjectCombination.classList.add('input-error');
-        document.getElementById('errCombination').classList.add('show');
-        isValid = false;
-      }
-
+      if (!fullName.value.trim()) { fullName.classList.add('input-error'); document.getElementById('errFullName').classList.add('show'); isValid = false; }
+      const normalizedReg = normalizeReg(regNumber.value);
+      if (!normalizedReg) { regNumber.classList.add('input-error'); document.getElementById('errRegNumber').classList.add('show'); isValid = false; }
+      if (!subjectCombination.value.trim()) { subjectCombination.classList.add('input-error'); document.getElementById('errCombination').classList.add('show'); isValid = false; }
       const sexRadio = document.querySelector('input[name="sex"]:checked');
-      if (!sexRadio) {
-        document.getElementById('errSex').classList.add('show');
-        isValid = false;
-      }
-
-      if (!isValid) {
-        showToast('Please fill in all required fields.', 'error');
-        return;
-      }
+      if (!sexRadio) { document.getElementById('errSex').classList.add('show'); isValid = false; }
+      if (!isValid) { showToast('Please fill in all fields.', 'error'); return; }
 
       const orig = submitBtn.innerHTML;
       submitBtn.disabled = true;
       submitBtn.innerHTML = '<span class="spinner"></span> Submitting…';
 
-      const normalizedReg = normalizeReg(regNumber.value);
-
       try {
         const isUnique = await checkRegNumberUnique(normalizedReg);
-
         if (!isUnique) {
           regNumber.classList.add('input-error');
           regStatus.textContent = '✕ Already registered';
@@ -1363,33 +977,23 @@
           updateCount: 0
         });
 
-        showToast('Registration complete! Welcome aboard.', 'success');
+        showToast('Registration complete!', 'success');
         form.reset();
         regStatus.textContent = '';
         regStatus.className = 'field-status';
         regNumberValid = false;
-
       } catch (error) {
-        console.error('❌', error);
-        let msg = 'Submission failed. Please try again.';
-        if (error.code === 'permission-denied') msg = 'Permission denied. Check Firestore rules.';
-        else if (error.code === 'unavailable') msg = 'Network error. Check your connection.';
-        showToast(msg, 'error');
+        showToast('Submission failed: ' + error.message, 'error');
       } finally {
         submitBtn.disabled = !portalOpen;
         submitBtn.innerHTML = orig;
       }
     });
 
-    // ============================================================
-    // CHECK TAB — lookup
-    // ============================================================
+    // LOOKUP RECORD
     async function findRegistration(regValue) {
       const normalized = normalizeReg(regValue);
-      if (!normalized) {
-        showToast('Please enter your Reg Number.', 'error');
-        return;
-      }
+      if (!normalized) { showToast('Please enter your Reg Number.', 'error'); return; }
 
       const orig = lookupBtnText.textContent;
       lookupBtn.disabled = true;
@@ -1400,48 +1004,33 @@
       resultCard.className = 'result-card';
 
       try {
-        const snap = await db.collection(COLLECTION)
-          .where('regNumber', '==', normalized)
-          .limit(1)
-          .get();
+        const snap = await db.collection(COLLECTION).where('regNumber', '==', normalized).limit(1).get();
 
         if (snap.empty) {
-          currentFoundRecord = null;
           resultCard.className = 'result-card show not-found';
           resultCard.innerHTML = `
             <div class="result-header">
               <div class="result-icon">✕</div>
               <div>
                 <div class="result-title">Not registered</div>
-                <div class="result-sub">No record found for <strong>${escapeHtml(normalized)}</strong>. Switch to the <strong>Register</strong> tab to sign up.</div>
+                <div class="result-sub">No record found for <strong>${escapeHtml(normalized)}</strong>.</div>
               </div>
             </div>`;
-          showToast('No registration found for that Reg Number.', 'info');
+          showToast('No registration found.', 'info');
         } else {
           const doc = snap.docs[0];
           const data = { id: doc.id, ...doc.data() };
           currentFoundRecord = data;
 
-          // Log the check (silent)
           try {
             await db.collection(COLLECTION).doc(data.id).update({
               lastCheckedAt: firebase.firestore.FieldValue.serverTimestamp(),
               checkCount: firebase.firestore.FieldValue.increment(1)
             });
-          } catch (logErr) {
-            console.warn('Could not log check event:', logErr);
-          }
+          } catch (logErr) {}
 
-          const sexBadge = data.sex === 'Female'
-            ? '<span style="color:#be185d;font-weight:700;">Female ♀</span>'
-            : '<span style="color:#1d4ed8;font-weight:700;">Male ♂</span>';
-
-          const submittedStr = data.submittedAt?.toDate
-            ? data.submittedAt.toDate().toLocaleString('en-GB', {
-                day: '2-digit', month: 'short', year: 'numeric',
-                hour: '2-digit', minute: '2-digit'
-              })
-            : '—';
+          const sexBadge = data.sex === 'Female' ? '<span style="color:#be185d;font-weight:700;">Female ♀</span>' : '<span style="color:#1d4ed8;font-weight:700;">Male ♂</span>';
+          const submittedStr = data.submittedAt?.toDate ? data.submittedAt.toDate().toLocaleString('en-GB') : '—';
 
           resultCard.className = 'result-card show found';
           resultCard.innerHTML = `
@@ -1449,30 +1038,15 @@
               <div class="result-icon">✓</div>
               <div>
                 <div class="result-title">You are registered</div>
-                <div class="result-sub">Here are the details on file for <strong>${escapeHtml(normalized)}</strong>.</div>
+                <div class="result-sub">Details on file for <strong>${escapeHtml(normalized)}</strong>.</div>
               </div>
             </div>
             <div class="details">
-              <div class="detail-row">
-                <span class="detail-label">Full Name</span>
-                <span class="detail-value">${escapeHtml(data.fullName || '—')}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Reg Number</span>
-                <span class="detail-value mono">${escapeHtml(data.regNumber || '—')}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Subject Combo</span>
-                <span class="detail-value mono">${escapeHtml(data.subjectCombination || '—')}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Sex</span>
-                <span class="detail-value">${sexBadge}</span>
-              </div>
-              <div class="detail-row">
-                <span class="detail-label">Registered</span>
-                <span class="detail-value" style="font-size:0.8rem;color:#5a6482;font-weight:500;">${escapeHtml(submittedStr)}</span>
-              </div>
+              <div class="detail-row"><span class="detail-label">Full Name</span><span class="detail-value">${escapeHtml(data.fullName)}</span></div>
+              <div class="detail-row"><span class="detail-label">Reg Number</span><span class="detail-value mono">${escapeHtml(data.regNumber)}</span></div>
+              <div class="detail-row"><span class="detail-label">Subject Combo</span><span class="detail-value mono">${escapeHtml(data.subjectCombination)}</span></div>
+              <div class="detail-row"><span class="detail-label">Sex</span><span class="detail-value">${sexBadge}</span></div>
+              <div class="detail-row"><span class="detail-label">Registered</span><span class="detail-value" style="font-size:0.8rem;color:#5a6482;">${escapeHtml(submittedStr)}</span></div>
             </div>
             <div class="result-actions">
               <button type="button" class="btn btn-outline btn-sm" id="startEditBtn" style="width:100%;" ${portalOpen ? '' : 'disabled'}>
@@ -1483,24 +1057,19 @@
           const startEditBtn = document.getElementById('startEditBtn');
           if (startEditBtn && portalOpen) {
             startEditBtn.addEventListener('click', () => {
-              openSelfEdit(data);
+              editSelfId.value = data.id;
+              editSelfFullName.value = data.fullName || '';
+              editSelfRegNumber.value = data.regNumber || '';
+              editSelfCombination.value = data.subjectCombination || '';
+              document.getElementById('editSexFemale').checked = data.sex === 'Female';
+              document.getElementById('editSexMale').checked = data.sex === 'Male';
+              editBanner.classList.add('show');
+              editPanel.style.display = 'block';
+              editPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             });
           }
-
-          showToast('Registration found!', 'success');
         }
-
       } catch (err) {
-        console.error(err);
-        resultCard.className = 'result-card show not-found';
-        resultCard.innerHTML = `
-          <div class="result-header">
-            <div class="result-icon">!</div>
-            <div>
-              <div class="result-title">Something went wrong</div>
-              <div class="result-sub">${escapeHtml(err.message || 'Please try again.')}</div>
-            </div>
-          </div>`;
         showToast('Lookup failed.', 'error');
       } finally {
         lookupBtn.disabled = false;
@@ -1509,104 +1078,19 @@
     }
 
     lookupBtn.addEventListener('click', () => findRegistration(lookupReg.value));
+    lookupReg.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); findRegistration(lookupReg.value); } });
 
-    lookupReg.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        e.preventDefault();
-        findRegistration(lookupReg.value);
-      }
-    });
-
-    // ============================================================
-    // SELF-EDIT
-    // ============================================================
-    function openSelfEdit(record) {
-      if (!portalOpen) {
-        showToast('Editing is disabled while the portal is closed.', 'error');
-        return;
-      }
-
-      editSelfId.value = record.id;
-      editSelfFullName.value = record.fullName || '';
-      editSelfRegNumber.value = record.regNumber || '';
-      editSelfCombination.value = record.subjectCombination || '';
-      document.getElementById('editSexFemale').checked = record.sex === 'Female';
-      document.getElementById('editSexMale').checked = record.sex === 'Male';
-
-      editBanner.innerHTML = '<span>✏️</span> <span>Edit the fields below and click <strong>Save Changes</strong>.</span>';
-      editBanner.classList.add('show');
-      editPanel.style.display = 'block';
-      editPanel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-      setTimeout(() => editSelfFullName.focus(), 250);
-    }
-
-    [editSelfFullName, editSelfCombination].forEach(field => {
-      field.addEventListener('input', function () {
-        this.classList.remove('input-error');
-        const errId = this.id === 'editSelfFullName' ? 'errEditFullName' : 'errEditCombination';
-        document.getElementById(errId).classList.remove('show');
-      });
-    });
-
-    document.querySelectorAll('input[name="editSelfSex"]').forEach(r => {
-      r.addEventListener('change', () => {
-        document.getElementById('errEditSex').classList.remove('show');
-      });
-    });
-
+    // SELF EDIT SUBMIT
     editSelfForm.addEventListener('submit', async function (e) {
       e.preventDefault();
-
-      if (!portalOpen) {
-        showToast('Editing is disabled while the portal is closed.', 'error');
-        return;
-      }
+      if (!portalOpen) { showToast('Editing disabled.', 'error'); return; }
 
       const id = editSelfId.value;
-      if (!id) {
-        showToast('No record to update.', 'error');
-        return;
-      }
-
-      let valid = true;
-
-      if (!editSelfFullName.value.trim()) {
-        editSelfFullName.classList.add('input-error');
-        document.getElementById('errEditFullName').classList.add('show');
-        valid = false;
-      }
-
-      if (!editSelfCombination.value.trim()) {
-        editSelfCombination.classList.add('input-error');
-        document.getElementById('errEditCombination').classList.add('show');
-        valid = false;
-      }
-
-      const sexRadio = document.querySelector('input[name="editSelfSex"]:checked');
-      if (!sexRadio) {
-        document.getElementById('errEditSex').classList.add('show');
-        valid = false;
-      }
-
-      if (!valid) {
-        showToast('Please fix the highlighted fields.', 'error');
-        return;
-      }
-
-      const before = currentFoundRecord || {};
-      const changes = {};
       const newName = editSelfFullName.value.trim();
       const newCombo = editSelfCombination.value.trim().toUpperCase();
-      const newSex = sexRadio.value;
+      const sexRadio = document.querySelector('input[name="editSelfSex"]:checked');
 
-      if (before.fullName !== newName) changes.fullName = { from: before.fullName, to: newName };
-      if (before.subjectCombination !== newCombo) changes.subjectCombination = { from: before.subjectCombination, to: newCombo };
-      if (before.sex !== newSex) changes.sex = { from: before.sex, to: newSex };
-
-      if (!Object.keys(changes).length) {
-        showToast('No changes detected.', 'info');
-        return;
-      }
+      if (!newName || !newCombo || !sexRadio) { showToast('Please fill all fields.', 'error'); return; }
 
       const orig = saveSelfBtn.innerHTML;
       saveSelfBtn.disabled = true;
@@ -1616,42 +1100,158 @@
         await db.collection(COLLECTION).doc(id).update({
           fullName: newName,
           subjectCombination: newCombo,
-          sex: newSex,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+          sex: sexRadio.value,
           lastUpdatedBy: 'student',
           lastUpdatedAt: firebase.firestore.FieldValue.serverTimestamp(),
           updateCount: firebase.firestore.FieldValue.increment(1)
         });
-
-        try {
-          await db.collection(ACTIVITY_COLLECTION).add({
-            docId: id,
-            regNumber: before.regNumber || '',
-            fullName: newName,
-            action: 'student_update',
-            changes: changes,
-            changedFields: Object.keys(changes),
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
-          });
-        } catch (logErr) {
-          console.warn('Could not write activity log:', logErr);
-        }
-
-        showToast('Your details have been updated.', 'success');
-
-        await findRegistration(editSelfRegNumber.value);
-
+        showToast('Details updated.', 'success');
         editPanel.style.display = 'none';
-        editBanner.classList.remove('show');
-
+        findRegistration(editSelfRegNumber.value);
       } catch (err) {
-        console.error(err);
         showToast('Update failed: ' + err.message, 'error');
       } finally {
         saveSelfBtn.disabled = !portalOpen;
         saveSelfBtn.innerHTML = orig;
       }
     });
+
+    // ============================================================
+    // MY GROUP LOOKUP
+    // ============================================================
+    groupBtn.addEventListener('click', async () => {
+      const reg = normalizeReg(groupReg.value);
+      if (!reg) { showToast('Please enter your reg number.', 'error'); return; }
+
+      const orig = groupBtnText.textContent;
+      groupBtn.disabled = true;
+      groupBtnText.innerHTML = '<span class="spinner spinner-dark"></span>';
+      groupResult.style.display = 'none';
+
+      try {
+        // Fetch the lookup doc
+        const doc = await db.collection('edf413_settings').doc('group_lookup').get();
+        
+        if (!doc.exists) {
+          showToast('Groups have not been published yet. Check back later.', 'error');
+          return;
+        }
+
+        const data = doc.data();
+        const member = data.members.find(m => m.regNumber === reg);
+
+        if (!member) {
+          groupResult.innerHTML = `
+            <div class="result-card show not-found">
+              <div class="result-header">
+                <div class="result-icon">✕</div>
+                <div>
+                  <div class="result-title">Not Found</div>
+                  <div class="result-sub">Could not find a group for registration number: <b>${reg}</b>.</div>
+                </div>
+              </div>
+            </div>`;
+          groupResult.style.display = 'block';
+          return;
+        }
+
+        // Fetch the full group details
+        const groupsSnap = await db.collection('edf413_groups').where('groupName', '==', member.groupName).limit(1).get();
+        if (groupsSnap.empty) throw new Error("Group details missing");
+
+        const groupData = groupsSnap.docs[0].data();
+        
+        let listHtml = '';
+        groupData.members.forEach(m => {
+          const isMe = m.regNumber === reg;
+          const leaderBadge = m.isLeader ? '<span class="group-leader">Leader</span>' : '';
+          listHtml += `
+            <li class="${isMe ? 'you' : ''}">
+              <span>${m.name} ${leaderBadge}</span>
+              <span style="font-family:monospace; color:var(--text-dim);">${m.regNumber}</span>
+            </li>`;
+        });
+
+        groupResult.innerHTML = `
+          <div class="group-card">
+            <div style="display:flex; justify-content:space-between; align-items:start; flex-wrap:wrap; gap:10px;">
+              <div>
+                <h3>${member.groupName}</h3>
+                <p style="color:var(--muted); margin:0;">Welcome, <b>${member.name}</b>!</p>
+              </div>
+              <button type="button" class="btn btn-outline btn-sm" id="dlGroupBtn" style="width:auto;">⬇ Download PDF</button>
+            </div>
+            <p style="margin-top:15px; font-size:0.85rem; color:var(--text-dimmer);">Total members: ${groupData.members.length}</p>
+            <ul>${listHtml}</ul>
+          </div>`;
+        
+        groupResult.style.display = 'block';
+        showToast('Group found!', 'success');
+
+        // PDF Download Handler
+        document.getElementById('dlGroupBtn').onclick = () => {
+          const { jsPDF } = window.jspdf;
+          const doc = new jsPDF();
+          
+          doc.setFontSize(18);
+          doc.text('EDF413 Group List', 14, 22);
+          
+          doc.setFontSize(14);
+          doc.setTextColor(99, 102, 241); // Indigo
+          doc.text(member.groupName, 14, 32);
+          
+          doc.setFontSize(10);
+          doc.setTextColor(100, 100, 100);
+          doc.text(`Total Members: ${groupData.members.length}`, 14, 38);
+          
+          let y = 50;
+          doc.setFontSize(11);
+          doc.setTextColor(0, 0, 0);
+          
+          // Table Header
+          doc.setFont("helvetica", "bold");
+          doc.text('Name', 14, y);
+          doc.text('Reg Number', 110, y);
+          doc.text('Role', 170, y);
+          y += 5;
+          
+          doc.setLineWidth(0.5);
+          doc.line(14, y, 196, y);
+          y += 7;
+          
+          // Table Body
+          doc.setFont("helvetica", "normal");
+          groupData.members.forEach((m) => {
+            // Handle page breaks
+            if (y > 270) {
+              doc.addPage();
+              y = 20;
+            }
+            
+            let displayName = m.name;
+            if (displayName.length > 40) displayName = displayName.substring(0, 40) + '...';
+            
+            doc.text(displayName, 14, y);
+            doc.text(m.regNumber, 110, y);
+            doc.text(m.isLeader ? 'Leader' : 'Member', 170, y);
+            y += 7;
+          });
+          
+          doc.save(`EDF413_${member.groupName.replace(/\s+/g, '_')}.pdf`);
+          showToast('PDF Downloaded', 'success');
+        };
+
+      } catch (err) {
+        console.error(err);
+        showToast('Error: ' + err.message, 'error');
+      } finally {
+        groupBtn.disabled = false;
+        groupBtnText.textContent = orig;
+      }
+    });
+
+    groupReg.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); groupBtn.click(); } });
+
   </script>
 </body>
 </html>
