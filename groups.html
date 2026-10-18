@@ -8,9 +8,7 @@
 <script src="https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-<!-- Firebase for saving -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 <style>
   :root{
@@ -141,7 +139,6 @@
 <body>
 <div class="wrap">
 
-<!-- Step 1: upload and review -->
 <section id="importView">
   <h1>EDF413 group maker</h1>
   <p class="sub">Check the class list, add or edit students, choose which duplicates to keep, then make groups. You can also upload more files.</p>
@@ -163,7 +160,6 @@
   <div id="review" hidden></div>
 </section>
 
-<!-- Step 2: make groups -->
 <div id="makerView" hidden>
   <h1>EDF413 group maker</h1>
   <p class="sub" id="sub"></p>
@@ -222,7 +218,6 @@
     <div class="field wide actions">
       <button type="button" class="primary" id="shuffle">Reshuffle</button>
       <button type="button" id="leaders">New leaders</button>
-      <!-- NEW BUTTON: Save to Database -->
       <button type="button" id="saveDb" style="background:#1e4b6e;color:white;border-color:#1e4b6e;font-weight:bold;">💾 Publish to Students</button>
       <button type="button" id="pdf">Export PDF</button>
       <button type="button" id="copy">Copy as text</button>
@@ -241,7 +236,7 @@
 
 <script>
 // ==========================================
-// FIREBASE INIT
+// FIREBASE INIT (mayopa-1)
 // ==========================================
 const firebaseConfig = {
   apiKey: "AIzaSyAx8yobJ7Y1wDQYyx5pnlb-uZe4aC864Sk",
@@ -254,7 +249,6 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
-const auth = firebase.auth(); // <--- IMPORTANT: We need the auth instance
 
 const $ = id => document.getElementById(id);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -443,7 +437,6 @@ $('aAdd').onclick = () => {
 };
 ['aN','aR','aC'].forEach(i => $(i).addEventListener('keydown', e => { if (e.key === 'Enter') $('aAdd').click(); }));
 
-// The class list from EDF413_FINAL-1wed.xlsx
 const DEFAULT = [["MASTER VALENTINO","NCE/SCI/192/22","MAT/AGR","M"],["Leonard Jamikele","NCE/ME/SCI/010/25","AGR/BIO","M"],["Misheck Gunde","NCE/SCI/087/23","MAT/COM","M"],["ARTHUR KAMIJA","NCE/SCI/121/23","AGR/BIO","M"],["Samuel junior Majamanda","NCE/SCI/164/23","MAT/COM","M"],["Hajirah Ngara","NCE/NG/SCI/063/23","MAT/CHE","F"],["Limbani Thosi","NCE/SCI/226/22","MAT/AGR","M"],["DEBORAH MWAGOMBA","NCE/SCI/246/23","AGR/BIO","F"],["CHIKUMBUTSO ENOCK","NCE/NG/SCI/086/23","MAT/HEC","M"],["ANDREW KAMWENDO","NCE/ME/SCI/025/24","AGR/BIO","M"],["Atupele Macloud","NCE/SCI/196/23","MAT/HEC","F"],["Lumbani Kaunga","NCE/SCI/136/23","MAT/BIO","M"],["Vitumbiko M. Kamanga","NCE/SCI/112/23","MAT/CHE","F"],["Blessings Chikhungwa","NCE/SCI/049/23","AGR/BIO","M"],["Lucy Mkwaira","NCE/SCI/209/23","AGR/BIO","F"],["GEORGE CHIMANGIRE","NVE/ME/SCI/004/25","AGR/BIO","M"],["ALEPHAH TSAMBA","NCE/SCI/333/23","AGR/BIO","F"],["Emmanuel Matemba","NCE/NG/SCI/137/23","MAT/COM","M"],["ENOCK YAKOBE","NCE/NG/SCI/183/23","AGR/BIO","M"],["Carolyn Kampheni","NCE/SCI/023/22","MAT/BIO","F"],["Temwa Mkandawire","NCE/SCI/205/23","MAT/PHY","F"],["BRENDA NGOZA","NCE/SCI/262/23","MAT/PHY","F"],["Kelvin H. Chaweza","NCE/NG/SCI/082/23","MAT/COM","M"],["Tirzah Mbewe","NCE/SCI/193/23","MAT/BIO","F"],["IDAH KUSAWANJE","NCE/NG/SCI/032/23","MAT/AGR","F"],["Tiyanjane Makandanje","NCE/SCI/165/23","AGR/BIO","F"],["CATHERINE CHILANGA","NCE/SCI/051/23","MAT/HEC","F"],["Blessings Osman","NCE/SCI/285/23","MAT/HEC","M"],["KAFUMBATA AUBREY","NCE/SCI/107/23","MAT/COM","M"],["KENNETH BLESSINGS LIZAKUWE","NCE/SCI/148/23","MAT/COM","M"],["Chisomo Chipatangwe","NCE/NG/SCI/090/23","MAT/HEC","M"],["Ethel Kamanga","NCE/SCI/111/23","MAT/HEC","F"],["KALUMBI SAMUEL W.","NCE/NG/SCI/110/23","BIO/HEC","M"],["anderson Lyford","NCE/SCI/187/22","AGR/HEC","M"],["Martin James","NCE/SCI/075/22","MAT/AGR","M"],["Tadeo Chimtali","NCE/SCI/054/23","AGR/BIO","M"],["MANUEL MIKELI BANDA","NCE/SCI/022/23","MAT/HEC","M"],["GREEN CHRISTOPHER JACKSON","NCE/SCI/094/23","MAT/CHE","M"],["BRENDA THOMAS","NCE/SCI/332/23","AGR/BIO","F"],["CYNTHIA MTELEMUKA","NCE/SCI/229/23","MAT/AGR","F"],["ISMAEL MTOLOWA","NCE/SCI/234/23","AGR/BIO","M"],["SINGENIRE NKHATA","NCE/ME/SCI/041/25","AGR/BIO","F"],["ESTERY NG'AMBI","NCE/NG/SCI/062/23","MAT/AGR","F"],["MAJOR TRYMORE","NCE/ME/SCI/030/24","AGR/BIO","M"],["JOYCE NDHLOVU","NCE/NG/SCI/059/23","MAT/CHE","F"],["EVELYN ZAMAGUNTHI","NCE/ME/SCI/051/25","AGR/BIO","F"],["Bexter Shonga","NCE/SCI/315/23","MAT/HEC","M"],["Dyless Mlenga","NCE/SCI/210/23","MAT/BIO","F"],["Madalitso Chikaponya","NCE/SCI/048/23","MAT/COM","M"],["GLORY MACKINLY","NCE/ME/SCI/023/25","AGR/BIO","F"],["Alex Atupele Kuchilunda","NCE/SCI/089/22","AGR/BIO","M"],["Loveness c Leckiam","NCE/SCI/071/21","MAT/CHE","F"],["Njerema victor Samuel","NCE/SCI/265/23","MAT/PHY","M"],["Matias pindani","NCE/SCI/303/23","AGR/BIO","M"],["GILBERT MARK","NCE/SCI/083/23","AGR/BIO","M"],["Tonthozo Bailo","NCE/NG/SCI/002/23","MAT/BIO","F"],["Glory Jeremiah","NCE/SCI/098/23","MAT/AGR","F"],["Grace moyo","NCE/NG/SCI/051/23","MAT/PHY","F"],["Patrick Gabriel Ng'ambi","NCE/SCI/208/22","AGR/HEC","M"],["Blessings Bandah","NCE/SCI/023/23","MAT/BIO","M"],["JAIROSI FRANK","NCE/SCI/095/23","MAT/COM","M"],["Lucy mandalasi","NCE/SCI/178/23","MAT/CHE","F"],["KENNEDY ACKIM","NCE/SCI/002/23","MAT/COM","M"],["Mphatso Thom","NCE/ME/SCI/049/25","AGR/BIO","M"],["JANNET KAIMBA","NCE/ME/SCI/013/25","MAT/CHE","F"],["David Chikuta","NCE/SCI/165/22","MAT/PHY","M"],["Yona Chimwendere","NCE/SCI/056/23","AGR/BIO","M"],["Cecilia Doviko Banda","NCE/ME/SCI/007/25","AGR/BIO","F"],["ABEL MICHAEL GOSPEL","NCE/SCI/001/23","MAT/HEC","M"],["Fred Kayange","NCE/SCI/138/23","MAT/COM","M"],["LYDIA KHUNYULI MHANGO","NCE/NG/SCI/034/23","MAT/AGR","F"],["POTIPHER KABONGA","NCE/NG/SCI/105/23","AGR/BIO","M"],["Olivia Blaston","NCE/SCI/026/23","MAT/CHE","F"],["Olivia Sokosi","NCE/SCI/324/23","AGR/BIO","F"],["Mirriam Chimtsitsi","NCE/SCI/055/23","AGR/BIO","F"],["Citrex Allan Sankhulani","NCE/ME/SCI/033/24","MAT/COM","M"],["Atupele Mulebe","NCE/NG/SCI/055/23","MAT/PHY","F"],["Bernadetta Mnelemba","NCE/NG/SCI/049/23","AGR/BIO","F"],["Emma Brazio","NCE/NG/SCI/006/23","AGR/BIO","F"],["MARLON MARTIN","NCE/ME/SCI/026/25","AGR/BIO","M"],["Chikondi Ndriva","NCE/NG/SCI/060/23","BIO/HEC","F"],["Norah Mphote","NCE/SCI/219/23","MAT/PHY","F"],["Felason Jepter","NCE/NG/SCI/103/23","BIO/HEC","M"],["HALMITON KEFFA PHIRI","NCE/ME/SCI/044/25","AGR/BIO","M"],["Boston Emmanuel Wilson","NCE/SCI/337/23","MAT/AGR","M"],["Ackim Chonde","NCE/ME/SCI/006/25","MAT/CHE","M"],["DALITSO PHIRI R","NCE/SCI/297/23","MAT/AGR","M"],["Ackim Chonde","NCE/ME/SCI/006/25","MAT/CHE","M"],["Hanipher kalako","NCE/SCI/108/23","AGR/BIO","F"],["William Phiri","NCE/SCI/299/23","MAT/COM","M"],["Bernadetta Kadyaulesi","NCE/ME/SCI/020/24","AGR/BIO","F"],["Lucy mandalasi","NCE/SCI/178/23","MAT/CHE","F"],["Getrude Mpoya","NCE/SCI/222/23","MAT/AGR","F"],["WILLIAM KATHUMBA","NCE/SCI/130/23","MAT/HEC","M"],["ISAAC ZINGWANGWA","NCE/SCI/346/23","MAT/PHY","M"],["Priscilla kambewa","NCE/SCI/117/23","MAT/CHE","F"],["Grenah Chilembwe","NCE/NG/SCI/012/23","BIO/HEC","F"],["Regina Kwenda Kamadzi","NCE/SCI/110/23","MAT/COM","F"],["Martin Mtonga","NCE/SCI/236/23","MAT/AGR","M"],["Chisomo Msiska","NCE/SCI/224/23","MAT/AGR","M"],["Trintus Banda","NCE/SCI/008/23","AGR/BIO","F"],["Maureen Kumwenda","NCE/SCI/143/23","MAT/PHY","F"],["Regina Kwenda Kamadzi","NCE/SCL/110/23","MAT/COM","F"],["JAMISON SAUKAN","NCE/SCI/096/23","MAT/COM","M"],["MPHATSO VELLIANO","NCE/SCI/052/22","MAT/BIO","F"],["Fanuel Luka","NCE/SCI/152/23","MAT/PHY","M"],["ASANTE DICKSON","NCE/SCI/067/23","MAT/CHE","M"],["Jacob D Banda","NCE/SCI/019/23","MAT/HEC","M"],["AARON CHISALE","NCE/SCI/060/23","MAT/BIO","M"],["STEVEN BONFACE KULUPANDO","NCE/SCI/142/23","MAT/COM","M"],["GEORGE CHIMANGIRE","NCE/ME/SCI/004/25","AGR/BIO","M"],["WISEMAN KAMANGA","NCE/SCI/113/23","MAT/AGR","M"],["JOYCE NDHLOVU","NCE/NG/SCI/059/23","MAT/CHE","F"],["Kondwani Daniel Msefula","NCE/SCI/107/22","MAT/CHE","M"],["Madalitso Makawa","NCE/SCI/167/23","MAT/AGR","F"],["Gladys Dalikeni","NCE/SCI/014/22","AGR/BIO","F"],["Mary Sichula","NCE/SCI/316/23","AGR/BIO","F"],["PATRICIA JULY","NCE/NG/SCI/023/23","AGR/HEC","F"],["Wezzie Ziba","NCE/SCI/345/23","AGR/BIO","F"],["Steven Nkhanyepa","NCE/NG/SCI/121/23","MAT/BIO","M"],["Aubrey Henry Chakalamba","NCE/SCI/032/23","AGR/BIO","M"],["Mabvuto Govati","NCE/ME/SCI/008/25","AGR/BIO","M"],["Kelvin Chateka","NCE/SCI/038/23","AGR/BIO","M"],["Hope Kachaje","NCE/SCI/104/23","AGR/BIO","M"],["LYDIA KHUNYULI MHANGO","NCE/NG/SCI/034/23","MAT/AGR","F"],["Patience Masina","NCE/SCI/186/23","MAT/COM","F"],["Arthur N Mponda","NCE/NG/SCI/147/23","MAT/AGR","M"],["FRED CHAVULA","NCE/SCI/041/23","MAT/PHY","M"],["Stella panganani","NCE/NG/SCI/067/23","MAT/PHY","F"],["LUSUNGU CHIONI","NCE/NG/SCI/015/23","AGR/BIO","F"],["Chikondi Kamwani","NCE/ME/SCI/015/25","AGR/BIO","F"],["Angella msamira","NCE/SCI/223/23","MAT/PHY","F"],["Enosi Mussa Kenvas","NCE/ME/SCI/019/25","AGR/BIO","M"],["LUCY MBVUNDULA","NCE/NG/SCI/046/23","AGR/BIO","F"],["Getrude Makanyanga","NCE/SCI/166/23","MAT/BIO","F"],["Prospelina Mtonga","NCE/SCI/235/23","MAT/BIO","F"],["Sheila Mtenje","NCE/SCI/231/23","AGR/BIO","F"],["Shelifa Bwanali","NCE/NG/SCI/008/23","AGR/HEC","F"],["Bridget K. Magombo","NCE/SCI/161/23","MAT/AGR","F"],["HASTINGS MUKOKO","NCE/ME/SCI/036/25","MAT/COM","M"],["JOANA SUBILI","NCE/SCI/049/22","MAT/CHE","F"],["DAVID MAKIYI","NCE/SCI/168/23","MAT/BIO","M"],["ENOCK SAKHULA","NCE/SCI/308/23","MAT/BIO","M"],["ALEX LIMBANI","NCE/SCI/147/23","MAT/AGR","M"],["FELIX CHIDULA","NCE/SCI/043/23","MAT/COM","M"],["SOFTER GANIZANI CHIDZAYE","NCE/SCI/044/23","MAT/PHY","M"],["FADHWILA ISMAIL MWAWA","NCE/SCI/257/23","MAT/BIO","F"],["FRANK TEMBETANI","NCE/NG/SCI/178/23","AGR/BIO","M"],["ASPHARD CHAKUNKHULIRA","NCE/SCI/060/22","AGR/HEC","M"],["ELICY KANGOYA","NCE/SCI/122/23","MAT/HEC","F"],["LAMECK MJAHON","NCE/NG/SCI/141/23","MAT/CHE","M"],["HOPE ADRIAN CHIMGANG'A","NCE/NG/SCI/089/23","MAT/COM","M"],["AUSTIN KAIPA","NCE/ME/SCI/014/25","AGR/BIO","M"],["HARISON MATUTA","NCE/SCI/190/23","AGR/BIO","M"],["HALIMA KISHOMBE","NCE/NG/SCI/035/23","MAT/CHE","F"],["Citrex Allan Sankhulani","NCE/ME/SCI/033/24","MAT/COM","M"],["MIRRIUM BANDA","NCE/SCI/011/23","MAT/PHY","F"],["CHISOMO EMMANUEL","NCE/SCI/070/23","MAT/COM","M"],["LUIS BEZAI","NCE/SCI/218/23","MAT/COM","M"],["AGGRY MEDSON MSIKA","NCE/SCI/225/23","MAT/COM","M"],["AUBRY CHAKALAMBA","NCE/SCI/032/23","ARI/BIO","M"],["COLLAS MSUKWA","NCE/SCI/227/23","MAT/HEC","F"],["LAZARUS BANDA","NCE/SCI/012/23","MAT/HEC","M"],["MARK MARUWO","NCE/ME/SCI/025/24","AGRI/BIO","M"]];
 imp.recs = DEFAULT.map((x, i) => ({n:x[0], r:x[1], c:x[2], s:x[3], f:'EDF413_FINAL-1wed.xlsx', inc:true, id:i}));
 analyse(); renderReview();
@@ -493,35 +486,27 @@ function build(){
   const f = Math.min(state.first, N);
   let g = state.by === 'count' ? state.count : (f > 0 ? 1 + Math.max(1, Math.floor((N - f) / state.size)) : Math.max(1, Math.floor(N / state.size)));
   
-  // Enforce the split logic
   if (state.mode === 'together') {
     const byCombo = {};
     people.forEach(p => { if(!byCombo[p.c]) byCombo[p.c] = []; byCombo[p.c].push(p); });
     
     const result = [];
     for (const c in byCombo) {
-      shuffle(byCombo[c]); // Randomize within the combo
+      shuffle(byCombo[c]);
       let comboPool = byCombo[c];
       
       while (comboPool.length > 0) {
-        // If we have exactly the size or more, make a full group
         if (comboPool.length >= state.size) {
           result.push(comboPool.splice(0, state.size));
         } else {
-          // Remainder is less than size. 
-          // If it's the ONLY group left and it's less than half size, it can mix with others later.
-          // But if you strictly want it kept alone (e.g. 4 people), we make a small group.
           result.push(comboPool.splice(0, comboPool.length));
         }
       }
     }
-    
-    // Sort groups so largest are first
     result.sort((a, b) => b.length - a.length);
     state.groups = result;
 
   } else {
-    // Random or Spread logic
     g = Math.max(1, Math.min(g, N));
     const sizes = Array.from({length: g}, (_, k) => Math.floor(N / g) + (k < N % g ? 1 : 0));
     shuffle(people);
@@ -649,18 +634,10 @@ $('combos').onclick = e => {
 };
 $('groups').addEventListener('input', e => { if (e.target.matches('input[data-i]')) state.names[+e.target.dataset.i] = e.target.value; });
 
-// ---- SAVE TO FIRESTORE ----
+// ---- SAVE TO FIRESTORE (No Login Required) ----
 $('saveDb').onclick = async () => {
   if (!state.groups.length) { say('Make groups first'); return; }
   
-  // --- CHECK LOGIN STATUS ---
-  const currentUser = auth.currentUser;
-  if (!currentUser) {
-    alert("You are not logged in. Please go to the Home Page, click 'Class Rep Login', and sign in first.");
-    say('❌ Not logged in.');
-    return;
-  }
-
   const btn = $('saveDb');
   const orig = btn.innerHTML;
   btn.disabled = true;
@@ -721,11 +698,6 @@ $('saveDb').onclick = async () => {
 
 // ---- RESET DATABASE ----
 $('resetDb').onclick = async () => {
-  if (!auth.currentUser) {
-    alert("You are not logged in. Please sign in on the Home Page first.");
-    return;
-  }
-
   if (!confirm("Are you sure you want to DELETE all published groups? Students will not be able to check their groups until you publish again.")) return;
   
   const btn = $('resetDb');
